@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng bán sách - Sách Cũ Theo Khu Vực</title>
+  <link rel="icon" href="assets/images/logo.png">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="assets/images/logo.png" alt="Logo">
+        Sách Cũ Theo Khu Vực
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="bi bi-house-door me-1"></i>Trang chủ
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="search-books.html">
+              <i class="bi bi-search me-1"></i>Tìm sách
+            </a>
+          </li>
+          <span id="authLinks"></span>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- POST BOOK FORM -->
+  <section class="container py-5">
+    <h2 class="section-title mb-4">📝 Đăng bán sách của bạn</h2>
+
+    <form id="postBookForm">
+      <div class="row g-4">
+        <!-- Image Preview -->
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm">
+            <img id="imagePreview" 
+                 src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=300&q=80"
+                 class="card-img-top" alt="Preview" style="height: 400px; object-fit: cover;">
+            <div class="card-body">
+              <label for="bookImage" class="form-label fw-semibold">Ảnh bìa sách</label>
+              <input type="file" class="form-control" id="bookImage" accept="image/*">
+              <small class="text-muted">Chọn ảnh rõ nét để thu hút người mua</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book Information -->
+        <div class="col-md-8">
+          <div class="card border-0 shadow-sm p-4">
+            <h5 class="mb-3">Thông tin sách</h5>
+
+            <div class="mb-3">
+              <label for="title" class="form-label fw-semibold">Tên sách *</label>
+              <input type="text" class="form-control" id="title" name="title" 
+                     placeholder="Nhập tên sách..." required>
+            </div>
+
+            <div class="mb-3">
+              <label for="author" class="form-label fw-semibold">Tác giả *</label>
+              <input type="text" class="form-control" id="author" name="author" 
+                     placeholder="Tên tác giả..." required>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="bookCondition" class="form-label fw-semibold">Tình trạng</label>
+                  <select class="form-select" id="bookCondition" name="bookCondition">
+                    <option value="Mới">Mới</option>
+                    <option value="Cũ nhẹ (90%)" selected>Cũ nhẹ (90%)</option>
+                    <option value="Cũ (70%)">Cũ (70%)</option>
+                    <option value="Rách nhẹ">Rách nhẹ</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="price" class="form-label fw-semibold">Giá bán (VNĐ) *</label>
+                  <input type="number" class="form-control" id="price" name="price" 
+                         placeholder="VD: 50000" min="1000" step="1000" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Thể loại</label>
+              <div id="categoriesCheckbox">
+                <!-- Categories will be loaded here -->
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="province" class="form-label fw-semibold">Tỉnh/Thành phố</label>
+                  <select class="form-select" id="province" name="province">
+                    <option value="">Chọn tỉnh/thành</option>
+                    <option value="TP.HCM">TP.HCM</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                    <option value="Đà Nẵng">Đà Nẵng</option>
+                    <option value="Cần Thơ">Cần Thơ</option>
+                    <option value="Hải Phòng">Hải Phòng</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="district" class="form-label fw-semibold">Quận/Huyện</label>
+                  <input type="text" class="form-control" id="district" name="district" 
+                         placeholder="Nhập quận/huyện">
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="contactInfo" class="form-label fw-semibold">Thông tin liên hệ</label>
+              <input type="text" class="form-control" id="contactInfo" name="contactInfo" 
+                     placeholder="VD: 0901234567 hoặc email@gmail.com">
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label fw-semibold">Mô tả chi tiết *</label>
+              <textarea class="form-control" id="description" name="description" rows="4" 
+                        placeholder="Giới thiệu về sách, lý do bán..." required></textarea>
+            </div>
+
+            <div class="text-end mt-4">
+              <button type="button" class="btn btn-outline-secondary me-2" onclick="history.back()">
+                Hủy
+              </button>
+              <button type="submit" class="btn btn-primary" id="submitBtn">
+                <i class="bi bi-upload me-2"></i>Đăng bài
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p class="mb-0">© 2025 - Nhóm 13 | Sách Cũ Theo Khu Vực</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/post-book.js"></script>
+</body>
+</html>
