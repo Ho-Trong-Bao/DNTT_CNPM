@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------
+  # Dịch vụ MySQL Database
+  # ----------------------------------------
+  mysql:
+    image: mysql:8.0.36
+    container_name: mysql-sachcu
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: sachcu_db
+    volumes:
+      # Lưu trữ dữ liệu database lên host (để không bị mất khi container bị xóa)
+      - mysql_data:/var/lib/mysql
+      # Chạy script khởi tạo database (cần file init-db.sql)
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      # Gắn file cấu hình tiếng Việt (UTF-8/utf8mb4) đã tạo trước đó
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    
+  # ----------------------------------------
+  # Dịch vụ Adminer (Giao diện quản lý DB)
+  # ----------------------------------------
+  adminer:
+    image: adminer
+    container_name: adminer-sachcu
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+# ----------------------------------------
+# Định nghĩa Volumes và Networks
+# ----------------------------------------
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
