@@ -1,0 +1,9 @@
+# File nay chua cau hinh cho cac cong cu Client (cli)
+[client]
+default-character-set=utf8mb4
+
+[mysql]
+default-character-set=utf8mb4
+
+[mysqladmin]
+default-character-set=utf8mb4

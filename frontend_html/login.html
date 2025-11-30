@@ -91,52 +91,6 @@
   <script src="assets/js/auth.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/main.js"></script>
-  <script>
-    // Redirect nếu đã đăng nhập
-    redirectIfAuthenticated();
-
-    // Xử lý form login
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorAlert = document.getElementById('errorAlert');
-      const loginBtn = document.getElementById('loginBtn');
-      
-      // Disable button
-      loginBtn.disabled = true;
-      loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang đăng nhập...';
-      
-      // Ẩn lỗi cũ
-      errorAlert.classList.add('d-none');
-      
-      try {
-        const response = await authAPI.login({ email, password });
-        
-        // Lưu thông tin đăng nhập
-        saveAuthData(response.token, {
-          userId: response.userId,
-          email: response.email,
-          name: response.name
-        });
-        
-        showToast('Đăng nhập thành công!', 'success');
-        
-        // Redirect về trang chủ
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 1000);
-        
-      } catch (error) {
-        errorAlert.textContent = error.message || 'Đăng nhập thất bại. Vui lòng thử lại!';
-        errorAlert.classList.remove('d-none');
-        
-        // Enable button
-        loginBtn.disabled = false;
-        loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập';
-      }
-    });
-  </script>
+  <script src="assets/js/login.js"></script>
 </body>
 </html>

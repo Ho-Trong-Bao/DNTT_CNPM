@@ -13,7 +13,11 @@ mysql --version  # Cần MySQL 8.0+
 
 Bước 2: Setup Database
 
-cd 
+cd database
+
+docker-compose up -d
+
+cd ..
 
 Bước 3: Chạy Backend
 cd backend
