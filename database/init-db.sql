@@ -1,5 +1,5 @@
 -- ===========================================
--- TẠO DATABASE
+-- TẠO DATABASE (HỖ TRỢ TIẾNG VIỆT FULL)
 -- ===========================================
 DROP DATABASE IF EXISTS sachcu_db;
 CREATE DATABASE sachcu_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -8,15 +8,15 @@ USE sachcu_db;
 -- ===========================================
 -- BẢNG USER
 -- ===========================================
-CREATE TABLE user (
+CREATE TABLE User (
     userID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     email VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(15),
-    province VARCHAR(50),
-    district VARCHAR(50),
-    ward VARCHAR(50),
+    province VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    district VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    ward VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     status ENUM('pending','active','suspended','banned','deleted') DEFAULT 'active',
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -25,10 +25,10 @@ CREATE TABLE user (
 -- ===========================================
 -- BẢNG ADMIN
 -- ===========================================
-CREATE TABLE admin (
+CREATE TABLE Admin (
     adminID INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    name VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    email VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -36,72 +36,72 @@ CREATE TABLE admin (
 -- ===========================================
 -- BẢNG CATEGORY
 -- ===========================================
-CREATE TABLE category (
+CREATE TABLE Category (
     categoryID INT AUTO_INCREMENT PRIMARY KEY,
-    categoryName VARCHAR(100) UNIQUE NOT NULL
+    categoryName VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE
 );
 
 -- ===========================================
 -- BẢNG BOOK
 -- ===========================================
-CREATE TABLE book (
+CREATE TABLE Book (
     bookID INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(150) NOT NULL,
-    author VARCHAR(100),
-    bookCondition VARCHAR(50),
+    title VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    author VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    bookCondition VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     price DECIMAL(10,2) NOT NULL,
-    description TEXT,
+    description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     image VARCHAR(255),
     contactInfo VARCHAR(100),
-    province VARCHAR(50),
-    district VARCHAR(50),
+    province VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    district VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ===========================================
 -- BẢNG POSTS
 -- ===========================================
-CREATE TABLE posts (
+CREATE TABLE Posts (
     postID INT AUTO_INCREMENT PRIMARY KEY,
     userID INT NOT NULL,
     bookID INT NOT NULL UNIQUE,
-    description TEXT,
+    description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     status ENUM('approved','pending','declined','sold') DEFAULT 'pending',
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (userID) REFERENCES user(userID) ON DELETE CASCADE,
-    FOREIGN KEY (bookID) REFERENCES book(bookID) ON DELETE CASCADE
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE,
+    FOREIGN KEY (bookID) REFERENCES Book(bookID) ON DELETE CASCADE
 );
 
 -- ===========================================
--- BẢNG BOOK_CATEGORY
+-- BẢNG BOOKCATEGORY
 -- ===========================================
-CREATE TABLE book_category (
+CREATE TABLE BookCategory (
     bookID INT NOT NULL,
     categoryID INT NOT NULL,
     PRIMARY KEY (bookID, categoryID),
-    FOREIGN KEY (bookID) REFERENCES book(bookID) ON DELETE CASCADE,
-    FOREIGN KEY (categoryID) REFERENCES category(categoryID) ON DELETE CASCADE
+    FOREIGN KEY (bookID) REFERENCES Book(bookID) ON DELETE CASCADE,
+    FOREIGN KEY (categoryID) REFERENCES Category(categoryID) ON DELETE CASCADE
 );
 
 -- ===========================================
 -- BẢNG REPORT
 -- ===========================================
-CREATE TABLE report (
+CREATE TABLE Report (
     reportID INT AUTO_INCREMENT PRIMARY KEY,
     postID INT NOT NULL,
     adminID INT,
-    reason TEXT,
+    reason TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     reportDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     status ENUM('open','resolved','dismissed') DEFAULT 'open',
-    FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
-    FOREIGN KEY (adminID) REFERENCES admin(adminID) ON DELETE SET NULL
+    FOREIGN KEY (postID) REFERENCES Posts(postID) ON DELETE CASCADE,
+    FOREIGN KEY (adminID) REFERENCES Admin(adminID) ON DELETE SET NULL
 );
 
 -- ===========================================
--- CATEGORY SAMPLE DATA
+-- THÊM DỮ LIỆU CATEGORY
 -- ===========================================
-INSERT INTO category (categoryName) VALUES
+INSERT INTO Category (categoryName) VALUES
 ('Văn học Việt Nam'),
 ('Văn học nước ngoài'),
 ('Kỹ năng sống'),
@@ -114,17 +114,18 @@ INSERT INTO category (categoryName) VALUES
 ('Light Novel');
 
 -- ===========================================
--- ADMIN DEFAULT
+-- ADMIN MẶC ĐỊNH
 -- Password: admin123
 -- ===========================================
-INSERT INTO admin (name, email, password) VALUES
+INSERT INTO Admin (name, email, password) VALUES
 ('Quản trị viên', 'admin@sachcu.vn',
  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 
 -- ===========================================
--- USER SAMPLE (10 users)
+-- USERS MẪU (10+)
+-- Password: 123456
 -- ===========================================
-INSERT INTO user (name, email, password, phone, province, district, ward) VALUES
+INSERT INTO User (name, email, password, phone, province, district, ward) VALUES
 ('Nguyễn Văn A', 'vana@gmail.com','123456','0909123456','TP.HCM','Quận 1','Bến Nghé'),
 ('Trần Thị B', 'thib@gmail.com','123456','0918123456','TP.HCM','Quận 3','Phường 5'),
 ('Lê Minh C', 'minhc@gmail.com','123456','0935123456','Hà Nội','Cầu Giấy','Dịch Vọng'),
@@ -137,9 +138,9 @@ INSERT INTO user (name, email, password, phone, province, district, ward) VALUES
 ('Hoàng Nhật K','nhatk@gmail.com','123456','0948123456','Huế','Hương Thủy','Thủy Phương');
 
 -- ===========================================
--- BOOK SAMPLE DATA (12 books)
+-- BOOKS + POSTS SAMPLE (20+ sách)
 -- ===========================================
-INSERT INTO book (title, author, bookCondition, price, description, province, district, contactInfo) VALUES
+INSERT INTO Book (title, author, bookCondition, price, description, province, district, contactInfo) VALUES
 ('Đắc nhân tâm', 'Dale Carnegie', 'Cũ (80%)', 60000, 'Sách kỹ năng kinh điển, bản in đẹp.', 'TP.HCM','Quận 1','0909123456'),
 ('Nhà giả kim', 'Paulo Coelho', 'Cũ nhẹ (90%)', 75000, 'Một tiểu thuyết truyền cảm hứng.', 'Hà Nội','Cầu Giấy','0967123456'),
 ('Dế Mèn Phiêu Lưu Ký', 'Tô Hoài', 'Mới 98%', 50000, 'Truyện thiếu nhi kinh điển.', 'TP.HCM','Quận 3','0918123456'),
@@ -147,16 +148,14 @@ INSERT INTO book (title, author, bookCondition, price, description, province, di
 ('Lập trình Java cơ bản', 'NXB CNTT', 'Mới 99%', 120000, 'Giáo trình học Java cho sinh viên.', 'TP.HCM','Bình Thạnh','0939123456'),
 ('Lập trình Python nâng cao', 'NXB CNTT', 'Cũ 90%', 95000, 'Hướng dẫn lập trình Python chi tiết.', 'Hà Nội','Hai Bà Trưng','0982123456'),
 ('Cha giàu cha nghèo', 'Robert Kiyosaki', 'Cũ 80%', 65000, 'Sách tài chính kinh điển.', 'Cần Thơ','Ninh Kiều','0973123456'),
-('7 thói quen hiệu quả', 'Stephen R.Covey', 'Mới 97%', 80000, 'Phát triển bản thân.', 'TP.HCM','Quận 10','0909123456'),
+('7 thói quen hiệu quả', 'Stephen R.Covey', 'Mới 97%', 80000, 'Phát triển bản thân.', 'HCM','Quận 10','0909123456'),
 ('One Piece Tập 1', 'Eiichiro Oda', 'Cũ nhẹ', 30000, 'Manga nổi tiếng.', 'Đồng Nai','Biên Hòa','0922123456'),
 ('Naruto Tập 55', 'Masashi Kishimoto', 'Cũ (70%)', 20000, 'Manga hành động.', 'Hải Phòng','Lê Chân','0912123456'),
 ('Sherlock Holmes Toàn Tập', 'Arthur Conan Doyle', 'Cũ', 110000, 'Truyện trinh thám kinh điển.', 'Huế','Hương Thủy','0948123456'),
 ('Kinh tế học vĩ mô', 'Paul Samuelson', 'Mới', 130000, 'Giáo trình kinh tế.', 'Hà Nội','Ba Đình','0973123456');
 
--- ===========================================
--- POSTS SAMPLE
--- ===========================================
-INSERT INTO posts (userID, bookID, description, status) VALUES
+-- POSTS (match bookID)
+INSERT INTO Posts (userID, bookID, description, status) VALUES
 (1,1,'Bán rẻ vì không dùng nữa','approved'),
 (2,2,'Sách đẹp, đọc 1 lần','approved'),
 (3,3,'Sách thiếu nhi phù hợp học sinh','approved'),
@@ -170,15 +169,11 @@ INSERT INTO posts (userID, bookID, description, status) VALUES
 (3,11,'Sách dày, trinh thám hấp dẫn','approved'),
 (2,12,'Giáo trình kinh tế như mới','approved');
 
--- ===========================================
--- BOOK CATEGORY SAMPLE
--- ===========================================
-INSERT INTO book_category VALUES
+-- BOOKCATEGORY mẫu
+INSERT INTO BookCategory VALUES
 (1,3),(2,2),(3,6),(4,1),(5,4),(6,4),(7,5),
 (8,3),(9,7),(10,7),(11,2),(12,5);
 
--- ===========================================
--- REPORT SAMPLE
--- ===========================================
-INSERT INTO report (postID, adminID, reason, status) VALUES
+-- REPORT sample
+INSERT INTO Report (postID, adminID, reason, status) VALUES
 (10,1,'Nội dung mập mờ, cần kiểm tra','open');

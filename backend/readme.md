@@ -18,6 +18,14 @@ Sửa password MySQL trong file application.properties
 
 spring.datasource.password=your_mysql_password_here
 
+Bước 4: Build và Run
+cd backend
+
+# Build project
+mvn clean install
+
+# Run application
+mvn spring-boot:run
 
 Hoặc dùng IDE (IntelliJ IDEA / Eclipse):
 

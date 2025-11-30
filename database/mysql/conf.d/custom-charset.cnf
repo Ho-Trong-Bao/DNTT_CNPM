@@ -1,0 +1,17 @@
+[mysqld]
+# Cấu hình Server: Đặt bộ ký tự và quy tắc sắp xếp mặc định cho toàn bộ MySQL Server.
+character-set-server=utf8mb4
+collation-server=utf8mb4_unicode_ci
+
+[client]
+# Cấu hình Client: Đặt bộ ký tự mặc định khi bất kỳ ứng dụng hoặc CLI (command line interface) 
+# kết nối với Server. Đây là phần quan trọng để khắc phục lỗi Latin1 bạn gặp.
+default-character-set=utf8mb4
+
+[mysql]
+# Cấu hình cho công cụ dòng lệnh 'mysql' (khi bạn dùng docker exec).
+# Đảm bảo lệnh shell cũng sử dụng utf8mb4.
+default-character-set=utf8mb4
+
+[mysqladmin]
+default-character-set=utf8mb4
