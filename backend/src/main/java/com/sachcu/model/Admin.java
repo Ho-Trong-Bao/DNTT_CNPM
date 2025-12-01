@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Admin")
+@Table(name = "admin")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
