@@ -17,7 +17,7 @@ CREATE TABLE user (
     province VARCHAR(50),
     district VARCHAR(50),
     ward VARCHAR(50),
-    status ENUM('pending','active','suspended','banned','deleted') DEFAULT 'active',
+    status ENUM('PENDING','ACTIVE','SUSPENDED','BANNED','DELETED') DEFAULT 'ACTIVE',
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -66,7 +66,7 @@ CREATE TABLE posts (
     userID INT NOT NULL,
     bookID INT NOT NULL UNIQUE,
     description TEXT,
-    status ENUM('approved','pending','declined','sold') DEFAULT 'pending',
+    status ENUM('APPROVED','PENDING','DECLINED','SOLD') DEFAULT 'PENDING',
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (userID) REFERENCES user(userID) ON DELETE CASCADE,
@@ -93,7 +93,7 @@ CREATE TABLE report (
     adminID INT,
     reason TEXT,
     reportDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('open','resolved','dismissed') DEFAULT 'open',
+    status ENUM('OPEN','RESOLVED','DISMISSED') DEFAULT 'OPEN',
     FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE,
     FOREIGN KEY (adminID) REFERENCES admin(adminID) ON DELETE SET NULL
 );
@@ -157,18 +157,18 @@ INSERT INTO book (title, author, bookCondition, price, description, province, di
 -- POSTS SAMPLE
 -- ===========================================
 INSERT INTO posts (userID, bookID, description, status) VALUES
-(1,1,'Bán rẻ vì không dùng nữa','approved'),
-(2,2,'Sách đẹp, đọc 1 lần','approved'),
-(3,3,'Sách thiếu nhi phù hợp học sinh','approved'),
-(4,4,'Còn mới 85%','pending'),
-(5,5,'Giáo trình cho sinh viên','approved'),
-(6,6,'Dùng học Python rất tốt','approved'),
-(7,7,'Bán lại giá tốt','approved'),
-(8,8,'Sách kỹ năng còn mới','approved'),
-(9,9,'Manga sưu tầm','approved'),
-(10,10,'Bản đọc nhiều lần','pending'),
-(3,11,'Sách dày, trinh thám hấp dẫn','approved'),
-(2,12,'Giáo trình kinh tế như mới','approved');
+(1,1,'Bán rẻ vì không dùng nữa','APPROVED'),
+(2,2,'Sách đẹp, đọc 1 lần','APPROVED'),
+(3,3,'Sách thiếu nhi phù hợp học sinh','APPROVED'),
+(4,4,'Còn mới 85%','PENDING'),
+(5,5,'Giáo trình cho sinh viên','APPROVED'),
+(6,6,'Dùng học Python rất tốt','APPROVED'),
+(7,7,'Bán lại giá tốt','APPROVED'),
+(8,8,'Sách kỹ năng còn mới','APPROVED'),
+(9,9,'Manga sưu tầm','APPROVED'),
+(10,10,'Bản đọc nhiều lần','PENDING'),
+(3,11,'Sách dày, trinh thám hấp dẫn','APPROVED'),
+(2,12,'Giáo trình kinh tế như mới','APPROVED');
 
 -- ===========================================
 -- BOOK CATEGORY SAMPLE
@@ -181,4 +181,5 @@ INSERT INTO book_category VALUES
 -- REPORT SAMPLE
 -- ===========================================
 INSERT INTO report (postID, adminID, reason, status) VALUES
-(10,1,'Nội dung mập mờ, cần kiểm tra','open');
+(10,1,'Nội dung mập mờ, cần kiểm tra','OPEN'),
+(4,1,'Tình trạng sách không đúng mô tả','RESOLVED');
