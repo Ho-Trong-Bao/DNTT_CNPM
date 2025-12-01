@@ -27,6 +27,7 @@ cd backend
 
 # Build và chạy
 mvn clean install
+
 mvn spring-boot:run
 
 # Backend sẽ chạy tại http://localhost:8080/api
