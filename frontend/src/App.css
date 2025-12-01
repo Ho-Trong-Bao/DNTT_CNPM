@@ -1,0 +1,243 @@
+/**
+ * File: frontend/src/App.css
+ * Main Stylesheet - React Version
+ */
+
+/* ============================================
+   VARIABLES & RESET
+   ============================================ */
+:root {
+  --primary-color: #E07A5F;
+  --secondary-color: #D4A373;
+  --dark-color: #4B3832;
+  --light-bg: #FAF3E0;
+  --cream-bg: #FDFCF8;
+  --border-color: #DAD2C9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background-color: var(--cream-bg);
+  color: var(--dark-color);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', serif;
+  color: #3E2C1C;
+  font-weight: 700;
+}
+
+/* ============================================
+   NAVBAR
+   ============================================ */
+.navbar {
+  background-color: var(--light-bg) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1rem 0;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  color: var(--dark-color) !important;
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.02);
+}
+
+.nav-link {
+  color: var(--dark-color) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(224, 122, 95, 0.1);
+  color: var(--primary-color) !important;
+}
+
+.nav-link.active {
+  background-color: var(--primary-color);
+  color: #FFF !important;
+}
+
+/* ============================================
+   HERO BANNER
+   ============================================ */
+.hero-banner {
+  background: linear-gradient(135deg, rgba(250, 243, 224, 0.95), rgba(75, 56, 50, 0.4)),
+              url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1600&q=80');
+  background-size: cover;
+  background-position: center;
+  padding: 120px 0;
+  color: #3E2C1C;
+}
+
+.hero-banner h1 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #C26D57 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(224, 122, 95, 0.4);
+}
+
+/* ============================================
+   SECTION TITLE
+   ============================================ */
+.section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2rem;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: 2px;
+}
+
+/* ============================================
+   BOOK CARDS
+   ============================================ */
+.book-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  height: 100%;
+}
+
+.book-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.book-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover img {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   ADMIN SIDEBAR
+   ============================================ */
+.admin-sidebar {
+  background-color: var(--light-bg);
+  min-height: calc(100vh - 76px);
+  padding: 2rem 0;
+  border-right: 2px solid var(--border-color);
+}
+
+.admin-sidebar .nav-link {
+  color: var(--dark-color);
+  padding: 1rem 1.5rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.admin-sidebar .nav-link:hover {
+  background-color: rgba(224, 122, 95, 0.1);
+  padding-left: 2rem;
+}
+
+.admin-sidebar .nav-link.active {
+  background-color: var(--primary-color);
+  color: white !important;
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+.form-control, .form-select {
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  background: var(--light-bg);
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-color);
+  background: #FFF;
+  box-shadow: 0 0 0 0.2rem rgba(224, 122, 95, 0.15);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background: var(--light-bg);
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 2px solid #E9E0D1;
+  margin-top: 4rem;
+}
+
+/* ============================================
+   LOADING
+   ============================================ */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .hero-banner {
+    padding: 80px 0;
+  }
+  
+  .hero-banner h1 {
+    font-size: 2rem;
+  }
+  
+  .book-card img {
+    height: 250px;
+  }
+}
