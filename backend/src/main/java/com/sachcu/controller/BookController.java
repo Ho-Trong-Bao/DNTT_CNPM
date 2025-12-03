@@ -5,7 +5,11 @@
 package com.sachcu.controller;
 
 import com.sachcu.model.Book;
+import com.sachcu.model.Post;
+import com.sachcu.dto.BookDetailResponse;
 import com.sachcu.service.BookService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,13 +59,39 @@ public class BookController {
     
     /**
      * GET /api/books/{id}
-     * Lấy chi tiết sách theo ID
+     * Lấy chi tiết sách theo ID, che thông tin nhạy cảm nếu chưa đăng nhập
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Integer id) {
+    public ResponseEntity<BookDetailResponse> getBookById(@PathVariable Integer id) {
         return bookService.getBookById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+            .map(book -> {
+                BookDetailResponse dto = new BookDetailResponse();
+                dto.setBookID(book.getBookID());
+                dto.setTitle(book.getTitle());
+                dto.setAuthor(book.getAuthor());
+                dto.setBookCondition(book.getBookCondition());
+                dto.setDescription(book.getDescription());
+                dto.setImage(book.getImage());
+                dto.setPrice(book.getPrice() != null ? book.getPrice().doubleValue() : null);
+                dto.setProvince(book.getProvince());
+                dto.setDistrict(book.getDistrict());
+
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                boolean isAuthenticated = auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal());
+
+                if (isAuthenticated) {
+                    dto.setContactInfo(book.getContactInfo());
+                    Post post = book.getPost();
+                    if (post != null && post.getUser() != null) {
+                        dto.setSellerUserID(post.getUser().getUserID());
+                    }
+                } else {
+                    dto.setContactInfo("Đăng nhập để xem");
+                    dto.setSellerUserID(null);
+                }
+                return ResponseEntity.ok(dto);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
     
     /**

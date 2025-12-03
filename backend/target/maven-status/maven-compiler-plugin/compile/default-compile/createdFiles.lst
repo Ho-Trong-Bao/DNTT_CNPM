@@ -24,6 +24,7 @@ com\sachcu\controller\BookController.class
 com\sachcu\dto\MessageResponse.class
 com\sachcu\config\JwtUtil.class
 com\sachcu\repository\BookRepository.class
+com\sachcu\dto\BookDetailResponse.class
 com\sachcu\repository\UserRepository.class
 com\sachcu\model\Post$PostStatus.class
 com\sachcu\repository\PostRepository.class

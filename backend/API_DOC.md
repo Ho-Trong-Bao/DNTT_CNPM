@@ -14,7 +14,8 @@
 - **Response:**
 ```json
 {
-  "message": "Đăng ký thành công!"
+  "message": "Đăng ký thành công!",
+  "success": true
 }
 ```
 
@@ -31,8 +32,11 @@
 - **Response:**
 ```json
 {
-  "token": "jwt-token",
-  "user": { ... }
+  "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0Njc2NDYzLCJleHAiOjE3NjQ3NjI4NjN9.u6UgMzk3MPFmb7KjZGMbJPu7qTiHfbFFt7e3ASk4xOwTAVBqKfi0ytv9nD1EIFgsGYVIK0aea5x7GqdmWB-LFQ",
+  "type": "Bearer",
+  "userId": 11,
+  "email": "test@example.com",
+  "name": "Test User"
 }
 ```
 

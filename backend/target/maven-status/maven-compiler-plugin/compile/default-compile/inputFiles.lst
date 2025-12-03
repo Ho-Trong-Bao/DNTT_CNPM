@@ -16,6 +16,7 @@ D:\Sach_cu\backend\src\main\java\com\sachcu\repository\ReportRepository.java
 D:\Sach_cu\backend\src\main\java\com\sachcu\model\Post.java
 D:\Sach_cu\backend\src\main\java\com\sachcu\model\Category.java
 D:\Sach_cu\backend\src\main\java\com\sachcu\service\UserService.java
+D:\Sach_cu\backend\src\main\java\com\sachcu\dto\BookDetailResponse.java
 D:\Sach_cu\backend\src\main\java\com\sachcu\repository\BookRepository.java
 D:\Sach_cu\backend\src\main\java\com\sachcu\service\PostService.java
 D:\Sach_cu\backend\src\main\java\com\sachcu\dto\LoginRequest.java

@@ -5,6 +5,7 @@
 package com.sachcu.controller;
 
 import com.sachcu.dto.MessageResponse;
+import com.sachcu.dto.PostDetailResponse;
 import com.sachcu.model.Post;
 import com.sachcu.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,11 +59,49 @@ public class PostController {
      * Lấy chi tiết bài đăng
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Integer id) {
-        return postService.getPostById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    public ResponseEntity<PostDetailResponse> getPostById(@PathVariable Integer id) {
+
+    return postService.getPostById(id)
+        .map(post -> {
+
+            PostDetailResponse dto = new PostDetailResponse();
+            dto.setPostID(post.getPostID());
+            dto.setTitle(post.getTitle());
+            dto.setContent(post.getContent());
+            dto.setStatus(post.getStatus());
+            dto.setCreatedAt(post.getCreatedAt().toString());
+
+            // Lấy thông tin seller
+            if (post.getUser() != null) {
+                dto.setSellerName(post.getUser().getFullName());
+            }
+
+            // Kiểm tra user có đăng nhập không
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            boolean isAuthenticated =
+                auth != null &&
+                auth.isAuthenticated() &&
+                !"anonymousUser".equals(auth.getPrincipal());
+
+            if (isAuthenticated) {
+                // Hiển thị đầy đủ thông tin
+                dto.setContactInfo(post.getContactInfo());
+                dto.setSellerUserID(post.getUser().getUserID());
+            } else {
+                // Khách ẩn thông tin nhạy cảm
+                dto.setContactInfo("Đăng nhập để xem");
+                dto.setSellerUserID(null);
+            }
+
+            // Nếu post có sách
+            dto.setBook(post.getBook());
+
+            return ResponseEntity.ok(dto);
+
+        })
+        .orElse(ResponseEntity.notFound().build());
+}
+
     
     /**
      * PUT /api/posts/{id}

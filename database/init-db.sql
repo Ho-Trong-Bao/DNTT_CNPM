@@ -1,5 +1,8 @@
 -- ===========================================
--- TẠO DATABASE
+-- spring.datasource.url=jdbc:mysql://localhost:3306/sachcu_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+-- spring.datasource.username=root
+-- spring.datasource.password=123456
+-- spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 -- ===========================================
 DROP DATABASE IF EXISTS sachcu_db;
 CREATE DATABASE sachcu_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -117,41 +120,48 @@ INSERT INTO category (categoryName) VALUES
 -- ADMIN DEFAULT
 -- Password: admin123
 -- ===========================================
-INSERT INTO admin (name, email, password) VALUES
-('Quản trị viên', 'admin@sachcu.vn',
- '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+SET NAMES utf8mb4;
+
+INSERT INTO `admin` (`adminID`, `name`, `email`, `password`, `createdAt`, `created_at`) VALUES
+(1,	'Quản trị viên',	'admin@sachcu.vn',	'$2a$12$lKGQzsHyOLBhzUarV2OVm.jinv3lKI45N5yx.JRRAKtH.psnnHZNS',	'2025-12-01 16:16:50',	NULL);
+
 
 -- ===========================================
--- USER SAMPLE (10 users)
+-- USER SAMPLE 
 -- ===========================================
-INSERT INTO user (name, email, password, phone, province, district, ward) VALUES
-('Nguyễn Văn A', 'vana@gmail.com','123456','0909123456','TP.HCM','Quận 1','Bến Nghé'),
-('Trần Thị B', 'thib@gmail.com','123456','0918123456','TP.HCM','Quận 3','Phường 5'),
-('Lê Minh C', 'minhc@gmail.com','123456','0935123456','Hà Nội','Cầu Giấy','Dịch Vọng'),
-('Phạm Duy D', 'duyd@gmail.com','123456','0967123456','Đà Nẵng','Hải Châu','Thuận Phước'),
-('Đặng Quỳnh E','quynhe@gmail.com','123456','0973123456','Cần Thơ','Ninh Kiều','An Bình'),
-('Nguyễn Hoàng F','hoangf@gmail.com','123456','0982123456','Hà Nội','Ba Đình','Điện Biên'),
-('Trương Mỹ G','myg@gmail.com','123456','0912123456','TP.HCM','Bình Thạnh','Phường 25'),
-('Lý Quốc H','quoch@gmail.com','123456','0939123456','Đồng Nai','Biên Hòa','Tân Hiệp'),
-('Cao Kim I','kimi@gmail.com','123456','0922123456','Hải Phòng','Lê Chân','An Biên'),
-('Hoàng Nhật K','nhatk@gmail.com','123456','0948123456','Huế','Hương Thủy','Thủy Phương');
+INSERT INTO `user` (`userID`, `name`, `email`, `password`, `phone`, `province`, `district`, `ward`, `status`, `createdAt`, `updatedAt`, `created_at`, `updated_at`) VALUES
+(11,	'Test User',	'test@example.com',	'$2a$10$E35s03Qtut13vGQfMqwiauG4.fO4Vze8lWZL3vC3kvTJ7Aldxbzxq',	NULL,	NULL,	NULL,	NULL,	'ACTIVE',	'2025-12-01 16:22:08',	'2025-12-01 16:22:08',	'2025-12-01 16:22:08.816446',	'2025-12-01 16:22:08.816446'),
+(12,	'User',	'user@example.com',	'$2a$12$lKGQzsHyOLBhzUarV2OVm.jinv3lKI45N5yx.JRRAKtH.psnnHZNS',	NULL,	NULL,	NULL,	NULL,	'ACTIVE',	'2025-12-02 11:00:56',	'2025-12-03 04:41:13',	'2025-12-02 11:00:56.168434',	'2025-12-02 11:00:56.168434'),
+(13,	'Nguyễn Văn Test',	'test@gmail.com',	'$2a$10$B.vBwfDe5AdGfQ2mA5KpTeriWsP.biwqLGwjiqNZpwpdxYX18y3I.',	'0909999999',	'TP.HCM',	'Quận 1',	'Bến Nghé',	'ACTIVE',	'2025-12-03 04:04:53',	'2025-12-03 04:04:53',	'2025-12-03 04:04:52.998102',	'2025-12-03 04:04:52.998102'),
+(14,	'Nguyễn Vũng Tàu',	'vungtau@gmail.com',	'$2a$10$Xxjtyx8rdh2dFc3HC7lf3uH8Eczegu5BwoOgugQGsYnxfEqQJgAhO',	'0909999777',	'Vũng Tàu',	'Phường 10',	'Hà Đông',	'ACTIVE',	'2025-12-03 04:43:43',	'2025-12-03 04:43:43',	'2025-12-03 04:43:43.409431',	'2025-12-03 04:43:43.409431');
 
 -- ===========================================
 -- BOOK SAMPLE DATA (12 books)
 -- ===========================================
-INSERT INTO book (title, author, bookCondition, price, description, province, district, contactInfo) VALUES
-('Đắc nhân tâm', 'Dale Carnegie', 'Cũ (80%)', 60000, 'Sách kỹ năng kinh điển, bản in đẹp.', 'TP.HCM','Quận 1','0909123456'),
-('Nhà giả kim', 'Paulo Coelho', 'Cũ nhẹ (90%)', 75000, 'Một tiểu thuyết truyền cảm hứng.', 'Hà Nội','Cầu Giấy','0967123456'),
-('Dế Mèn Phiêu Lưu Ký', 'Tô Hoài', 'Mới 98%', 50000, 'Truyện thiếu nhi kinh điển.', 'TP.HCM','Quận 3','0918123456'),
-('Tôi thấy hoa vàng trên cỏ xanh', 'Nguyễn Nhật Ánh', 'Cũ 85%', 55000,'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.', 'Đà Nẵng','Hải Châu','0967123456'),
-('Lập trình Java cơ bản', 'NXB CNTT', 'Mới 99%', 120000, 'Giáo trình học Java cho sinh viên.', 'TP.HCM','Bình Thạnh','0939123456'),
-('Lập trình Python nâng cao', 'NXB CNTT', 'Cũ 90%', 95000, 'Hướng dẫn lập trình Python chi tiết.', 'Hà Nội','Hai Bà Trưng','0982123456'),
-('Cha giàu cha nghèo', 'Robert Kiyosaki', 'Cũ 80%', 65000, 'Sách tài chính kinh điển.', 'Cần Thơ','Ninh Kiều','0973123456'),
-('7 thói quen hiệu quả', 'Stephen R.Covey', 'Mới 97%', 80000, 'Phát triển bản thân.', 'TP.HCM','Quận 10','0909123456'),
-('One Piece Tập 1', 'Eiichiro Oda', 'Cũ nhẹ', 30000, 'Manga nổi tiếng.', 'Đồng Nai','Biên Hòa','0922123456'),
-('Naruto Tập 55', 'Masashi Kishimoto', 'Cũ (70%)', 20000, 'Manga hành động.', 'Hải Phòng','Lê Chân','0912123456'),
-('Sherlock Holmes Toàn Tập', 'Arthur Conan Doyle', 'Cũ', 110000, 'Truyện trinh thám kinh điển.', 'Huế','Hương Thủy','0948123456'),
-('Kinh tế học vĩ mô', 'Paul Samuelson', 'Mới', 130000, 'Giáo trình kinh tế.', 'Hà Nội','Ba Đình','0973123456');
+INSERT INTO `book` (`bookID`, `title`, `author`, `bookCondition`, `price`, `description`, `image`, `contactInfo`, `province`, `district`, `createdAt`, `book_condition`, `contact_info`, `created_at`) VALUES
+(1,	'Đắc nhân tâm',	'Dale Carnegie',	'Cũ (80%)',	60000.00,	'Sách kỹ năng kinh điển, bản in đẹp.',	NULL,	'0909123456',	'TP.HCM',	'Quận 1',	'2025-12-01 16:16:50',	NULL,	'2025-12-02 11:09:05.577692',	'2025-12-02 11:09:05.577692'),
+(2,	'Nhà giả kim',	'Paulo Coelho',	'Cũ nhẹ (90%)',	75000.00,	'Một tiểu thuyết truyền cảm hứng.',	NULL,	'0967123456',	'Hà Nội',	'Cầu Giấy',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(3,	'Dế Mèn Phiêu Lưu Ký',	'Tô Hoài',	'Mới 98%',	50000.00,	'Truyện thiếu nhi kinh điển.',	NULL,	'0918123456',	'TP.HCM',	'Quận 3',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(4,	'Tôi thấy hoa vàng trên cỏ xanh',	'Nguyễn Nhật Ánh',	'Cũ 85%',	55000.00,	'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.',	NULL,	'0967123456',	'Đà Nẵng',	'Hải Châu',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(5,	'Lập trình Java cơ bản',	'NXB CNTT',	'Mới 99%',	120000.00,	'Giáo trình học Java cho sinh viên.',	NULL,	'0939123456',	'TP.HCM',	'Bình Thạnh',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(6,	'Lập trình Python nâng cao',	'NXB CNTT',	'Cũ 90%',	95000.00,	'Hướng dẫn lập trình Python chi tiết.',	NULL,	'0982123456',	'Hà Nội',	'Hai Bà Trưng',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(7,	'Cha giàu cha nghèo',	'Robert Kiyosaki',	'Cũ 80%',	65000.00,	'Sách tài chính kinh điển.',	NULL,	'0973123456',	'Cần Thơ',	'Ninh Kiều',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(8,	'7 thói quen hiệu quả',	'Stephen R.Covey',	'Mới 97%',	80000.00,	'Phát triển bản thân.',	NULL,	'0909123456',	'TP.HCM',	'Quận 10',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(9,	'One Piece Tập 1',	'Eiichiro Oda',	'Cũ nhẹ',	30000.00,	'Manga nổi tiếng.',	NULL,	'0922123456',	'Đồng Nai',	'Biên Hòa',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(10,	'Naruto Tập 55',	'Masashi Kishimoto',	'Cũ (70%)',	20000.00,	'Manga hành động.',	NULL,	'0912123456',	'Hải Phòng',	'Lê Chân',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(11,	'Sherlock Holmes Toàn Tập',	'Arthur Conan Doyle',	'Cũ',	110000.00,	'Truyện trinh thám kinh điển.',	NULL,	'0948123456',	'Huế',	'Hương Thủy',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(12,	'Kinh tế học vĩ mô',	'Paul Samuelson',	'Mới',	130000.00,	'Giáo trình kinh tế.',	NULL,	'0973123456',	'Hà Nội',	'Ba Đình',	'2025-12-01 16:16:50',	NULL,	NULL,	NULL),
+(13,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:09:05',	'Mới',	'0909123456',	'2025-12-02 11:09:05.577692'),
+(14,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:10:31',	'Mới',	'0909123456',	'2025-12-02 11:10:31.122953'),
+(15,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:35:44',	'Mới',	'0909123456',	'2025-12-02 11:35:44.610186'),
+(16,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:36:14',	'Mới',	'0909123456',	'2025-12-02 11:36:14.207604'),
+(17,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:36:14',	'Mới',	'0909123456',	'2025-12-02 11:36:14.777204'),
+(18,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:36:15',	'Mới',	'0909123456',	'2025-12-02 11:36:15.358340'),
+(19,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:36:15',	'Mới',	'0909123456',	'2025-12-02 11:36:15.613613'),
+(20,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	NULL,	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:36:15',	'Mới',	'0909123456',	'2025-12-02 11:36:15.785568'),
+(22,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	'https://cdn1.fahasa.com/media/catalog/product/d/n/dntttttuntitled.jpg',	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 11:41:49',	'Mới',	'0909123456',	'2025-12-02 11:41:49.576996'),
+(23,	'Sách mới',	'Tác giả',	NULL,	100000.00,	NULL,	'https://cdn1.fahasa.com/media/catalog/product/d/n/dntttttuntitled.jpg',	NULL,	'TP.HCM',	'Quận 1',	'2025-12-02 15:10:56',	'Mới',	'0909123456',	'2025-12-02 15:10:56.259024');
+-- 2025-12-03 05:07:11 UTC
 
 -- ===========================================
 -- POSTS SAMPLE
