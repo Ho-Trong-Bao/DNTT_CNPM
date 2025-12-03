@@ -1,6 +1,7 @@
 package com.sachcu.service;
 
 import com.sachcu.dto.response.PostResponse;
+import com.sachcu.dto.response.UserResponse;
 import com.sachcu.entity.Post;
 import com.sachcu.entity.Report;
 import com.sachcu.entity.User;
@@ -77,6 +78,29 @@ public class AdminService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    /**
+     * Lấy thông tin User theo ID (Admin)
+     */
+    public UserResponse getUserById(Integer id) {
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+    return new UserResponse(
+            user.getUserID(),
+            user.getName(),
+            user.getEmail(),
+            user.getPhone(),
+            user.getProvince(),
+            user.getDistrict(),
+            user.getWard(),
+            user.getStatus().name(),
+            user.getCreatedAt()
+        );
+    }
+
+
+
     
     /**
      * Cập nhật trạng thái User (Admin)

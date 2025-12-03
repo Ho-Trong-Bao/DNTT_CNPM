@@ -1,5 +1,30 @@
 # Hướng dẫn Test API - Sách Cũ Theo Khu Vực
 
+
+ Các quy tắc quan trọng
+✅ Guest (chưa login):
+
+Xem được danh sách sách đã duyệt
+Xem được chi tiết sách
+❌ KHÔNG xem được contact
+❌ KHÔNG xem được tên người đăng
+❌ KHÔNG đăng bài
+
+✅ User (đã login):
+
+Xem được TẤT CẢ thông tin sách
+Xem được contact và tên người đăng
+Đăng bài mới
+Xem/sửa/xóa bài của CHÍNH MÌNH
+❌ KHÔNG sửa/xóa bài của người khác
+
+✅ Admin:
+
+Duyệt/từ chối bài đăng
+Quản lý User
+Xóa bất kỳ bài nào
+
+
 ## 1. Chuẩn bị
 
 ### Chạy database:
@@ -46,6 +71,14 @@ Content-Type: application/json
 
 **Response:** Lưu lại `token` để sử dụng cho các API khác
 
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6MTQsInN1YiI6InZ1bmd0YXVAZ21haWwuY29tIiwiaWF0IjoxNzY0NzUyNDI2LCJleHAiOjE3NjQ4Mzg4MjZ9.4BBGc0lUV1_n3NhmkX7kLLGNXCeJFe5xzsqqRCoxSYI",
+  "type": "Bearer",
+  "userID": 14,
+  "name": "Hồ Trọng Bảo",
+  "email": "vungtau@gmail.com",
+  "role": "USER"
+}
 ### 2.3 Đăng nhập Admin
 ```
 POST /auth/admin/login
@@ -57,6 +90,15 @@ Content-Type: application/json
 }
 ```
 
+
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6ImFkbWluQHNhY2hjdS52biIsImlhdCI6MTc2NDc1MjA5NiwiZXhwIjoxNzY0ODM4NDk2fQ.ZTS07PhbdA5xfrNlf0p2Meri9Q9_XnsM6OqZmX4qjb4",
+  "type": "Bearer",
+  "userID": 1,
+  "name": "Quản trị viên",
+  "email": "admin@sachcu.vn",
+  "role": "ADMIN"
+}
 ## 3. Test Book APIs (Public - không cần token)
 
 ### 3.1 Lấy tất cả sách
@@ -64,10 +106,54 @@ Content-Type: application/json
 GET /books
 ```
 
+response
+  {
+    "bookID": 2,
+    "title": "Nhà giả kim",
+    "author": "Paulo Coelho",
+    "bookCondition": null,
+    "price": 75000.00,
+    "description": "Một tiểu thuyết truyền cảm hứng.",
+    "image": null,
+    "contactInfo": "🔒 Vui lòng đăng nhập để xem thông tin liên hệ",
+    "province": "Hà Nội",
+    "district": "Cầu Giấy",
+    "createdAt": null,
+    "postID": 2,
+    "postDescription": "Sách đẹp, đọc 1 lần",
+    "postStatus": "APPROVED",
+    "userID": null,
+    "userName": "🔒 Đăng nhập để xem",
+    "categoryID": 2,
+    "categoryName": ""
+  },
+
+
 ### 3.2 Xem chi tiết sách (Guest - ẩn contact)
 ```
 GET /books/1
 ```
+
+{
+  "bookID": 2,
+  "title": "Nhà giả kim",
+  "author": "Paulo Coelho",
+  "bookCondition": null,
+  "price": 75000.00,
+  "description": "Một tiểu thuyết truyền cảm hứng.",
+  "image": null,
+  "contactInfo": "🔒 Vui lòng đăng nhập để xem thông tin liên hệ",
+  "province": "Hà Nội",
+  "district": "Cầu Giấy",
+  "createdAt": null,
+  "postID": 2,
+  "postDescription": "Sách đẹp, đọc 1 lần",
+  "postStatus": "APPROVED",
+  "userID": null,
+  "userName": "🔒 Đăng nhập để xem",
+  "categoryID": 2,
+  "categoryName": ""
+}
 
 ### 3.3 Xem chi tiết sách (User đã login - hiện contact)
 ```
@@ -106,13 +192,13 @@ Content-Type: application/json
 
 ### 4.2 Xem bài đăng của User
 ```
-GET /users/1/posts
+GET /my-posts
 Authorization: Bearer {token}
 ```
 
 ### 4.3 Sửa bài đăng
 ```
-PUT /posts/1
+PUT /my-posts/{postID}: Sửa bài của chính mình (kiểm tra quyền sở hữu)
 Authorization: Bearer {token}
 Content-Type: application/json
 
@@ -124,9 +210,13 @@ Content-Type: application/json
 
 ### 4.4 Xóa bài đăng
 ```
-DELETE /posts/1
+DELETE /my-posts/{postID}: Xóa bài của chính mình (chỉ PENDING/DECLINED)
 Authorization: Bearer {token}
 ```
+
+### 4.5 Đánh dấu đã bán
+PUT /my-posts/1/sold
+Authorization: Bearer {token}
 
 ## 5. Test User APIs
 
@@ -234,3 +324,8 @@ Content-Type: application/json
 2. Set environment variable `base_url` = `http://localhost:8080/api`
 3. Set environment variable `token` sau khi đăng nhập
 4. Run collection để test tất cả APIs
+
+
+Cấm user, thây đổi user
+Report
+Lấy thông tin user (admin)

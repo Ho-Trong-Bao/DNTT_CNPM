@@ -6,15 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * DTO Response: UserResponse
- * Mô tả: Thông tin user trả về
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
-    
+
     private Integer userID;
     private String name;
     private String email;

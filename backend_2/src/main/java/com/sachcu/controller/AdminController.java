@@ -1,6 +1,7 @@
 package com.sachcu.controller;
 
 import com.sachcu.dto.response.PostResponse;
+import com.sachcu.dto.response.UserResponse;
 import com.sachcu.entity.Post;
 import com.sachcu.entity.Report;
 import com.sachcu.entity.User;
@@ -110,6 +111,25 @@ public class AdminController {
         }
     }
     
+
+    /**
+     * API: Lấy thông tin User theo ID (Admin)
+     * Method: GET
+     * Endpoint: /admin/users/{id}
+     * Auth: ROLE_ADMIN
+     */
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+        try {
+            UserResponse response = adminService.getUserById(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+
     /**
      * API: Cập nhật trạng thái User
      * Method: PUT
