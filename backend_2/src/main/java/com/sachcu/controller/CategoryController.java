@@ -35,13 +35,9 @@ public class CategoryController {
      */
     @GetMapping("/categories")
     public ResponseEntity<?> getAllCategories() {
-        try {
-            List<Category> categories = categoryService.getAllCategories();
-            return ResponseEntity.ok(categories);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
+
     
     /**
      * API: Thêm danh mục mới

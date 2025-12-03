@@ -1,5 +1,6 @@
 package com.sachcu.service;
 
+import com.sachcu.dto.response.CategoryResponse;
 import com.sachcu.entity.Category;
 import com.sachcu.exception.ResourceNotFoundException;
 import com.sachcu.repository.CategoryRepository;
@@ -27,9 +28,17 @@ public class CategoryService {
     /**
      * Lấy tất cả danh mục
      */
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryResponse> getAllCategories() {
+    return categoryRepository.findAll()
+        .stream()
+        .map(cat -> new CategoryResponse(
+                cat.getCategoryID(),
+                cat.getCategoryName(),
+                cat.getBookCategories().size()
+        ))
+        .toList();
     }
+
     
     /**
      * Lấy Category theo ID
