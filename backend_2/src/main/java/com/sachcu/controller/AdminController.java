@@ -104,13 +104,9 @@ public class AdminController {
      */
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
-        try {
-            List<User> users = adminService.getAllUsers();
-            return ResponseEntity.ok(users);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(adminService.getAllUsers());
     }
+
     
 
     /**

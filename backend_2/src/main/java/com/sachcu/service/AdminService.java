@@ -75,9 +75,24 @@ public class AdminService {
     /**
      * Lấy danh sách tất cả User (Admin)
      */
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+    List<User> users = userRepository.findAll();
+
+    return users.stream()
+            .map(user -> new UserResponse(
+                    user.getUserID(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getPhone(),
+                    user.getProvince(),
+                    user.getDistrict(),
+                    user.getWard(),
+                    user.getStatus().name(),
+                    user.getCreatedAt()
+            ))
+            .toList();
     }
+
 
     /**
      * Lấy thông tin User theo ID (Admin)
