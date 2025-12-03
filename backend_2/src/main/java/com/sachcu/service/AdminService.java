@@ -121,18 +121,27 @@ public class AdminService {
      * Cập nhật trạng thái User (Admin)
      */
     @Transactional
-    public User updateUserStatus(Integer userID, String status) {
+    public UserResponse updateUserStatus(Integer userID, String status) {
         User user = userRepository.findById(userID)
-                .orElseThrow(() -> new ResourceNotFoundException("User không tồn tại"));
-        
-        try {
-            User.UserStatus newStatus = User.UserStatus.valueOf(status.toUpperCase());
-            user.setStatus(newStatus);
-            return userRepository.save(user);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Trạng thái không hợp lệ: " + status);
-        }
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+        User.UserStatus newStatus = User.UserStatus.valueOf(status.toUpperCase());
+        user.setStatus(newStatus);
+        userRepository.save(user);
+
+        return new UserResponse(
+                user.getUserID(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getProvince(),
+                user.getDistrict(),
+                user.getWard(),
+                user.getStatus().name(),
+                user.getCreatedAt()
+        );
     }
+
     
     /**
      * Xóa User (Admin)

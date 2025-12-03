@@ -140,17 +140,13 @@ public class AdminController {
             @RequestBody Map<String, String> request) {
 
         String status = request.get("status");
-
-        if (status == null || status.trim().isEmpty()) {
+        if (status == null)
             return ResponseEntity.badRequest().body("Trạng thái không được để trống");
-        }
 
-        User updated = adminService.updateUserStatus(userID, status);
-
-        return ResponseEntity.ok(
-                new UserStatusResponse(updated.getUserID(), updated.getStatus().name())
-        );
+        return ResponseEntity.ok(adminService.updateUserStatus(userID, status));
     }
+
+
 
     
     /**
