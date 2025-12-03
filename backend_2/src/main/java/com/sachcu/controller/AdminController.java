@@ -2,6 +2,7 @@ package com.sachcu.controller;
 
 import com.sachcu.dto.response.PostResponse;
 import com.sachcu.dto.response.UserResponse;
+import com.sachcu.dto.response.UserStatusResponse;
 import com.sachcu.entity.Post;
 import com.sachcu.entity.Report;
 import com.sachcu.entity.User;
@@ -138,20 +139,23 @@ public class AdminController {
      * Body: { "status": "ACTIVE" | "SUSPENDED" | "BANNED" | "DELETED" }
      */
     @PutMapping("/users/{userID}/status")
-    public ResponseEntity<?> updateUserStatus(@PathVariable Integer userID,
-                                              @RequestBody Map<String, String> request) {
-        try {
-            String status = request.get("status");
-            if (status == null || status.trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("Trạng thái không được để trống");
-            }
-            
-            User user = adminService.updateUserStatus(userID, status);
-            return ResponseEntity.ok(user);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<?> updateUserStatus(
+            @PathVariable Integer userID,
+            @RequestBody Map<String, String> request) {
+
+        String status = request.get("status");
+
+        if (status == null || status.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Trạng thái không được để trống");
         }
+
+        User updated = adminService.updateUserStatus(userID, status);
+
+        return ResponseEntity.ok(
+                new UserStatusResponse(updated.getUserID(), updated.getStatus().name())
+        );
     }
+
     
     /**
      * API: Xóa User
