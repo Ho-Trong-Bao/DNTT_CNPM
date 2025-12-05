@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * - POST /auth/register - Đăng ký tài khoản User
  * - POST /auth/login - Đăng nhập User
  * - POST /auth/admin/login - Đăng nhập Admin
+ * 
  * BCrypt được sử dụng để mã hóa mật khẩu người dùng.
  */
 @RestController

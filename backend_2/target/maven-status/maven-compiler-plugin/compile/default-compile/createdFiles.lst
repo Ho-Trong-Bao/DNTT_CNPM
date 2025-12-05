@@ -22,6 +22,7 @@ com\sachcu\dto\request\UpdateUserRequest.class
 com\sachcu\repository\BookRepository.class
 com\sachcu\repository\UserRepository.class
 com\sachcu\SachcuApplication.class
+com\sachcu\controller\ImageController.class
 com\sachcu\security\UserDetailsServiceImpl.class
 com\sachcu\dto\response\BookDetailResponse.class
 com\sachcu\dto\request\UpdatePostRequest.class
@@ -31,6 +32,7 @@ com\sachcu\controller\AuthController.class
 com\sachcu\service\AuthService.class
 com\sachcu\entity\Post$PostStatus.class
 com\sachcu\entity\Report.class
+com\sachcu\service\FileStorageService.class
 com\sachcu\entity\User.class
 com\sachcu\entity\BookCategory$BookCategoryId.class
 com\sachcu\entity\Post.class
@@ -39,7 +41,9 @@ com\sachcu\entity\Report$ReportStatus.class
 com\sachcu\dto\request\LoginRequest.class
 com\sachcu\dto\request\RegisterRequest.class
 com\sachcu\repository\ReportRepository.class
+com\sachcu\dto\response\CategoryResponse.class
 com\sachcu\entity\Book.class
 com\sachcu\dto\response\UserResponse.class
+com\sachcu\dto\response\UserStatusResponse.class
 com\sachcu\dto\request\CreatePostRequest.class
 com\sachcu\repository\PostRepository.class

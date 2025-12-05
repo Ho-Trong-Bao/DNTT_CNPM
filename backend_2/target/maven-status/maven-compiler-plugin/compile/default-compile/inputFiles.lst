@@ -20,6 +20,7 @@ D:\Sachcu_2\backend_2\src\main\java\com\sachcu\controller\PostController.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\controller\BookController.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\repository\AdminRepository.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\repository\ReportRepository.java
+D:\Sachcu_2\backend_2\src\main\java\com\sachcu\dto\response\CategoryResponse.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\service\UserService.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\dto\request\UpdatePostRequest.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\dto\response\AuthResponse.java
@@ -29,6 +30,7 @@ D:\Sachcu_2\backend_2\src\main\java\com\sachcu\service\PostService.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\service\AuthService.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\service\AdminService.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\service\CategoryService.java
+D:\Sachcu_2\backend_2\src\main\java\com\sachcu\dto\response\UserStatusResponse.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\entity\BookCategory.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\config\SecurityConfig.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\entity\Post.java
@@ -38,4 +40,6 @@ D:\Sachcu_2\backend_2\src\main\java\com\sachcu\repository\UserRepository.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\dto\response\PostResponse.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\SachcuApplication.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\dto\request\RegisterRequest.java
+D:\Sachcu_2\backend_2\src\main\java\com\sachcu\controller\ImageController.java
 D:\Sachcu_2\backend_2\src\main\java\com\sachcu\entity\Report.java
+D:\Sachcu_2\backend_2\src\main\java\com\sachcu\service\FileStorageService.java

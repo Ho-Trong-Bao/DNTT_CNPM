@@ -1,6 +1,9 @@
 # Hướng dẫn Test API - Sách Cũ Theo Khu Vực
 
 
+
+
+
  Các quy tắc quan trọng
 ✅ Guest (chưa login):
 
@@ -24,16 +27,100 @@ Duyệt/từ chối bài đăng
 Quản lý User
 Xóa bất kỳ bài nào
 
+/**
+ * Controller: AdminController
+ * Mô tả: Xử lý các API dành cho Admin
+ * 
+ * APIs:
+ * - GET /admin/posts - Lấy tất cả bài đăng (Admin)
+ * - GET /admin/posts/status/{status} - Lấy bài đăng theo trạng thái (Admin)
+ * - PUT /admin/posts/{postID}/status - Duyệt/từ chối bài đăng (Admin)
+ * - GET /admin/users - Lấy danh sách User (Admin)
+ * - PUT /admin/users/{userID}/status - Cập nhật trạng thái User (Admin)
+ * - DELETE /admin/users/{userID} - Xóa User (Admin)
+ * - GET /admin/reports - Lấy danh sách báo cáo (Admin)
+ * - PUT /admin/reports/{reportID}/status - Xử lý báo cáo (Admin)
+ */
 
+/**
+ * Controller: AuthController
+ * Mô tả: Xử lý các API liên quan đến xác thực
+ * 
+ * APIs:
+ * - POST /auth/register - Đăng ký tài khoản User
+ * - POST /auth/login - Đăng nhập User
+ * - POST /auth/admin/login - Đăng nhập Admin
+ * 
+ * BCrypt được sử dụng để mã hóa mật khẩu người dùng.
+ */
+
+ 
+/**
+ * Controller: BookController
+ * Mô tả: Xử lý các API liên quan đến Book (Public - không cần đăng nhập)
+ * 
+ * APIs:
+ * - GET /books - Lấy danh sách tất cả sách đã duyệt (Public, ẩn thông tin)
+ * - GET /books/{bookID} - Xem chi tiết sách (Public, ẩn contact nếu chưa login)
+ * - GET /books/search - Tìm kiếm sách (Public, ẩn thông tin)
+ * - GET /books/province/{province} - Lấy sách theo tỉnh (Public, ẩn thông tin)
+ */
+
+ /**
+ * Controller: CategoryController
+ * Mô tả: Xử lý các API liên quan đến Category
+ * 
+ * APIs:
+ * - GET /categories - Lấy tất cả danh mục (Public)
+ * - POST /admin/categories - Thêm danh mục mới (Admin)
+ * - PUT /admin/categories/{categoryID} - Sửa danh mục (Admin)
+ * - DELETE /admin/categories/{categoryID} - Xóa danh mục (Admin)
+ */
+
+
+/**
+ * Controller: PostController
+ * Mô tả: Xử lý các API liên quan đến Post (Bài đăng)
+ * 
+ * ==================== PUBLIC APIs (Không cần đăng nhập) ====================
+ * - GET /posts/{postID} - Xem chi tiết bài đăng (ẩn thông tin nếu chưa login)
+ * 
+ * ==================== USER APIs (Cần đăng nhập) ====================
+ * - POST /posts - Đăng bài bán sách mới
+ * - GET /my-posts - Xem tất cả bài đăng của chính mình
+ * - PUT /my-posts/{postID} - Sửa bài đăng của chính mình
+ * - DELETE /my-posts/{postID} - Xóa bài đăng của chính mình
+ * - PUT /my-posts/{postID}/sold - Đánh dấu đã bán
+ */
+
+ /**
+ * Controller: UserController
+ * Mô tả: Xử lý các API liên quan đến User
+ * 
+ * APIs:
+ * - GET /users/{userID} - Lấy thông tin chi tiết User (Cần đăng nhập)
+ * - PUT /users/{userID} - Cập nhật thông tin User (Cần đăng nhập)
+ * - POST /users/{userID}/change-password - Đổi mật khẩu (Cần đăng nhập)
+ */
 ## 1. Chuẩn bị
 
 ### Chạy database:
+
+
+
+
 - Import file `init-db.sql` vào MySQL
 - Database name: `sachcu_db`
 - Username: `root`
 - Password: `123456`
 
+
+
+
 ### Chạy backend:
+
+mvn clean install  
+
 ```bash
 mvn spring-boot:run
 ```
@@ -238,6 +325,18 @@ Content-Type: application/json
   "province": "Hà Nội"
 }
 ```
+
+{
+  "userID": 13,
+  "name": "Nguyễn Văn Test",
+  "email": "test@gmail.com",
+  "phone": "0909999999",
+  "province": "TP.HCM",
+  "district": "Quận 1",
+  "ward": "Bến Nghé",
+  "status": "ACTIVE",
+  "createdAt": "2025-12-03T11:04:52.998102"
+}
 
 ### 5.3 Đổi mật khẩu
 ```
