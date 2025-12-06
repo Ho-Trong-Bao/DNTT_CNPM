@@ -67,7 +67,7 @@ public class SecurityConfig {
                         "/admin/**",
                         "/manage/**",
                         "/books/admin/**",
-                        "/categories/admin/**"
+                        "admin/categories/**"
                 ).hasRole("ADMIN")
 
                 // mặc định: yêu cầu đăng nhập
