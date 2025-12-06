@@ -46,15 +46,16 @@ async function handleLogin(e) {
     console.log('✅ Login response:', response);
     
     // Kiểm tra response structure
-    if (!response.token || !response.userId) {
+    if (!response.token || !response.userID) {
       throw new Error('Dữ liệu đăng nhập không hợp lệ');
     }
     
     // Lưu thông tin đăng nhập vào localStorage
     const userData = {
-      userId: response.userId || response.userID,
+      userID: response.userID || response.userID,
       email: response.email,
-      name: response.name
+      name: response.name,
+      role: response.role
     };
     
     console.log('💾 Saving auth data:', userData);
