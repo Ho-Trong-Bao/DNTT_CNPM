@@ -428,3 +428,12 @@ Content-Type: application/json
 Cấm user, thây đổi user
 Report
 Lấy thông tin user (admin)
+
+
+
+
+curl.exe -X POST http://localhost:8080/api/images/upload `
+>>   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6MTUsInN1YiI6Imh1eUBnbWFpbC5jb20iLCJpYXQiOjE3NjQ5MTkyMzQsImV4cCI6MTc2NTAwNTYzNH0.0EOTVEOzXSg-pqEIjxeyEfKiXN3m2rveP8deNGYa2F4" `
+>>   -F file=@"D:/hinhanh.jpg"
+{"fileName":"783e2c01-7653-4c38-9af4-6e791e93a098.jpg","fileSize":30197,"success":true,"fileUrl":"http://localhost:8080/api/images/783e2c01-7653-4c38-9af4-6e791e93a098.jpg","message":"Upload ảnh thành công","fileType":"image/jpeg"}
+PS D:\Sachcu_2\backend_2>
