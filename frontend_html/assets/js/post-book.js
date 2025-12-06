@@ -1,119 +1,124 @@
 /**
  * File: frontend/assets/js/post-book.js
- * Post Book Page JavaScript - KẾT NỐI VỚI BACKEND API
+ * Đăng bán sách – phiên bản dùng API upload ảnh mới
  */
 
-let selectedCategories = [];
-let imageBase64 = '';
-
-document.addEventListener('DOMContentLoaded', async function() {
-  // Kiểm tra đăng nhập
+document.addEventListener('DOMContentLoaded', async () => {
   if (!requireAuth()) return;
-  
+
   await loadCategories();
   setupImagePreview();
-  setupFormSubmit();
+  setupSubmit();
 });
 
-// Load categories từ API backend: GET /api/categories
+let selectedImageFile = null;
+
+// Load categories: GET /api/categories
 async function loadCategories() {
   try {
     const categories = await categoryAPI.getAll();
-    const container = document.getElementById('categoriesCheckbox');
-    
-    container.innerHTML = categories.map(cat => `
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" 
-               id="cat${cat.categoryID}" value="${cat.categoryID}">
-        <label class="form-check-label" for="cat${cat.categoryID}">
-          ${cat.categoryName}
-        </label>
-      </div>
-    `).join('');
-    
+    const select = document.getElementById('category');
+
+    select.innerHTML = `
+      <option value="">-- Chọn thể loại --</option>
+    `;
+
+    categories.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat.categoryID;
+      opt.textContent = cat.categoryName;
+      select.appendChild(opt);
+    });
+
   } catch (error) {
-    console.error('Error loading categories:', error);
-    showToast('Không thể tải danh sách thể loại', 'error');
+    console.error("Error loading categories:", error);
+    showToast("Không thể tải danh sách thể loại", "error");
   }
 }
 
-// Setup image preview
+
+// Preview Image
 function setupImagePreview() {
-  document.getElementById('bookImage').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
+  document.getElementById("bookImage").addEventListener("change", e => {
+    selectedImageFile = e.target.files[0];
+
+    if (selectedImageFile) {
       const reader = new FileReader();
-      reader.onload = function(evt) {
-        imageBase64 = evt.target.result;
-        document.getElementById('imagePreview').src = imageBase64;
+      reader.onload = ev => {
+        document.getElementById("imagePreview").src = ev.target.result;
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedImageFile);
     }
   });
 }
 
-// Setup form submit - KẾT NỐI API: POST /api/posts?userID={id}
-function setupFormSubmit() {
-  document.getElementById('postBookForm').addEventListener('submit', async function(e) {
+// Submit form
+function setupSubmit() {
+  document.getElementById("postBookForm").addEventListener("submit", async e => {
     e.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang đăng...';
-    
+
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Đang đăng...`;
+
     try {
-      // Lấy categories đã chọn
-      selectedCategories = [];
-      document.querySelectorAll('#categoriesCheckbox input:checked').forEach(cb => {
-        selectedCategories.push({
-          categoryID: parseInt(cb.value)
+      // 1️⃣ Upload ảnh nếu có
+      async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch(`${API_BASE_URL}/images/upload`, {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + getToken() // ⚠️ phải có token
+          },
+          body: formData
         });
-      });
-      
-      // Tạo object Book theo đúng cấu trúc backend
+
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        return data.fileUrl; // ⭐ quan trọng
+      }
+
+      const file = document.getElementById("bookImage").files[0];
+
+      const imageUrl = await uploadImage(file);
+
+      // 2️⃣ Lấy categories đã chọn
+      const selectedCategories = Array.from(
+        document.querySelectorAll("#categoriesCheckbox input:checked")
+      ).map(cb => Number(cb.value));
+
+      // 3️⃣ Tạo book object đúng backend
       const bookData = {
         title: document.getElementById('title').value,
         author: document.getElementById('author').value,
         bookCondition: document.getElementById('bookCondition').value,
         price: parseFloat(document.getElementById('price').value),
-        description: document.getElementById('description').value,
-        province: document.getElementById('province').value,
-        district: document.getElementById('district').value,
+        postDescription: document.getElementById('description').value,
+        image: imageUrl,
         contactInfo: document.getElementById('contactInfo').value,
-        image: imageBase64 || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
-        categories: selectedCategories
+        categoryID: parseInt(document.getElementById('category').value),
+        province: document.getElementById('province').value,
+        district: document.getElementById('district').value
       };
-      
-      // Tạo object Post
-      const postData = {
-        book: bookData,
-        description: document.getElementById('description').value
-      };
-      
-      // Lấy userID từ localStorage
+
+
+
+      // 4️⃣ Gửi bài đăng: POST /api/posts
       const userID = getUserId();
-      
-      if (!userID) {
-        throw new Error('Không tìm thấy thông tin người dùng');
-      }
-      
-      // Gọi API: POST /api/posts?userID={userID}
-      console.log('Sending post data:', postData);
-      await postAPI.create(postData, userID);
-      
-      showToast('Đăng bài thành công! Vui lòng chờ admin duyệt.', 'success');
-      
-      // Redirect về my-posts sau 1.5s
-      setTimeout(() => {
-        window.location.href = 'my-posts.html';
-      }, 1500);
-      
-    } catch (error) {
-      console.error('Error posting book:', error);
-      showToast(error.message || 'Đăng bài thất bại. Vui lòng thử lại!', 'error');
-      
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="bi bi-upload me-2"></i>Đăng bài';
+      await postAPI.create(bookData);
+
+      showToast("Đăng bài thành công!", "success");
+      setTimeout(() => location.href = "my-posts.html", 1200);
+
+    } catch (err) {
+      console.error(err);
+      showToast(err.message || "Lỗi đăng bài!", "error");
+
+      btn.disabled = false;
+      btn.innerHTML = `<i class="bi bi-upload me-2"></i>Đăng bài`;
     }
   });
 }
