@@ -96,15 +96,38 @@ function createPostCard(post) {
             <i class="bi bi-pencil-square me-1"></i>Sửa
           </button>
 
-          <button class="btn btn-danger btn-sm" onclick="confirmDelete(${post.postID})">
+          <button class="btn btn-danger btn-sm" onclick="deletePost(${post.postID})">
             <i class="bi bi-trash me-1"></i>Xóa
           </button>
+
+          <button class="btn btn-success btn-sm" onclick="markAsSold(${post.postID})">
+            <i class="bi bi-check2-circle me-1"></i>Đã bán
+          </button>
+
         </div>
 
       </div>
     </div>
   `;
 }
+
+
+/* ============================
+   Thây đổi trạng thái bài thành đã bán
+============================= */
+
+async function markAsSold(postID) {
+  try {
+    await postAPI.markSold(postID);
+    showToast("Đã cập nhật trạng thái: Đã bán!", "success");
+    setTimeout(() => location.reload(), 800);
+  } catch (error) {
+    console.error(error);
+    showToast("Không thể cập nhật trạng thái!", "error");
+  }
+}
+
+
 
 /* ============================
    HIỂN THỊ BADGE TRẠNG THÁI
@@ -113,14 +136,21 @@ function getStatusBadge(status) {
   switch (status) {
     case "PENDING":
       return `<span class="badge bg-warning text-dark">⏳ Chờ duyệt</span>`;
+
     case "APPROVED":
       return `<span class="badge bg-success">✔ Đã duyệt</span>`;
+
     case "REJECTED":
       return `<span class="badge bg-danger">❌ Từ chối</span>`;
+
+    case "SOLD":
+      return `<span class="badge bg-secondary">💰 Đã bán</span>`;
+
     default:
       return `<span class="badge bg-secondary">Không xác định</span>`;
   }
 }
+
 
 /* ============================
    BUTTON ACTIONS
@@ -131,11 +161,19 @@ function editPost(postID) {
 }
 
 let deletePostID = null;
-function confirmDelete(postID) {
-  deletePostID = postID;
-  const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
-  modal.show();
+async function deletePost() {
+  try {
+    await postAPI.delete(deletePostID);
+
+    showToast("Đã xoá bài đăng!", "success");
+
+    loadMyPosts();   // load lại danh sách
+
+  } catch (error) {
+    showToast(error.message || "Lỗi xoá bài đăng!", "error");
+  }
 }
+
 
 document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
   if (!deletePostID) return;
