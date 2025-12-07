@@ -61,7 +61,7 @@ function createPostCard(post) {
         
         <img src="${img}" 
              class="card-img-top" 
-             style="height: 260px; object-fit: cover;" 
+             style="height: 460px; object-fit: cover;" 
              alt="Book image">
 
         <div class="card-body">

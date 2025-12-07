@@ -161,7 +161,7 @@ function setActiveNavLink() {
 function logout() {
   localStorage.removeItem('authToken');
   localStorage.removeItem('user');
-  window.location.href = 'assets/index.html';
+  window.location.href = 'index.html';
 }
 
 // Lấy URL parameter
