@@ -10,10 +10,14 @@ let totalPages = 0;
 document.addEventListener('DOMContentLoaded', async function() {
   await loadCategories();
   await searchBooks();
+  await loadProvinces();
   
   // Event listeners
   document.getElementById('searchForm').addEventListener('submit', handleSearch);
   document.getElementById('resetBtn').addEventListener('click', handleReset);
+  document.getElementById('provinceFilter').addEventListener('change', function () {
+    console.log("Giá trị tỉnh được chọn:", this.value);
+});
 });
 
 // Load categories cho filter
@@ -31,6 +35,21 @@ async function loadCategories() {
   } catch (error) {
     console.error('Error loading categories:', error);
   }
+}
+
+// Load tỉnh từ API
+async function loadProvinces() {
+  const province = document.getElementById("provinceFilter");
+
+  const res = await fetch("https://provinces.open-api.vn/api/p/");
+  const data = await res.json();
+
+  data.forEach(p => {
+    const opt = document.createElement("option");
+    opt.value = p.name;            // giá trị gửi lên backend
+    opt.textContent = p.name;      // nội dung hiển thị
+    province.appendChild(opt);
+  });
 }
 
 // Search books

@@ -95,8 +95,8 @@ a:hover {
 }
 
 .nav-link.active {
-  background-color: var(--primary-color);
-  color: #FFF !important;
+    background-color: var(--primary-color);
+    color: #070505 !important;
 }
 
 /* ============================================
