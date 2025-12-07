@@ -157,6 +157,13 @@ function setActiveNavLink() {
   });
 }
 
+// Đăng xuất
+function logout() {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('user');
+  window.location.href = 'assets/index.html';
+}
+
 // Lấy URL parameter
 function getUrlParameter(name) {
   const urlParams = new URLSearchParams(window.location.search);

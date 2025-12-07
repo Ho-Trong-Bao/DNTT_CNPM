@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   setupAvatarPreview();
   setupProfileForm();
   setupPasswordForm();
-});
+});     
 
 // Load user profile từ API: GET /api/users/{id}
 async function loadUserProfile() {

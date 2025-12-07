@@ -22,7 +22,7 @@ async function loadMyPosts() {
 
   try {
     // GET /api/my-posts
-    const posts = await myPostAPI.list();
+    const posts = await postAPI.getMyPosts();
 
     if (!posts || posts.length === 0) {
       container.innerHTML = `

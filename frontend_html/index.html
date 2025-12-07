@@ -16,27 +16,31 @@
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="index.html">
-        <img src="assets/images/logo.png" alt="Logo">
+      <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+        <img src="assets/images/logo.png" alt="Logo" class="me-2" style="height:40px">
         Sách Cũ Theo Khu Vực
       </a>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav align-items-lg-center">
           <li class="nav-item">
             <a class="nav-link active" href="index.html">
               <i class="bi bi-house-door me-1"></i>Trang chủ
             </a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" href="search-books.html">
               <i class="bi bi-search me-1"></i>Tìm sách
             </a>
           </li>
+
           <span id="authLinks"></span>
         </ul>
       </div>
@@ -44,17 +48,19 @@
   </nav>
 
   <!-- HERO BANNER -->
-  <section class="hero-banner">
+  <section class="hero-banner py-5">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-lg-8">
-          <h1>Khám phá và chia sẻ sách cũ quanh bạn</h1>
-          <p>Góp phần lan tỏa tri thức, giữ gìn ký ức — mỗi quyển sách đều có câu chuyện riêng.</p>
-          <div class="d-flex gap-3 flex-wrap">
-            <a href="search-books.html" class="btn btn-primary btn-lg">
+          <h1 class="fw-bold">Khám phá và chia sẻ sách cũ quanh bạn</h1>
+          <p class="lead">Góp phần lan tỏa tri thức, giữ gìn ký ức — mỗi quyển sách đều có câu chuyện riêng.</p>
+
+          <div class="d-flex gap-3 flex-wrap mt-3">
+            <a href="search-books.html" class="btn btn-primary btn-lg px-4">
               <i class="bi bi-search me-2"></i>Tìm sách ngay
             </a>
-            <a href="post-book.html" class="btn btn-outline-secondary btn-lg">
+
+            <a href="post-book.html" class="btn btn-outline-secondary btn-lg px-4">
               <i class="bi bi-pencil-square me-2"></i>Đăng bán sách
             </a>
           </div>
@@ -63,20 +69,27 @@
     </div>
   </section>
 
-  <!-- FEATURED BOOKS -->
+    <!-- FEATURED BOOKS -->
   <section class="container my-5 py-4">
-    <h2 class="section-title">📚 Sách nổi bật</h2>
-    <div id="featuredBooks" class="row g-4">
-      <!-- Books will be loaded here -->
+    <h2 class="section-title mb-4">📚 Sách nổi bật</h2>
+
+    <div id="featuredBooks" class="row g-4"></div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul id="pagination" class="pagination"></ul>
+        </nav>
     </div>
   </section>
+
 
   <!-- SEARCH PROMPT -->
   <section class="bg-white py-5">
     <div class="container text-center">
       <h2 class="section-title">🔍 Tìm kiếm sách quanh bạn</h2>
       <p class="lead mb-4">Hàng ngàn đầu sách đang chờ bạn khám phá từ những người yêu sách khác.</p>
-      <a href="search-books.html" class="btn btn-primary btn-lg">
+      <a href="search-books.html" class="btn btn-primary btn-lg px-4">
         <i class="bi bi-search me-2"></i>Bắt đầu tìm kiếm
       </a>
     </div>
@@ -86,23 +99,25 @@
   <section class="container my-5 py-4">
     <div class="row text-center">
       <div class="col-md-4 mb-4">
-        <div class="p-4">
-          <i class="bi bi-book-fill stats-icon"></i>
-          <h3 class="stats-number">1000+</h3>
+        <div class="p-4 shadow-sm rounded-4 bg-light">
+          <i class="bi bi-book-fill stats-icon mb-2"></i>
+          <h3 class="stats-number fw-bold">1000+</h3>
           <p class="text-muted">Đầu sách</p>
         </div>
       </div>
+
       <div class="col-md-4 mb-4">
-        <div class="p-4">
-          <i class="bi bi-people-fill stats-icon"></i>
-          <h3 class="stats-number">500+</h3>
+        <div class="p-4 shadow-sm rounded-4 bg-light">
+          <i class="bi bi-people-fill stats-icon mb-2"></i>
+          <h3 class="stats-number fw-bold">500+</h3>
           <p class="text-muted">Người dùng</p>
         </div>
       </div>
+
       <div class="col-md-4 mb-4">
-        <div class="p-4">
-          <i class="bi bi-geo-alt-fill stats-icon"></i>
-          <h3 class="stats-number">63</h3>
+        <div class="p-4 shadow-sm rounded-4 bg-light">
+          <i class="bi bi-geo-alt-fill stats-icon mb-2"></i>
+          <h3 class="stats-number fw-bold">63</h3>
           <p class="text-muted">Tỉnh thành</p>
         </div>
       </div>
@@ -110,18 +125,17 @@
   </section>
 
   <!-- FOOTER -->
-  <footer>
-    <div class="container">
+  <footer class="bg-dark text-white py-3">
+    <div class="container text-center">
       <p class="mb-0">
-        © 2025 - Nhóm 13 | Sách Cũ Theo Khu Vực |
+        © 2025 - Nhóm 13 | Sách Cũ Theo Khu Vực
         <span class="ms-2"><i class="bi bi-heart-fill text-danger"></i> Made with love</span>
       </p>
     </div>
   </footer>
 
-  <!-- Bootstrap JS -->
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Custom JS -->
   <script src="assets/js/auth.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/main.js"></script>

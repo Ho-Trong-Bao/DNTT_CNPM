@@ -99,139 +99,30 @@ const authAPI = {
 
 // ------------------ BOOKS ------------------
 const bookAPI = {
-  async list(params = {}) {
-    const qs = new URLSearchParams(params).toString();
-    const res = await fetch(`${API_BASE_URL}/books${qs ? `?${qs}` : ''}`, { headers: getHeaders() });
+  list: async () => {
+    const res = await fetch(`${API_BASE_URL}/books`, { headers: getHeaders() });
     return handleResponse(res);
   },
 
-  async get(bookID) {
+  get: async (bookID) => {
     const res = await fetch(`${API_BASE_URL}/books/${bookID}`, { headers: getHeaders() });
     return handleResponse(res);
   },
 
-  async search(params = {}) {
+  search: async (params) => {
     const qs = new URLSearchParams(params).toString();
     const res = await fetch(`${API_BASE_URL}/books/search?${qs}`, { headers: getHeaders() });
     return handleResponse(res);
   },
 
-  async byProvince(province) {
-    const res = await fetch(`${API_BASE_URL}/books/province/${encodeURIComponent(province)}`, { headers: getHeaders() });
-    return handleResponse(res);
-  },
-
-  async featured() {
-    const res = await fetch(`${API_BASE_URL}/books/featured`, { headers: getHeaders() });
-    return handleResponse(res);
-  }
-};
-
-// ------------------ POSTS ------------------
-const postAPI = {
-  
-  // Tạo bài đăng mới
-  create: async (data) => {
-    const res = await fetch(`${API_BASE_URL}/posts`, {
-      method: "POST",
-      headers: getHeaders(),
-      body: JSON.stringify(data)
-    });
-    return handleResponse(res);
-  },
-
-  // Lấy bài của tôi
-  getMyPosts: async () => {
-    return request.get("/my-posts");
-  },
-
-  // Xóa bài đăng
-  delete: async (postID) => {
-    return request.delete(`/posts/${postID}`);
-  }
-};
-
-
-// ------------------ MY POSTS (user) ------------------
-const myPostAPI = {
-  async list() {
-    const res = await fetch(`${API_BASE_URL}/my-posts`, { headers: getHeaders() });
-    return handleResponse(res);
-  },
-
-  async create(payload) {
-    const res = await fetch(`${API_BASE_URL}/posts`, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(payload)
-    });
-    return handleResponse(res);
-  },
-
-  async update(postID, payload) {
-    const res = await fetch(`${API_BASE_URL}/my-posts/${postID}`, {
-      method: 'PUT',
-      headers: getHeaders(),
-      body: JSON.stringify(payload)
-    });
-    return handleResponse(res);
-  },
-
-  async delete(postID) {
-    const res = await fetch(`${API_BASE_URL}/my-posts/${postID}`, {
-      method: 'DELETE',
-      headers: getHeaders(false)
-    });
-    return handleResponse(res);
-  },
-
-  async markSold(postID) {
-    const res = await fetch(`${API_BASE_URL}/my-posts/${postID}/sold`, {
-      method: 'PUT',
-      headers: getHeaders(false)
+  byProvince: async (province) => {
+    const res = await fetch(`${API_BASE_URL}/books/province/${province}`, {
+      headers: getHeaders()
     });
     return handleResponse(res);
   }
 };
 
-// ------------------ IMAGE ------------------
-const imageAPI = {
-  async upload(file) {
-    const fd = new FormData(); fd.append('file', file);
-    const token = getAuthToken();
-    const res = await fetch(`${API_BASE_URL}/images/upload`, {
-      method: 'POST',
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
-      body: fd
-    });
-    return handleResponse(res);
-  },
-
-  async uploadMultiple(filesArray) {
-    const fd = new FormData();
-    filesArray.forEach(f => fd.append('files', f));
-    const token = getAuthToken();
-    const res = await fetch(`${API_BASE_URL}/images/upload-multiple`, {
-      method: 'POST',
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
-      body: fd
-    });
-    return handleResponse(res);
-  },
-
-  async delete(fileName) {
-    const res = await fetch(`${API_BASE_URL}/images/${encodeURIComponent(fileName)}`, {
-      method: 'DELETE',
-      headers: getHeaders(false)
-    });
-    return handleResponse(res);
-  },
-
-  // public image URL: `${API_BASE_URL.replace('/api','')}/images/{fileName}` or `${API_BASE_URL}/images/{fileName}` depending on backend routing
-  getPublicUrl(fileName) {
-    return `${API_BASE_URL}/images/${fileName}`;
-  }
-};
 
 // ------------------ CATEGORIES ------------------
 const categoryAPI = {
@@ -241,7 +132,116 @@ const categoryAPI = {
   }
 };
 
-// ------------------ USER (admin) ------------------
+// ========================
+// POST (USER)
+// ========================
+const postAPI = {
+  create: async (data) => {
+    const res = await fetch(`${API_BASE_URL}/posts`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(data)
+    });
+    return handleResponse(res);
+  },
+
+  getMyPosts: async () => {
+    const res = await fetch(`${API_BASE_URL}/my-posts`, {
+      headers: getHeaders()
+    });
+    return handleResponse(res);
+  },
+
+  update: async (postID, payload) => {
+    const res = await fetch(`${API_BASE_URL}/my-posts/${postID}`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify(payload)
+    });
+    return handleResponse(res);
+  },
+
+  delete: async (postID) => {
+    const res = await fetch(`${API_BASE_URL}/my-posts/${postID}`, {
+      method: "DELETE",
+      headers: getHeaders(false)
+    });
+    return handleResponse(res);
+  },
+
+  markSold: async (postID) => {
+    const res = await fetch(`${API_BASE_URL}/my-posts/${postID}/sold`, {
+      method: "PUT",
+      headers: getHeaders(false)
+    });
+    return handleResponse(res);
+  }
+};
+
+// ------------------ USER API ------------------
+const userAPI = {
+  // GET /api/users/{userID}
+  getById: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/users/${id}`, {
+      headers: getHeaders()
+    });
+    return handleResponse(res);
+  },
+
+  // PUT /api/users/{userID}
+  updateProfile: async (id, payload) => {
+    const res = await fetch(`${API_BASE_URL}/users/${id}`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify(payload)
+    });
+    return handleResponse(res);
+  },
+
+  // POST /api/users/{userID}/change-password
+  changePassword: async (id, payload) => {
+    const res = await fetch(`${API_BASE_URL}/users/${id}/change-password`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(payload)
+    });
+    return handleResponse(res);
+  }
+};
+
+
+
+
+
+// ========================
+// IMAGE
+// ========================
+const imageAPI = {
+  upload: async (file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+
+    const res = await fetch(`${API_BASE_URL}/images/upload`, {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + getToken() },
+      body: fd
+    });
+
+    return handleResponse(res);
+  },
+
+  delete: async (fileName) => {
+    const res = await fetch(`${API_BASE_URL}/images/${fileName}`, {
+      method: "DELETE",
+      headers: getHeaders(false)
+    });
+    return handleResponse(res);
+  }
+};
+
+
+
+// ------------------ admin ------------------
 const adminAPI = {
   async getAllPosts() {
     const res = await fetch(`${API_BASE_URL}/admin/posts`, { headers: getHeaders() });
@@ -319,14 +319,11 @@ window.api = {
   myPostAPI,
   imageAPI,
   categoryAPI,
-  userAPI: {
-    getById: async (id) => fetch(`${API_BASE_URL}/users/${id}`, { headers: getHeaders() }).then(handleResponse),
-    update: async (id, payload) => fetch(`${API_BASE_URL}/users/${id}`, { method: 'PUT', headers: getHeaders(), body: JSON.stringify(payload) }).then(handleResponse),
-    changePassword: async (id, payload) => fetch(`${API_BASE_URL}/users/${id}/change-password`, { method: 'POST', headers: getHeaders(), body: JSON.stringify(payload) }).then(handleResponse)
-  },
-  categoryAPI,
+  userAPI,
   adminAPI
 };
 
 // Usage note: this file matches the API document provided. If backend property names differ (userID vs userId)
 // the authAPI.login normalizes userID. Make sure the frontend uses localStorage key 'authToken' and 'user'.
+
+

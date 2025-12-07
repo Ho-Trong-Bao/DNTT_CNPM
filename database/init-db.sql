@@ -104,17 +104,17 @@ CREATE TABLE report (
 -- ===========================================
 -- CATEGORY SAMPLE DATA
 -- ===========================================
-INSERT INTO category (categoryName) VALUES
-('Văn học Việt Nam'),
-('Văn học nước ngoài'),
-('Kỹ năng sống'),
-('Tin học'),
-('Kinh tế'),
-('Thiếu nhi'),
-('Truyện tranh - Manga'),
-('Giáo trình đại học'),
-('Tâm lý - Triết học'),
-('Light Novel');
+INSERT INTO `category` (`categoryID`, `category_name`) VALUES
+(1,	'Văn học Việt Nam'),
+(2,	'Văn học nước ngoài'),
+(3,	'Kỹ năng sống'),
+(4,	'Tin học'),
+(5,	'Kinh tế'),
+(6,	'Thiếu nhi'),
+(7,	'Truyện tranh - Manga'),
+(8,	'Giáo trình đại học'),
+(9,	'Tâm lý - Triết học'),
+(10,	'Light Novel');
 
 -- ===========================================
 -- ADMIN DEFAULT
@@ -183,9 +183,23 @@ INSERT INTO posts (userID, bookID, description, status) VALUES
 -- ===========================================
 -- BOOK CATEGORY SAMPLE
 -- ===========================================
-INSERT INTO book_category VALUES
-(1,3),(2,2),(3,6),(4,1),(5,4),(6,4),(7,5),
-(8,3),(9,7),(10,7),(11,2),(12,5);
+INSERT INTO `book_category` (`bookID`, `categoryID`) VALUES
+(4,	1),
+(2,	2),
+(11,	2),
+(1,	3),
+(8,	3),
+(5,	4),
+(6,	4),
+(24,	4),
+(25,	4),
+(26,	4),
+(27,	4),
+(7,	5),
+(12,	5),
+(3,	6),
+(9,	7),
+(10,	7);
 
 -- ===========================================
 -- REPORT SAMPLE

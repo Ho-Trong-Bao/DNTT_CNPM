@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng bán sách - Sách Cũ Theo Khu Vực</title>
   <link rel="icon" href="assets/images/logo.png">
-  
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
@@ -43,118 +43,107 @@
     </div>
   </nav>
 
-  <!-- POST BOOK FORM -->
+  <!-- FORM -->
   <section class="container py-5">
     <h2 class="section-title mb-4">📝 Đăng bán sách của bạn</h2>
 
     <form id="postBookForm">
       <div class="row g-4">
-        <!-- Image Preview -->
+
+        <!-- IMAGE -->
         <div class="col-md-4">
           <div class="card border-0 shadow-sm">
-            <img id="imagePreview" 
-                 src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=300&q=80"
-                 class="card-img-top" alt="Preview" style="height: 400px; object-fit: cover;">
+            <img id="imagePreview"
+                 src="https://placehold.co/400x500?text=Book+Cover"
+                 class="card-img-top"
+                 style="height: 400px; object-fit: cover;"
+            />
             <div class="card-body">
-              <label for="bookImage" class="form-label fw-semibold">Ảnh bìa sách</label>
-              <input type="file" class="form-control" id="bookImage" accept="image/*">
-              <small class="text-muted">Chọn ảnh rõ nét để thu hút người mua</small>
+              <label class="form-label fw-semibold">Ảnh bìa sách *</label>
+              <input type="file" id="bookImage" class="form-control" accept="image/*" required />
+              <small class="text-muted">Ảnh sẽ được upload trước khi đăng bài</small>
             </div>
           </div>
         </div>
 
-        <!-- Book Information -->
+        <!-- INFO -->
         <div class="col-md-8">
           <div class="card border-0 shadow-sm p-4">
-            <h5 class="mb-3">Thông tin sách</h5>
 
             <div class="mb-3">
-              <label for="title" class="form-label fw-semibold">Tên sách *</label>
-              <input type="text" class="form-control" id="title" name="title" 
-                     placeholder="Nhập tên sách..." required>
+              <label class="form-label fw-semibold">Tên sách *</label>
+              <input id="title" class="form-control" required />
             </div>
 
             <div class="mb-3">
-              <label for="author" class="form-label fw-semibold">Tác giả *</label>
-              <input type="text" class="form-control" id="author" name="author" 
-                     placeholder="Tên tác giả..." required>
+              <label class="form-label fw-semibold">Tác giả *</label>
+              <input id="author" class="form-control" required />
             </div>
 
             <div class="row">
               <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="bookCondition" class="form-label fw-semibold">Tình trạng</label>
-                  <select class="form-select" id="bookCondition" name="bookCondition">
-                    <option value="Mới">Mới</option>
-                    <option value="Cũ nhẹ (90%)" selected>Cũ nhẹ (90%)</option>
-                    <option value="Cũ (70%)">Cũ (70%)</option>
-                    <option value="Rách nhẹ">Rách nhẹ</option>
-                  </select>
-                </div>
+                <label class="form-label fw-semibold">Tình trạng</label>
+                <select id="bookCondition" class="form-select">
+                  <option value="Mới">Mới</option>
+                  <option value="Cũ nhẹ (90%)" selected>Cũ nhẹ (90%)</option>
+                  <option value="Cũ (70%)">Cũ (70%)</option>
+                  <option value="Rách nhẹ">Rách nhẹ</option>
+                </select>
               </div>
 
               <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="price" class="form-label fw-semibold">Giá bán (VNĐ) *</label>
-                  <input type="number" class="form-control" id="price" name="price" 
-                         placeholder="VD: 50000" min="1000" step="1000" required>
-                </div>
+                <label class="form-label fw-semibold">Giá bán *</label>
+                <input id="price" type="number" class="form-control" min="1000" step="1000" required />
               </div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-semibold">Thể loại</label>
-              <div id="categoriesCheckbox">
-                <!-- Categories will be loaded here -->
-              </div>
+              <label class="form-label fw-semibold">Thể loại *</label>
+              <select id="category" class="form-select" required>
+                <option value="">-- Chọn thể loại --</option>
+              </select>
             </div>
+
 
             <div class="row">
               <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="province" class="form-label fw-semibold">Tỉnh/Thành phố</label>
-                  <select class="form-select" id="province" name="province">
-                    <option value="">Chọn tỉnh/thành</option>
-                    <option value="TP.HCM">TP.HCM</option>
-                    <option value="Hà Nội">Hà Nội</option>
-                    <option value="Đà Nẵng">Đà Nẵng</option>
-                    <option value="Cần Thơ">Cần Thơ</option>
-                    <option value="Hải Phòng">Hải Phòng</option>
-                  </select>
-                </div>
+                <label class="form-label fw-semibold">Tỉnh/Thành</label>
+                <select id="province" class="form-select">
+                  <option value="">Chọn tỉnh</option>
+                  <option value="TP.HCM">TP.HCM</option>
+                  <option value="Hà Nội">Hà Nội</option>
+                  <option value="Đà Nẵng">Đà Nẵng</option>
+                  <option value="Cần Thơ">Cần Thơ</option>
+                  <option value="Hải Phòng">Hải Phòng</option>
+                </select>
               </div>
 
               <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="district" class="form-label fw-semibold">Quận/Huyện</label>
-                  <input type="text" class="form-control" id="district" name="district" 
-                         placeholder="Nhập quận/huyện">
-                </div>
+                <label class="form-label fw-semibold">Quận/Huyện</label>
+                <input id="district" class="form-control" />
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="contactInfo" class="form-label fw-semibold">Thông tin liên hệ</label>
-              <input type="text" class="form-control" id="contactInfo" name="contactInfo" 
-                     placeholder="VD: 0901234567 hoặc email@gmail.com">
+              <label class="form-label fw-semibold">Thông tin liên hệ</label>
+              <input id="contactInfo" class="form-control" />
             </div>
 
             <div class="mb-3">
-              <label for="description" class="form-label fw-semibold">Mô tả chi tiết *</label>
-              <textarea class="form-control" id="description" name="description" rows="4" 
-                        placeholder="Giới thiệu về sách, lý do bán..." required></textarea>
+              <label class="form-label fw-semibold">Mô tả *</label>
+              <textarea id="description" rows="4" class="form-control" required></textarea>
             </div>
 
             <div class="text-end mt-4">
-              <button type="button" class="btn btn-outline-secondary me-2" onclick="history.back()">
-                Hủy
-              </button>
+              <button type="button" class="btn btn-outline-secondary" onclick="history.back()">Hủy</button>
               <button type="submit" class="btn btn-primary" id="submitBtn">
                 <i class="bi bi-upload me-2"></i>Đăng bài
               </button>
             </div>
+
           </div>
         </div>
+
       </div>
     </form>
   </section>
@@ -166,9 +155,8 @@
     </div>
   </footer>
 
-  <!-- Bootstrap JS -->
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Custom JS -->
   <script src="assets/js/auth.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/main.js"></script>

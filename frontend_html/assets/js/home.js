@@ -1,37 +1,60 @@
 /**
  * File: frontend/assets/js/home.js
- * Home Page JavaScript
+ * Trang chủ - Hiển thị sách nổi bật và dữ liệu tổng quan
  */
 
-// Load featured books khi trang load
-document.addEventListener('DOMContentLoaded', async function() {
-  await loadFeaturedBooks();
+document.addEventListener("DOMContentLoaded", () => {
+    loadBooks(1); // load trang đầu tiên
 });
 
-async function loadFeaturedBooks() {
-  const container = document.getElementById('featuredBooks');
-  showLoading('featuredBooks');
+const ITEMS_PER_PAGE = 12;
 
-  try {
-    const books = await bookAPI.getFeatured();
-    
-    if (books && books.length > 0) {
-      container.innerHTML = books.map(book => createBookCard(book)).join('');
-    } else {
-      container.innerHTML = `
-        <div class="col-12 text-center py-5">
-          <i class="bi bi-book fs-1 text-muted"></i>
-          <p class="mt-3 text-muted">Chưa có sách nổi bật nào</p>
-        </div>
-      `;
+async function loadBooks(page) {
+    try {
+        const books = await bookAPI.list(); // GET /books
+        renderBooksPage(books, page);
+        renderPagination(books.length, page);
+    } catch (err) {
+        console.error(err);
+        showToast("Không thể tải dữ liệu sách!", "error");
     }
-  } catch (error) {
-    console.error('Error loading featured books:', error);
-    container.innerHTML = `
-      <div class="col-12 text-center py-5">
-        <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
-        <p class="mt-3 text-muted">Không thể tải sách nổi bật</p>
-      </div>
-    `;
-  }
+}
+
+function renderBooksPage(books, page) {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+
+    const booksToShow = books.slice(start, end);
+    const container = document.getElementById("featuredBooks");
+
+    container.innerHTML = booksToShow
+        .map(book => `
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <img src="${book.image}" class="card-img-top" style="height:200px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">${book.title}</h5>
+                        <p class="text-muted">${book.author}</p>
+                        <p class="fw-bold text-danger">${book.price.toLocaleString()} đ</p>
+                        <a href="book-detail.html?id=${book.bookID}" class="btn btn-primary w-100">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        `)
+        .join("");
+}
+
+function renderPagination(totalItems, currentPage) {
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const pagination = document.getElementById("pagination");
+
+    pagination.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+            <li class="page-item ${i === currentPage ? "active" : ""}">
+                <a class="page-link" href="#" onclick="loadBooks(${i})">${i}</a>
+            </li>
+        `;
+    }
 }
