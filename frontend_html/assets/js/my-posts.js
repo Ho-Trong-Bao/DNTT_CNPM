@@ -96,7 +96,7 @@ function createPostCard(post) {
             <i class="bi bi-pencil-square me-1"></i>Sửa
           </button>
 
-          <button class="btn btn-danger btn-sm" onclick="deletePost(${post.postID})">
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete(${post.postID})">
             <i class="bi bi-trash me-1"></i>Xóa
           </button>
 
@@ -161,6 +161,17 @@ function editPost(postID) {
 }
 
 let deletePostID = null;
+
+function confirmDelete(postID) {
+  deletePostID = postID;
+  const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
+  modal.show();
+}
+
+
+
+
+
 async function deletePost() {
   try {
     await postAPI.delete(deletePostID);
@@ -173,6 +184,8 @@ async function deletePost() {
     showToast(error.message || "Lỗi xoá bài đăng!", "error");
   }
 }
+
+
 
 
 document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {

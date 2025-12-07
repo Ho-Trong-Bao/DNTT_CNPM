@@ -3,6 +3,29 @@
  * Main Utilities & Common Functions
  */
 
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const btnPostBook = document.getElementById("btnPostBook");
+  if (!btnPostBook) return;
+
+  btnPostBook.addEventListener("click", () => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      const modal = new bootstrap.Modal(document.getElementById("loginRequiredModal"));
+      modal.show();
+      return;
+    }
+
+    // Đã đăng nhập -> chuyển về post-book
+    window.location.href = "post-book.html";
+  });
+
+});
+
+
+
 // Format giá tiền
 function formatPrice(price) {
   return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
