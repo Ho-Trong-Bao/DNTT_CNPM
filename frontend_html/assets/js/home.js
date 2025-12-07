@@ -32,17 +32,38 @@ function renderBooksPage(books, page) {
             <div class="col-md-3">
                 <div class="card h-100 shadow-sm">
                     <img src="${book.image}" class="card-img-top" style="height:400px; object-fit:cover;">
-                    <div class="card-body">
+                    
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">${book.title}</h5>
-                        <p class="text-muted">${book.author}</p>
-                        <p class="fw-bold text-danger">${book.price.toLocaleString()} đ</p>
-                        <a href="book-detail.html?id=${book.bookID}" class="btn btn-primary w-100">Xem chi tiết</a>
+
+                        <p class="text-muted mb-1">
+                            <i class="bi bi-person"></i> ${book.author}
+                        </p>
+
+                        <p class="text-muted small mb-1">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            ${book.province || "?"} ${book.district ? "- " + book.district : ""}
+                        </p>
+
+                        <p class="small text-secondary" style="min-height:40px;">
+                            ${book.postDescription || book.description || "Không có mô tả"}
+                        </p>
+
+                        <p class="fw-bold text-danger mt-auto mb-3">
+                            ${book.price.toLocaleString()} đ
+                        </p>
+
+                        <a href="book-detail.html?id=${book.bookID}" 
+                           class="btn btn-primary w-100 mt-auto">
+                            Xem chi tiết
+                        </a>
                     </div>
                 </div>
             </div>
         `)
         .join("");
 }
+
 
 function renderPagination(totalItems, currentPage) {
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
