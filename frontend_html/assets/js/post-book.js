@@ -121,4 +121,28 @@ function setupSubmit() {
       btn.innerHTML = `<i class="bi bi-upload me-2"></i>Đăng bài`;
     }
   });
+
+const province = document.getElementById("province");
+const district = document.getElementById("district");
+
+// Load danh sách tỉnh
+fetch("https://provinces.open-api.vn/api/p/")
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(p => {
+      province.innerHTML += `<option value="${p.code}">${p.name}</option>`;
+    });
+  });
+
+// Khi chọn tỉnh → load huyện
+province.addEventListener("change", async function(){
+  district.innerHTML = "<option value=''>-- Chọn Quận/Huyện --</option>";
+  const res = await fetch(`https://provinces.open-api.vn/api/p/${this.value}?depth=2`);
+  const data = await res.json();
+
+  data.districts.forEach(d => {
+    district.innerHTML += `<option value="${d.code}">${d.name}</option>`;
+  });
+});
+
 }
