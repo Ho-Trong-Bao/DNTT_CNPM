@@ -134,26 +134,20 @@ INSERT INTO user (userID, name, email, password, phone, province, district, ward
 -- ===========================================
 -- BOOK SAMPLE DATA (KHỚP CỘT)
 -- ===========================================
-INSERT INTO book (bookID, title, author, price, description, image, province, district, book_condition, contact_info, created_at) VALUES
-(1,'Đắc nhân tâm','Dale Carnegie',60000.00,'Sách kỹ năng kinh điển, bản in đẹp.',NULL,'TP.HCM','Quận 1',NULL,NULL,'2025-12-02 11:09:05'),
-(2,'Nhà giả kim','Paulo Coelho',75000.00,'Một tiểu thuyết truyền cảm hứng.','http://localhost:8080/api/images/16088de5-9eae-4d11-8c2c-d48594f08a5d.jpg','Hà Nội','Cầu Giấy',NULL,NULL,'2025-12-02 11:09:05'),
-(3,'Dế Mèn Phiêu Lưu Ký','Tô Hoài',50000.00,'Truyện thiếu nhi kinh điển.','http://localhost:8080/api/images/e5d34bb7-d814-4a67-b35d-c648534bb131.jpg','TP.HCM','Quận 3',NULL,NULL,'2025-12-02 11:09:05'),
-(4,'Tôi thấy hoa vàng trên cỏ xanh','Nguyễn Nhật Ánh',55000.00,'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.','http://localhost:8080/api/images/d121b093-da44-443e-baf3-ca7ce066ea9b.jpg','Đà Nẵng','Hải Châu',NULL,NULL,'2025-12-02 11:09:05'),
-(5,'Lập trình Java cơ bản','NXB CNTT',120000.00,'Giáo trình học Java cho sinh viên.','http://localhost:8080/api/images/983aa0f9-bda7-4154-adbf-26afeaa37a48.jpg','TP.HCM','Bình Thạnh',NULL,NULL,'2025-12-02 11:09:05'),
-(6,'Lập trình Python nâng cao','NXB CNTT',95000.00,'Hướng dẫn lập trìnhPython chi tiết.','http://localhost:8080/api/images/8d9f1afb-9f5f-475d-a26b-88f0c9eda815.jpg','Hà Nội','Hai Bà Trưng',NULL,NULL,'2025-12-02 11:09:05'),
-(7,'Cha giàu cha nghèo','Robert Kiyosaki',65000.00,'Sách tài chính kinh điển.','http://localhost:8080/api/images/09a2ad63-0727-48e9-a9ea-bbdbc3ee58e0.jpg','Cần Thơ','Ninh Kiều',NULL,NULL,'2025-12-02 11:09:05'),
-(8,'7 thói quen hiệu quả','Stephen R.Covey',80000.00,'Phát triển bản thân.','http://localhost:8080/api/images/3dc81451-c2a7-4114-a10a-5202eb05729d.jpg','TP.HCM','Quận 10',NULL,NULL,'2025-12-02 11:09:05'),
-(9,'One Piece Tập 1','Eiichiro Oda',30000.00,'Manga nổi tiếng.','http://localhost:8080/api/images/5c61a247-7a7a-46eb-8b09-22f7c6c9c520.jpeg','Đồng Nai','Biên Hòa',NULL,NULL,'2025-12-02 11:09:05'),
-(10,'Naruto Tập 55','Masashi Kishimoto',20000.00,'Manga hành động.',NULL,'Hải Phòng','Lê Chân',NULL,NULL,'2025-12-02 11:09:05'),
-(11,'Sherlock Holmes Toàn Tập','Arthur Conan Doyle',110000.00,'Truyện trinh thám kinh điển.',NULL,'Huế','Hương Thủy',NULL,NULL,'2025-12-02 11:09:05'),
-(12,'Kinh tế học vĩ mô','Paul Samuelson',130000.00,'Giáo trình kinh tế.',NULL,'Hà Nội','Ba Đình',NULL,NULL,'2025-12-02 11:09:05'),
+INSERT INTO `book` (`bookID`, `title`, `author`, `price`, `description`, `image`, `province`, `district`, `book_condition`, `contact_info`, `created_at`) VALUES
+(1, 'Đắc nhân tâm', 'Dale Carnegie', 60000.00, 'Sách kỹ năng kinh điển, bản in đẹp.', NULL, 'TP.HCM', 'Quận 1', NULL, '0300100222', '2025-12-02 11:09:05.577692'),
+(2, 'Nhà giả kim', 'Paulo Coelho', 75000.00, 'Một tiểu thuyết truyền cảm hứng.', 'http://localhost:8080/api/images/16088de5-9eae-4d11-8c2c-d48594f08a5d.jpg', 'Hà Nội', 'Cầu Giấy', NULL, '0300100222', NULL),
+(3, 'Dế Mèn Phiêu Lưu Ký', 'Tô Hoài', 50000.00, 'Truyện thiếu nhi kinh điển.', 'http://localhost:8080/api/images/e5d34bb7-d814-4a67-b35d-c648534bb131.jpg', 'TP.HCM', 'Quận 3', NULL, '0300100222', NULL),
+(4, 'Tôi thấy hoa vàng trên cỏ xanh', 'Nguyễn Nhật Ánh', 55000.00, 'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.', 'http://localhost:8080/api/images/d121b093-da44-443e-baf3-ca7ce066ea9b.jpg', 'Đà Nẵng', 'Hải Châu', NULL, '0300100222', NULL),
+(5, 'Lập trình Java cơ bản', 'NXB CNTT', 120000.00, 'Giáo trình học Java cho sinh viên.', 'http://localhost:8080/api/images/983aa0f9-bda7-4154-adbf-26afeaa37a48.jpg', 'TP.HCM', 'Bình Thạnh', NULL, '0300100222', NULL),
+(6, 'Lập trình Python nâng cao', 'NXB CNTT', 95000.00, 'Hướng dẫn lập trình Python chi tiết.', 'http://localhost:8080/api/images/8d9f1afb-9f5f-475d-a26b-88f0c9eda815.jpg', 'Hà Nội', 'Hai Bà Trưng', NULL, '0300100222', NULL),
+(7, 'Cha giàu cha nghèo', 'Robert Kiyosaki', 65000.00, 'Sách tài chính kinh điển.', 'http://localhost:8080/api/images/09a2ad63-0727-48e9-a9ea-bbdbc3ee58e0.jpg', 'Cần Thơ', 'Ninh Kiều', NULL, '0300100222', NULL),
+(8, '7 thói quen hiệu quả', 'Stephen R.Covey', 80000.00, 'Phát triển bản thân.', 'http://localhost:8080/api/images/3dc81451-c2a7-4114-a10a-5202eb05729d.jpg', 'TP.HCM', 'Quận 10', NULL, '0300100222', NULL),
+(11, 'Sherlock Holmes Toàn Tập', 'Arthur Conan Doyle', 110000.00, 'Truyện trinh thám kinh điển.', NULL, 'Huế', 'Hương Thủy', NULL, '0300100222', NULL),
+(12, 'Kinh tế học vĩ mô', 'Paul Samuelson', 130000.00, 'Giáo trình kinh tế.', NULL, 'Hà Nội', 'Ba Đình', NULL, '0300100222', NULL),
+(29, '7 thoái quen hiệu quả', 'Tôi', 85000.00, 'L', 'http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg', 'TP.HCM', 'Quận 3', 'Củ 80%', '0328605555', '2025-12-03 13:31:14.126766'),
+(34, 'Người quan trọng nhất là bản thân bạn', 'Hồ Trọng Bảo', 100000.00, 'Cuốn sách nói về kĩ năng sống. Vì mới nhận hàng chưa bóc siu muốn pass lại', 'http://localhost:8080/api/images/a6723956-56bb-463a-8c7c-6298b40026b2.png', 'TP.HCM', 'Quận 1', 'Mới', '0328605127', '2025-12-06 15:42:22.531547');
 
--- Các bookID 28,29,30,33 GIỮ NGUYÊN
-(28,'7 thoái quen hiệu quả','Tôi',85000.00,'Đây là sách test API','http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg','TP.HCM','Quận 3','Củ 80%','0328605555','2025-12-03 12:45:04'),
-(29,'7 thoái quen hiệu quả','Tôi',85000.00,'L','http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg','TP.HCM','Quận 3','Củ 80%','0328605555','2025-12-03 13:31:14'),
-(30,'7 thoái quen hiệu quả','Tôi',85000.00,'L','http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg','TP.HCM','Quận 3','Củ 80%','0328605555','2025-12-06 05:29:20'),
-(33,'Chiều trên biển','Trọng Bảo',100000.00,'dfsdf','http://localhost:8080/api/images/c9dd4a2a-9a0c-458f-b1e4-dd58f383cf09.jpg','TP.HCM','Quận 1','Cũ nhẹ (90%)','0328605127','2025-12-06 09:04:15'),
-(34,'Người quan trọng nhất là bản thân bạn','Hồ Trọng Bảo',100000.00,'Cuốn sách nói về kĩ năng sống. Vì mới nhận hàng chưa bóc siu muốn pass lại','http://localhost:8080/api/images/a6723956-56bb-463a-8c7c-6298b40026b2.png','TP.HCM','Quận 1','Mới','0328605127','2025-12-06 15:42:22');
 
 -- ===========================================
 -- THÊM BOOK 24–27 ĐỂ HỢP LỆ BOOK_CATEGORY
