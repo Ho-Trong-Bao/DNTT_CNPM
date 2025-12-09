@@ -285,9 +285,15 @@ const adminAPI = {
       method: "DELETE",
       headers: getHeaders(false),
     });
-    return handleResponse(res);
-  },
 
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Xóa user thất bại");
+    }
+
+    // ✅ Vì backend trả TEXT: "Xóa User thành công"
+    return true;
+  },
   async createCategory(payload) {
     const res = await fetch(`${API_BASE_URL}/admin/categories`, {
       method: "POST",
