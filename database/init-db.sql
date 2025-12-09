@@ -143,20 +143,11 @@ INSERT INTO `book` (`bookID`, `title`, `author`, `price`, `description`, `image`
 (6, 'Lập trình Python nâng cao', 'NXB CNTT', 95000.00, 'Hướng dẫn lập trình Python chi tiết.', 'http://localhost:8080/api/images/8d9f1afb-9f5f-475d-a26b-88f0c9eda815.jpg', 'Hà Nội', 'Hai Bà Trưng', NULL, '0300100222', NULL),
 (7, 'Cha giàu cha nghèo', 'Robert Kiyosaki', 65000.00, 'Sách tài chính kinh điển.', 'http://localhost:8080/api/images/09a2ad63-0727-48e9-a9ea-bbdbc3ee58e0.jpg', 'Cần Thơ', 'Ninh Kiều', NULL, '0300100222', NULL),
 (8, '7 thói quen hiệu quả', 'Stephen R.Covey', 80000.00, 'Phát triển bản thân.', 'http://localhost:8080/api/images/3dc81451-c2a7-4114-a10a-5202eb05729d.jpg', 'TP.HCM', 'Quận 10', NULL, '0300100222', NULL),
-(11, 'Sherlock Holmes Toàn Tập', 'Arthur Conan Doyle', 110000.00, 'Truyện trinh thám kinh điển.', NULL, 'Huế', 'Hương Thủy', NULL, '0300100222', NULL),
-(12, 'Kinh tế học vĩ mô', 'Paul Samuelson', 130000.00, 'Giáo trình kinh tế.', NULL, 'Hà Nội', 'Ba Đình', NULL, '0300100222', NULL),
-(29, '7 thoái quen hiệu quả', 'Tôi', 85000.00, 'L', 'http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg', 'TP.HCM', 'Quận 3', 'Củ 80%', '0328605555', '2025-12-03 13:31:14.126766'),
-(34, 'Người quan trọng nhất là bản thân bạn', 'Hồ Trọng Bảo', 100000.00, 'Cuốn sách nói về kĩ năng sống. Vì mới nhận hàng chưa bóc siu muốn pass lại', 'http://localhost:8080/api/images/a6723956-56bb-463a-8c7c-6298b40026b2.png', 'TP.HCM', 'Quận 1', 'Mới', '0328605127', '2025-12-06 15:42:22.531547');
+(9, 'Sherlock Holmes Toàn Tập', 'Arthur Conan Doyle', 110000.00, 'Truyện trinh thám kinh điển.', NULL, 'Huế', 'Hương Thủy', NULL, '0300100222', NULL),
+(10, 'Kinh tế học vĩ mô', 'Paul Samuelson', 130000.00, 'Giáo trình kinh tế.', NULL, 'Hà Nội', 'Ba Đình', NULL, '0300100222', NULL),
+(11, '7 thoái quen hiệu quả', 'Tôi', 85000.00, 'L', 'http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg', 'TP.HCM', 'Quận 3', 'Củ 80%', '0328605555', '2025-12-03 13:31:14.126766'),
+(12, 'Người quan trọng nhất là bản thân bạn', 'Hồ Trọng Bảo', 100000.00, 'Cuốn sách nói về kĩ năng sống. Vì mới nhận hàng chưa bóc siu muốn pass lại', 'http://localhost:8080/api/images/a6723956-56bb-463a-8c7c-6298b40026b2.png', 'TP.HCM', 'Quận 1', 'Mới', '0328605127', '2025-12-06 15:42:22.531547');
 
-
--- ===========================================
--- THÊM BOOK 24–27 ĐỂ HỢP LỆ BOOK_CATEGORY
--- ===========================================
-INSERT INTO book (bookID, title, price, created_at) VALUES
-(24,'Sách tạm cho category mapping',10000,'2025-12-01 00:00:00'),
-(25,'Sách tạm cho category mapping 2',10000,'2025-12-01 00:00:00'),
-(26,'Sách tạm cho category mapping 3',10000,'2025-12-01 00:00:00'),
-(27,'Sách tạm cho category mapping 4',10000,'2025-12-01 00:00:00');
 
 -- ===========================================
 -- POSTS SAMPLE
@@ -172,11 +163,8 @@ INSERT INTO posts (postID, userID, bookID, description, status, created_at, upda
 (9,14,9,'Manga sưu tầm','APPROVED',NULL,NULL),
 (10,14,10,'Bản đọc nhiều lần','PENDING',NULL,NULL),
 (11,14,11,'Sách dày, trinh thám hấp dẫn','APPROVED',NULL,NULL),
-(12,14,12,'Giáo trình kinh tế như mới','APPROVED',NULL,NULL),
-(17,14,28,'Đây là sách test API','APPROVED','2025-12-03 12:45:04','2025-12-03 12:47:58'),
-(18,14,29,'L','APPROVED','2025-12-03 13:31:14','2025-12-03 13:31:14'),
-(19,14,30,'L','APPROVED','2025-12-06 05:29:20','2025-12-06 05:29:20'),
-(22,14,33,'dfsdf','APPROVED','2025-12-06 09:04:15','2025-12-06 09:04:15');
+(12,14,12,'Giáo trình kinh tế như mới','APPROVED',NULL,NULL)
+;
 
 -- ===========================================
 -- BOOK CATEGORY SAMPLE
@@ -184,20 +172,14 @@ INSERT INTO posts (postID, userID, bookID, description, status, created_at, upda
 INSERT INTO book_category (bookID, categoryID) VALUES
 (4,1),
 (2,2),
-(11,2),
+(9,2),
 (1,3),
 (8,3),
 (5,4),
 (6,4),
-(24,4),
-(25,4),
-(26,4),
-(27,4),
 (7,5),
-(12,5),
-(3,6),
-(9,7),
-(10,7);
+(10,5),
+(3,6);
 
 -- ===========================================
 -- REPORT SAMPLE
