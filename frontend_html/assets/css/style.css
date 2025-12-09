@@ -6,7 +6,7 @@
 /* ============================================
    FONT & RESET
    ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap&subset=vietnamese');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap&subset=vietnamese");
 
 * {
   margin: 0;
@@ -15,28 +15,33 @@
 }
 
 :root {
-  --primary-color: #E07A5F;
-  --secondary-color: #D4A373;
-  --dark-color: #4B3832;
-  --light-bg: #FAF3E0;
-  --cream-bg: #FDFCF8;
-  --border-color: #DAD2C9;
+  --primary-color: #e07a5f;
+  --secondary-color: #d4a373;
+  --dark-color: #4b3832;
+  --light-bg: #faf3e0;
+  --cream-bg: #fdfcf8;
+  --border-color: #dad2c9;
   --success-color: #28a745;
   --danger-color: #dc3545;
   --warning-color: #ffc107;
 }
 
 body {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   background-color: var(--cream-bg);
   color: var(--dark-color);
   line-height: 1.6;
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Merriweather', serif;
-  color: #3E2C1C;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Merriweather", serif;
+  color: #3e2c1c;
   font-weight: 700;
 }
 
@@ -59,7 +64,7 @@ a:hover {
    ============================================ */
 .navbar {
   background-color: var(--light-bg) !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 1rem 0;
 }
 
@@ -95,21 +100,25 @@ a:hover {
 }
 
 .nav-link.active {
-    background-color: var(--primary-color);
-    color: #070505 !important;
+  background-color: var(--primary-color);
+  color: #070505 !important;
 }
 
 /* ============================================
    HERO BANNER
    ============================================ */
 .hero-banner {
-  background: linear-gradient(135deg, rgba(250, 243, 224, 0.95), rgba(75, 56, 50, 0.4)),
-              url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1600&q=80');
+  background: linear-gradient(
+      135deg,
+      rgba(250, 243, 224, 0.95),
+      rgba(75, 56, 50, 0.4)
+    ),
+    url("https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1600&q=80");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   padding: 120px 0;
-  color: #3E2C1C;
+  color: #3e2c1c;
   position: relative;
 }
 
@@ -145,7 +154,7 @@ a:hover {
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
-  color: #FFF !important;
+  color: #fff !important;
   padding: 0.6rem 1.5rem;
   font-weight: 600;
   border-radius: 8px;
@@ -153,15 +162,15 @@ a:hover {
 }
 
 .btn-primary:hover {
-  background-color: #C26D57 !important;
-  border-color: #C26D57 !important;
+  background-color: #c26d57 !important;
+  border-color: #c26d57 !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(224, 122, 95, 0.4);
 }
 
 .btn-outline-secondary {
-  border-color: #6B705C !important;
-  color: #6B705C !important;
+  border-color: #6b705c !important;
+  color: #6b705c !important;
   padding: 0.6rem 1.5rem;
   font-weight: 600;
   border-radius: 8px;
@@ -169,8 +178,8 @@ a:hover {
 }
 
 .btn-outline-secondary:hover {
-  background-color: #6B705C !important;
-  color: #FFF !important;
+  background-color: #6b705c !important;
+  color: #fff !important;
   transform: translateY(-2px);
 }
 
@@ -181,7 +190,7 @@ a:hover {
 
 .btn-outline-danger:hover {
   background-color: var(--danger-color) !important;
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 /* ============================================
@@ -192,20 +201,24 @@ a:hover {
   margin-bottom: 3rem;
   font-size: 2rem;
   font-weight: 700;
-  color: #3E2C1C;
+  color: #3e2c1c;
   position: relative;
   padding-bottom: 15px;
 }
 
 .section-title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   border-radius: 2px;
 }
 
@@ -215,16 +228,16 @@ a:hover {
 .book-card {
   border: none;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   overflow: hidden;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   height: 100%;
 }
 
 .book-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .book-card img {
@@ -245,7 +258,7 @@ a:hover {
 .book-card .card-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #3E2C1C;
+  color: #3e2c1c;
   margin-bottom: 0.75rem;
   min-height: 50px;
   display: -webkit-box;
@@ -256,7 +269,7 @@ a:hover {
 
 .book-meta {
   font-size: 0.9rem;
-  color: #6B6B6B;
+  color: #6b6b6b;
   margin-bottom: 1rem;
   line-height: 1.8;
 }
@@ -268,7 +281,8 @@ a:hover {
 /* ============================================
    FORMS
    ============================================ */
-.form-control, .form-select {
+.form-control,
+.form-select {
   border: 2px solid var(--border-color);
   border-radius: 8px;
   padding: 0.7rem 1rem;
@@ -277,10 +291,11 @@ a:hover {
   transition: all 0.3s ease;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: var(--primary-color);
   outline: none;
-  background: #FFF;
+  background: #fff;
   box-shadow: 0 0 0 0.2rem rgba(224, 122, 95, 0.15);
 }
 
@@ -299,7 +314,7 @@ textarea.form-control {
    SEARCH SECTION
    ============================================ */
 .search-section {
-  background: linear-gradient(135deg, var(--light-bg), #F5EDD8);
+  background: linear-gradient(135deg, var(--light-bg), #f5edd8);
   padding: 3rem 0;
   margin-bottom: 3rem;
   border-radius: 12px;
@@ -312,7 +327,7 @@ footer {
   background: var(--light-bg);
   padding: 2rem 0;
   text-align: center;
-  border-top: 2px solid #E9E0D1;
+  border-top: 2px solid #e9e0d1;
   margin-top: 4rem;
   font-size: 0.95rem;
   color: var(--dark-color);
@@ -356,7 +371,7 @@ footer {
 .toast {
   min-width: 300px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .toast-success {
@@ -448,17 +463,32 @@ footer {
 }
 
 .text-muted {
-  color: #6B6B6B !important;
+  color: #6b6b6b !important;
 }
 
 .fw-bold {
   font-weight: 700 !important;
 }
 
-.mt-3 { margin-top: 1rem; }
-.mt-4 { margin-top: 1.5rem; }
-.mt-5 { margin-top: 3rem; }
-.mb-3 { margin-bottom: 1rem; }
-.mb-4 { margin-bottom: 1.5rem; }
-.mb-5 { margin-bottom: 3rem; }
-.py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+.mt-3 {
+  margin-top: 1rem;
+}
+.mt-4 {
+  margin-top: 1.5rem;
+}
+.mt-5 {
+  margin-top: 3rem;
+}
+.mb-3 {
+  margin-bottom: 1rem;
+}
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+.mb-5 {
+  margin-bottom: 3rem;
+}
+.py-5 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
