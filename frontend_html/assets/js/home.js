@@ -1,0 +1,81 @@
+/**
+ * File: frontend/assets/js/home.js
+ * Trang chủ - Hiển thị sách nổi bật và dữ liệu tổng quan
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadBooks(1); // load trang đầu tiên
+});
+
+const ITEMS_PER_PAGE = 12;
+
+async function loadBooks(page) {
+    try {
+        const books = await bookAPI.list(); // GET /books
+        renderBooksPage(books, page);
+        renderPagination(books.length, page);
+    } catch (err) {
+        console.error(err);
+        showToast("Không thể tải dữ liệu sách!", "error");
+    }
+}
+
+function renderBooksPage(books, page) {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+
+    const booksToShow = books.slice(start, end);
+    const container = document.getElementById("featuredBooks");
+
+    container.innerHTML = booksToShow
+        .map(book => `
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <img src="${book.image}" class="card-img-top" style="height:400px; object-fit:cover;">
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">${book.title}</h5>
+
+                        <p class="text-muted mb-1">
+                            <i class="bi bi-person"></i> ${book.author}
+                        </p>
+
+                        <p class="text-muted small mb-1">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            ${book.province || "?"} ${book.district ? "- " + book.district : ""}
+                        </p>
+
+                        <p class="small text-secondary" style="min-height:40px;">
+                            ${book.postDescription || book.description || "Không có mô tả"}
+                        </p>
+
+                        <p class="fw-bold text-danger mt-auto mb-3">
+                            ${book.price.toLocaleString()} đ
+                        </p>
+
+                        <a href="book-detail.html?id=${book.bookID}" 
+                           class="btn btn-primary w-100 mt-auto">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `)
+        .join("");
+}
+
+
+function renderPagination(totalItems, currentPage) {
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const pagination = document.getElementById("pagination");
+
+    pagination.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+            <li class="page-item ${i === currentPage ? "active" : ""}">
+                <a class="page-link" href="#" onclick="loadBooks(${i})">${i}</a>
+            </li>
+        `;
+    }
+}
