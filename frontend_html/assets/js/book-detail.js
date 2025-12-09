@@ -115,8 +115,8 @@ async function loadRelatedBooks() {
   const container = document.getElementById("relatedBooks");
 
   try {
-    const response = await bookAPI.search({ page: 0, size: 4 });
-    const books = response.content;
+    const books = await bookAPI.search({});
+
 
     if (books && books.length > 0) {
       container.innerHTML = books

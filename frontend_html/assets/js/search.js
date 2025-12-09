@@ -1,170 +1,163 @@
 /**
  * File: frontend/assets/js/search.js
- * Search Books Page JavaScript
+ * Search Books Page JavaScript (PHIÊN BẢN CHUẨN BACKEND)
  */
 
-let currentPage = 0;
-let totalPages = 0;
-
-// Load categories và search books khi trang load
-document.addEventListener('DOMContentLoaded', async function() {
-  await loadCategories();
-  await searchBooks();
+// Khi tải trang
+document.addEventListener('DOMContentLoaded', async function () {
   await loadProvinces();
-  
-  // Event listeners
+  await searchBooks();
+
   document.getElementById('searchForm').addEventListener('submit', handleSearch);
   document.getElementById('resetBtn').addEventListener('click', handleReset);
-  document.getElementById('provinceFilter').addEventListener('change', function () {
-    console.log("Giá trị tỉnh được chọn:", this.value);
-});
 });
 
-// Load categories cho filter
-async function loadCategories() {
+/* ============================
+   LOAD PROVINCE (API VN)
+============================ */
+async function loadProvinces() {
   try {
-    const categories = await categoryAPI.getAll();
-    const categoryFilter = document.getElementById('categoryFilter');
-    
-    categories.forEach(cat => {
-      const option = document.createElement('option');
-      option.value = cat.categoryID;
-      option.textContent = cat.categoryName;
-      categoryFilter.appendChild(option);
+    const res = await fetch("https://provinces.open-api.vn/api/p/");
+    const provinces = await res.json();
+
+    const select = document.getElementById("provinceFilter");
+
+    provinces.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.name;
+      opt.textContent = p.name;
+      select.appendChild(opt);
     });
-  } catch (error) {
-    console.error('Error loading categories:', error);
+  } catch (err) {
+    console.error("Error loading provinces:", err);
   }
 }
 
-// Load tỉnh từ API
-async function loadProvinces() {
-  const province = document.getElementById("provinceFilter");
+/* ============================
+   SEARCH BOOKS – KHỚP BACKEND
+============================ */
+async function searchBooks() {
+  const title = document.getElementById("titleInput").value.trim();
+  const author = document.getElementById("authorInput").value.trim();
+  const province = document.getElementById("provinceFilter").value.trim();
+  const district = document.getElementById("districtFilter").value.trim();
 
-  const res = await fetch("https://provinces.open-api.vn/api/p/");
-  const data = await res.json();
+  console.log("titleInput =", document.getElementById("titleInput"));
+  console.log("authorInput =", document.getElementById("authorInput"));
+  console.log("🔥 searchBooks() ĐÃ ĐƯỢC GỌI");
+  
 
-  data.forEach(p => {
-    const opt = document.createElement("option");
-    opt.value = p.name;            // giá trị gửi lên backend
-    opt.textContent = p.name;      // nội dung hiển thị
-    province.appendChild(opt);
-  });
+  const params = {};
+
+  if (title !== "") params.title = title;
+  if (author !== "") params.author = author;
+  if (province !== "") params.province = province;
+  if (district !== "") params.district = district;
+
+  const qs = new URLSearchParams(params).toString();
+
+  console.log("➡ Gửi API:", `${API_BASE_URL}/books/search?${qs}`);
+
+  const res = await fetch(`${API_BASE_URL}/books/search?${qs}`);
+  const books = await res.json();
+  console.log("🔥 Dữ liệu books nhận từ API:", books);
+  renderBooks(books);
 }
 
-// Search books
-async function searchBooks(page = 0) {
-  const container = document.getElementById('searchResults');
-  const resultCount = document.getElementById('resultCount');
-  
-  showLoading('searchResults');
-  
-  try {
-    const params = {
-      search: document.getElementById('searchKeyword').value || undefined,
-      categoryID: document.getElementById('categoryFilter').value || undefined,
-      province: document.getElementById('provinceFilter').value || undefined,
-      minPrice: document.getElementById('minPrice').value || undefined,
-      maxPrice: document.getElementById('maxPrice').value || undefined,
-      page: page,
-      size: 12,
-      sortBy: 'createdAt',
-      sortDir: 'desc'
-    };
-    
-    // Loại bỏ undefined values
-    Object.keys(params).forEach(key => {
-      if (params[key] === undefined) delete params[key];
-    });
-    
-    const response = await bookAPI.search(params);
-    const books = response.content;
-    totalPages = response.totalPages;
-    currentPage = page;
-    
-    if (books && books.length > 0) {
-      container.innerHTML = books.map(book => createBookCard(book)).join('');
-      resultCount.textContent = `(${books.length} sách)`;
-      
-      // Update pagination
-      if (totalPages > 1) {
-        updatePagination();
-      } else {
-        document.getElementById('paginationNav').classList.add('d-none');
-      }
-    } else {
-      container.innerHTML = `
-        <div class="col-12 text-center py-5">
-          <i class="bi bi-inbox fs-1 text-muted"></i>
-          <h4 class="mt-3 text-muted">Không tìm thấy sách nào</h4>
-          <p class="text-muted">Thử thay đổi điều kiện tìm kiếm</p>
-        </div>
-      `;
-      resultCount.textContent = '';
-      document.getElementById('paginationNav').classList.add('d-none');
-    }
-  } catch (error) {
-    console.error('Error searching books:', error);
+
+
+
+function renderBooks(books) {
+  const container = document.getElementById("searchResults");
+
+  if (!books || books.length === 0) {
     container.innerHTML = `
       <div class="col-12 text-center py-5">
-        <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
-        <p class="mt-3 text-muted">Không thể tìm kiếm sách</p>
+        <i class="bi bi-inbox fs-1 text-muted"></i>
+        <h4 class="mt-3 text-muted">Không tìm thấy sách nào</h4>
       </div>
     `;
-    resultCount.textContent = '';
+    return;
   }
+
+  container.innerHTML = books.map(book => `
+    <div class="col-md-3">
+      <div class="card h-100 shadow-sm">
+        <img src="${book.image}" class="card-img-top"
+             style="height: 220px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">${book.title}</h5>
+          <p class="text-muted">${book.author}</p>
+          <p><i class="bi bi-geo-alt"></i> ${book.district}, ${book.province}</p>
+        </div>
+      </div>
+    </div>
+  `).join("");
 }
 
-// Handle search form submit
+
+/* ============================
+   FORM EVENTS
+============================ */
 function handleSearch(e) {
   e.preventDefault();
-  searchBooks(0);
+  searchBooks();
 }
 
-// Handle reset button
 function handleReset() {
-  document.getElementById('searchKeyword').value = '';
-  document.getElementById('categoryFilter').value = '';
-  document.getElementById('provinceFilter').value = '';
-  document.getElementById('minPrice').value = '';
-  document.getElementById('maxPrice').value = '';
-  searchBooks(0);
+  document.getElementById("titleInput").value = "";
+  document.getElementById("authorInput").value = "";
+  document.getElementById("provinceFilter").value = "";
+  document.getElementById("districtFilter").value = "";
+
+  searchBooks();
 }
 
-// Update pagination
-function updatePagination() {
-  const pagination = document.getElementById('pagination');
-  const paginationNav = document.getElementById('paginationNav');
-  
-  pagination.innerHTML = '';
-  
-  // Previous button
-  const prevLi = document.createElement('li');
-  prevLi.className = `page-item ${currentPage === 0 ? 'disabled' : ''}`;
-  prevLi.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${currentPage - 1}); return false;">Trước</a>`;
-  pagination.appendChild(prevLi);
-  
-  // Page numbers
-  for (let i = 0; i < totalPages; i++) {
-    const li = document.createElement('li');
-    li.className = `page-item ${i === currentPage ? 'active' : ''}`;
-    li.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${i}); return false;">${i + 1}</a>`;
-    pagination.appendChild(li);
-  }
-  
-  // Next button
-  const nextLi = document.createElement('li');
-  nextLi.className = `page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`;
-  nextLi.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${currentPage + 1}); return false;">Sau</a>`;
-  pagination.appendChild(nextLi);
-  
-  paginationNav.classList.remove('d-none');
+/* ============================
+   BOOK CARD
+============================ */
+function createBookCard(book) {
+  const defaultImage =
+    "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=300&q=80";
+
+  const img = book.image || defaultImage;
+
+  return `
+    <div class="col-md-3 col-sm-6">
+      <div class="card border-0 shadow-sm h-100">
+        <img src="${img}" 
+             class="card-img-top" 
+             style="height: 250px; object-fit: cover;"
+             onerror="this.src='${defaultImage}'">
+
+        <div class="card-body">
+          <h5 class="card-title">${book.title}</h5>
+          <p class="text-muted small">${book.author || "Không rõ"}</p>
+
+          <p class="fw-bold text-danger">${formatPrice(book.price)}</p>
+
+          <p class="small text-muted">
+            <i class="bi bi-geo-alt-fill me-1"></i>
+            ${book.province || ""} ${book.district ? "- " + book.district : ""}
+          </p>
+
+          <a href="book-detail.html?id=${book.bookID}" 
+             class="btn btn-outline-primary btn-sm w-100">
+            Xem chi tiết
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-// Go to page
-function goToPage(page) {
-  if (page >= 0 && page < totalPages) {
-    searchBooks(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+/* ============================
+   UTIL
+============================ */
+function showLoading(id) {
+  document.getElementById(id).innerHTML = `
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+  `;
 }

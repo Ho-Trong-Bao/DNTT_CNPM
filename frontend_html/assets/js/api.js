@@ -109,11 +109,14 @@ const bookAPI = {
     return handleResponse(res);
   },
 
+
   search: async (params) => {
     const qs = new URLSearchParams(params).toString();
-    const res = await fetch(`${API_BASE_URL}/books/search?${qs}`, { headers: getHeaders() });
-    return handleResponse(res);
+    const res = await fetch(`${API_BASE_URL}/books/search?${qs}`);
+    return handleResponse(res);  // backend trả LIST
   },
+
+
 
   byProvince: async (province) => {
     const res = await fetch(`${API_BASE_URL}/books/province/${province}`, {
@@ -316,7 +319,6 @@ window.api = {
   authAPI,
   bookAPI,
   postAPI,
-  myPostAPI,
   imageAPI,
   categoryAPI,
   userAPI,
