@@ -49,8 +49,6 @@ function getHeaders(isJson = true, isAdmin = false) {
 // ===== HANDLE RESPONSE =====
 async function handleResponse(response) {
   if (response.status === 401) {
-    clearUserAuth();
-    clearAdminAuth();
     throw new Error("401 Unauthorized");
   }
 
