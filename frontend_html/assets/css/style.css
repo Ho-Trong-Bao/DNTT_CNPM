@@ -26,6 +26,25 @@
   --warning-color: #ffc107;
 }
 
+/* Sticky footer */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1; /* Đẩy footer xuống cuối */
+}
+
+
+
 body {
   font-family: 'Nunito Sans', sans-serif;
   background-color: var(--cream-bg);
