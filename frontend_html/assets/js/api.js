@@ -1,36 +1,57 @@
-// API client rebuilt per your backend API document
-// Save token under localStorage key 'authToken' and user info under 'user'
+// ========================
+// API CLIENT HOÀN CHỈNH
+// ========================
 
 const API_BASE_URL = "http://localhost:8080/api";
 
+// ===== TOKEN =====
 function getAuthToken() {
-  return localStorage.getItem("authToken");
+  return localStorage.getItem("userToken");
 }
 
-function saveAuth(token, user) {
-  localStorage.setItem("authToken", token);
+function getAdminToken() {
+  return localStorage.getItem("adminToken");
+}
+
+// ===== SAVE AUTH =====
+function saveUserAuth(token, user) {
+  localStorage.setItem("userToken", token);
   localStorage.setItem("user", JSON.stringify(user));
 }
 
-function clearAuth() {
-  localStorage.removeItem("authToken");
+function saveAdminAuth(token, admin) {
+  localStorage.setItem("adminToken", token);
+  localStorage.setItem("admin", JSON.stringify(admin));
+}
+
+// ===== CLEAR AUTH =====
+function clearUserAuth() {
+  localStorage.removeItem("userToken");
   localStorage.removeItem("user");
 }
 
-function getHeaders(isJson = true) {
-  const token = getAuthToken();
+function clearAdminAuth() {
+  localStorage.removeItem("adminToken");
+  localStorage.removeItem("admin");
+}
+
+// ===== HEADERS =====
+function getHeaders(isJson = true, isAdmin = false) {
+  const token = isAdmin ? getAdminToken() : getAuthToken();
   const headers = {};
+
   if (isJson) headers["Content-Type"] = "application/json";
   if (token) headers["Authorization"] = `Bearer ${token}`;
+
   return headers;
 }
 
+// ===== HANDLE RESPONSE =====
 async function handleResponse(response) {
   if (response.status === 401) {
-    clearAuth();
-    // don't redirect automatically here; let caller handle
     throw new Error("401 Unauthorized");
   }
+
   if (!response.ok) {
     const json = await response.json().catch(() => ({}));
     const message = json.message || json.error || "Request failed";
@@ -39,12 +60,21 @@ async function handleResponse(response) {
     err.payload = json;
     throw err;
   }
-  // If response has no body (204), return null
+
   const text = await response.text();
-  return text ? JSON.parse(text) : null;
+
+  try {
+    // ✅ Nếu backend trả JSON hợp lệ
+    return text ? JSON.parse(text) : null;
+  } catch (e) {
+    // ✅ Nếu backend trả TEXT như: \"Xóa danh mục thành công\"
+    return text;
+  }
 }
 
-// ------------------ AUTH ------------------
+// =============================================================
+// AUTH API
+// =============================================================
 const authAPI = {
   async register(payload) {
     const res = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -61,16 +91,16 @@ const authAPI = {
       headers: getHeaders(),
       body: JSON.stringify(payload),
     });
+
     const data = await handleResponse(res);
-    // normalize: backend returns userID (camelCase UserID in docs) and role
-    const token = data.token;
-    const user = {
-      userID: data.userID ?? data.userId ?? data.user?.userID ?? null,
+
+    saveUserAuth(data.token, {
+      userID: data.userID,
       name: data.name,
       email: data.email,
-      role: data.role,
-    };
-    saveAuth(token, user);
+      role: "USER",
+    });
+
     return data;
   },
 
@@ -80,24 +110,31 @@ const authAPI = {
       headers: getHeaders(),
       body: JSON.stringify(payload),
     });
+
     const data = await handleResponse(res);
-    const token = data.token;
-    const user = {
-      userID: data.userID,
+
+    saveAdminAuth(data.token, {
+      adminID: data.userID,
       name: data.name,
       email: data.email,
-      role: data.role,
-    };
-    saveAuth(token, user);
+      role: "ADMIN",
+    });
+
     return data;
   },
 
-  logout() {
-    clearAuth();
+  logoutUser() {
+    clearUserAuth();
+  },
+
+  logoutAdmin() {
+    clearAdminAuth();
   },
 };
 
-// ------------------ BOOKS ------------------
+// =============================================================
+// BOOKS API
+// =============================================================
 const bookAPI = {
   list: async () => {
     const res = await fetch(`${API_BASE_URL}/books`, { headers: getHeaders() });
@@ -114,7 +151,7 @@ const bookAPI = {
   search: async (params) => {
     const qs = new URLSearchParams(params).toString();
     const res = await fetch(`${API_BASE_URL}/books/search?${qs}`);
-    return handleResponse(res); // backend trả LIST
+    return handleResponse(res);
   },
 
   byProvince: async (province) => {
@@ -125,7 +162,9 @@ const bookAPI = {
   },
 };
 
-// ------------------ CATEGORIES ------------------
+// =============================================================
+// CATEGORY API
+// =============================================================
 const categoryAPI = {
   async getAll() {
     const res = await fetch(`${API_BASE_URL}/categories`, {
@@ -135,9 +174,9 @@ const categoryAPI = {
   },
 };
 
-// ========================
-// POST (USER)
-// ========================
+// =============================================================
+// POST API (USER)
+// =============================================================
 const postAPI = {
   create: async (data) => {
     const res = await fetch(`${API_BASE_URL}/posts`, {
@@ -181,40 +220,39 @@ const postAPI = {
   },
 };
 
-// ------------------ USER API ------------------
+// =============================================================
+// USER API
+// =============================================================
 const userAPI = {
-  // GET /api/users/{userID}
   getById: async (id) => {
     const res = await fetch(`${API_BASE_URL}/users/${id}`, {
-      headers: getHeaders(),
+      headers: getHeaders(true, false),
     });
     return handleResponse(res);
   },
 
-  // PUT /api/users/{userID}
   updateProfile: async (id, payload) => {
     const res = await fetch(`${API_BASE_URL}/users/${id}`, {
       method: "PUT",
-      headers: getHeaders(),
+      headers: getHeaders(true, false),
       body: JSON.stringify(payload),
     });
     return handleResponse(res);
   },
 
-  // POST /api/users/{userID}/change-password
   changePassword: async (id, payload) => {
     const res = await fetch(`${API_BASE_URL}/users/${id}/change-password`, {
       method: "POST",
-      headers: getHeaders(),
+      headers: getHeaders(true, false),
       body: JSON.stringify(payload),
     });
     return handleResponse(res);
   },
 };
 
-// ========================
-// IMAGE
-// ========================
+// =============================================================
+// IMAGE API
+// =============================================================
 const imageAPI = {
   upload: async (file) => {
     const fd = new FormData();
@@ -222,7 +260,7 @@ const imageAPI = {
 
     const res = await fetch(`${API_BASE_URL}/images/upload`, {
       method: "POST",
-      headers: { Authorization: "Bearer " + getToken() },
+      headers: { Authorization: "Bearer " + getAuthToken() },
       body: fd,
     });
 
@@ -238,11 +276,13 @@ const imageAPI = {
   },
 };
 
-// ------------------ admin ------------------
+// =============================================================
+// ADMIN API
+// =============================================================
 const adminAPI = {
   async getAllPosts() {
     const res = await fetch(`${API_BASE_URL}/admin/posts`, {
-      headers: getHeaders(),
+      headers: getHeaders(true, true),
     });
     return handleResponse(res);
   },
@@ -250,7 +290,9 @@ const adminAPI = {
   async getPostsByStatus(status) {
     const res = await fetch(
       `${API_BASE_URL}/admin/posts/status/${encodeURIComponent(status)}`,
-      { headers: getHeaders() }
+      {
+        headers: getHeaders(true, true),
+      }
     );
     return handleResponse(res);
   },
@@ -258,7 +300,7 @@ const adminAPI = {
   async updatePostStatus(postID, payload) {
     const res = await fetch(`${API_BASE_URL}/admin/posts/${postID}/status`, {
       method: "PUT",
-      headers: getHeaders(),
+      headers: getHeaders(true, true),
       body: JSON.stringify(payload),
     });
     return handleResponse(res);
@@ -266,7 +308,7 @@ const adminAPI = {
 
   async listUsers() {
     const res = await fetch(`${API_BASE_URL}/admin/users`, {
-      headers: getHeaders(),
+      headers: getHeaders(true, true),
     });
     return handleResponse(res);
   },
@@ -274,7 +316,7 @@ const adminAPI = {
   async updateUserStatus(userID, payload) {
     const res = await fetch(`${API_BASE_URL}/admin/users/${userID}/status`, {
       method: "PUT",
-      headers: getHeaders(),
+      headers: getHeaders(true, true),
       body: JSON.stringify(payload),
     });
     return handleResponse(res);
@@ -283,7 +325,7 @@ const adminAPI = {
   async deleteUser(userID) {
     const res = await fetch(`${API_BASE_URL}/admin/users/${userID}`, {
       method: "DELETE",
-      headers: getHeaders(false),
+      headers: getHeaders(false, true),
     });
     return handleResponse(res);
   },
@@ -291,7 +333,7 @@ const adminAPI = {
   async createCategory(payload) {
     const res = await fetch(`${API_BASE_URL}/admin/categories`, {
       method: "POST",
-      headers: getHeaders(),
+      headers: getHeaders(true, true),
       body: JSON.stringify(payload),
     });
     return handleResponse(res);
@@ -300,7 +342,7 @@ const adminAPI = {
   async updateCategory(categoryID, payload) {
     const res = await fetch(`${API_BASE_URL}/admin/categories/${categoryID}`, {
       method: "PUT",
-      headers: getHeaders(),
+      headers: getHeaders(true, true),
       body: JSON.stringify(payload),
     });
     return handleResponse(res);
@@ -309,13 +351,13 @@ const adminAPI = {
   async deleteCategory(categoryID) {
     const res = await fetch(`${API_BASE_URL}/admin/categories/${categoryID}`, {
       method: "DELETE",
-      headers: getHeaders(false),
+      headers: getHeaders(false, true),
     });
     return handleResponse(res);
   },
 };
 
-// ------------------ EXPORT ------------------
+// EXPORT
 window.api = {
   authAPI,
   bookAPI,
@@ -325,6 +367,3 @@ window.api = {
   userAPI,
   adminAPI,
 };
-
-// Usage note: this file matches the API document provided. If backend property names differ (userID vs userId)
-// the authAPI.login normalizes userID. Make sure the frontend uses localStorage key 'authToken' and 'user'.
