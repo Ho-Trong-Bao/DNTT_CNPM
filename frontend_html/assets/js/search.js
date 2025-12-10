@@ -24,7 +24,7 @@ async function loadProvinces() {
 
     provinces.forEach(p => {
       const opt = document.createElement("option");
-      opt.value = p.name;
+      opt.value = p.code;
       opt.textContent = p.name;
       select.appendChild(opt);
     });
