@@ -171,8 +171,8 @@
     <script>
       function logout() {
         if (!confirm("Bạn có chắc muốn đăng xuất không?")) return;
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
+          localStorage.removeItem("adminToken");
+          localStorage.removeItem("admin");
         window.location.href = "index.html"; // hoặc trang login
       }
     </script>
