@@ -134,29 +134,20 @@ INSERT INTO user (userID, name, email, password, phone, province, district, ward
 -- ===========================================
 -- BOOK SAMPLE DATA (KHỚP CỘT)
 -- ===========================================
-INSERT INTO `book` (`bookID`, `title`, `author`, `price`, `description`, `image`, `province`, `district`, `book_condition`, `contact_info`, `created_at`) VALUES
-(1, 'Đắc nhân tâm', 'Dale Carnegie', 60000.00, 'Sách kỹ năng kinh điển, bản in đẹp.', NULL, 'TP.HCM', 'Quận 1', '0300100222', '2025-12-02 11:09:05.577692'),
-(2, 'Nhà giả kim', 'Paulo Coelho', 75000.00, 'Một tiểu thuyết truyền cảm hứng.', 'http://localhost:8080/api/images/16088de5-9eae-4d11-8c2c-d48594f08a5d.jpg', 'Hà Nội', 'Cầu Giấy', '0300100222', '2025-12-03 13:31:14.126766'),
-(3, 'Dế Mèn Phiêu Lưu Ký', 'Tô Hoài', 50000.00, 'Truyện thiếu nhi kinh điển.', 'http://localhost:8080/api/images/e5d34bb7-d814-4a67-b35d-c648534bb131.jpg', 'TP.HCM', 'Quận 3', '0300100222', '2025-12-03 13:31:14.126766'),
-(4, 'Tôi thấy hoa vàng trên cỏ xanh', 'Nguyễn Nhật Ánh', 55000.00, 'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.', 'http://localhost:8080/api/images/d121b093-da44-443e-baf3-ca7ce066ea9b.jpg', 'Đà Nẵng', 'Hải Châu', '0300100222', '2025-12-03 13:31:14.126766'),
-(5, 'Lập trình Java cơ bản', 'NXB CNTT', 120000.00, 'Giáo trình học Java cho sinh viên.', 'http://localhost:8080/api/images/983aa0f9-bda7-4154-adbf-26afeaa37a48.jpg', 'TP.HCM', 'Bình Thạnh', '0300100222', '2025-12-03 13:31:14.126766'),
-(6, 'Lập trình Python nâng cao', 'NXB CNTT', 95000.00, 'Hướng dẫn lập trình Python chi tiết.', 'http://localhost:8080/api/images/8d9f1afb-9f5f-475d-a26b-88f0c9eda815.jpg', 'Hà Nội', 'Hai Bà Trưng', '0300100222', '2025-12-03 13:31:14.126766'),
-(7, 'Cha giàu cha nghèo', 'Robert Kiyosaki', 65000.00, 'Sách tài chính kinh điển.', 'http://localhost:8080/api/images/09a2ad63-0727-48e9-a9ea-bbdbc3ee58e0.jpg', 'Cần Thơ', 'Ninh Kiều', '0300100222', '2025-12-03 13:31:14.126766'),
-(8, '7 thói quen hiệu quả', 'Stephen R.Covey', 80000.00, 'Phát triển bản thân.', 'http://localhost:8080/api/images/3dc81451-c2a7-4114-a10a-5202eb05729d.jpg', 'TP.HCM', 'Quận 10', '0300100222', '2025-12-03 13:31:14.126766'),
-(11, 'Sherlock Holmes Toàn Tập', 'Arthur Conan Doyle', 110000.00, 'Truyện trinh thám kinh điển.', NULL, 'Huế', 'Hương Thủy', '0300100222', '2025-12-03 13:31:14.126766'),
-(12, 'Kinh tế học vĩ mô', 'Paul Samuelson', 130000.00, 'Giáo trình kinh tế.', NULL, 'Hà Nội', 'Ba Đình', '0300100222', '2025-12-03 13:31:14.126766'),
-(29, '7 thoái quen hiệu quả', 'Tôi', 85000.00, 'L', 'http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg', 'TP.HCM', 'Quận 3', 'Củ 80%', '0328605555', '2025-12-03 13:31:14.126766'),
-(34, 'Người quan trọng nhất là bản thân bạn', 'Hồ Trọng Bảo', 100000.00, 'Cuốn sách nói về kĩ năng sống. Vì mới nhận hàng chưa bóc siu muốn pass lại', 'http://localhost:8080/api/images/a6723956-56bb-463a-8c7c-6298b40026b2.png', 'TP.HCM', 'Quận 1', 'Mới', '0328605127', '2025-12-06 15:42:22.531547');
+INSERT INTO book (`bookID`, `title`, `author`, `price`, `description`, `image`, `province`, `district`, `book_condition`, `contact_info`, `created_at`) VALUES
+(1,	'Đắc nhân tâm',	'Dale Carnegie',	60000.00,	'Sách kỹ năng kinh điển, bản in đẹp.',	NULL,	'TP.HCM',	'Quận 1',	NULL,	'0300100222',	'2025-12-02 11:09:05.577692'),
+(2,	'Nhà giả kim',	'Paulo Coelho',	75000.00,	'Một tiểu thuyết truyền cảm hứng.',	'http://localhost:8080/api/images/16088de5-9eae-4d11-8c2c-d48594f08a5d.jpg',	'Hà Nội',	'Cầu Giấy',	NULL,	'0300100222',	NULL),
+(3,	'Dế Mèn Phiêu Lưu Ký',	'Tô Hoài',	50000.00,	'Truyện thiếu nhi kinh điển.',	'http://localhost:8080/api/images/e5d34bb7-d814-4a67-b35d-c648534bb131.jpg',	'TP.HCM',	'Quận 3',	NULL,	'0300100222',	NULL),
+(4,	'Tôi thấy hoa vàng trên cỏ xanh',	'Nguyễn Nhật Ánh',	55000.00,	'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.',	'http://localhost:8080/api/images/d121b093-da44-443e-baf3-ca7ce066ea9b.jpg',	'Đà Nẵng',	'Hải Châu',	NULL,	'0300100222',	NULL),
+(5,	'Lập trình Java cơ bản',	'NXB CNTT',	120000.00,	'Giáo trình học Java cho sinh viên.',	'http://localhost:8080/api/images/983aa0f9-bda7-4154-adbf-26afeaa37a48.jpg',	'TP.HCM',	'Bình Thạnh',	NULL,	'0300100222',	NULL),
+(6,	'Lập trình Python nâng cao',	'NXB CNTT',	95000.00,	'Hướng dẫn lập trình Python chi tiết.',	'http://localhost:8080/api/images/8d9f1afb-9f5f-475d-a26b-88f0c9eda815.jpg',	'Hà Nội',	'Hai Bà Trưng',	NULL,	'0300100222',	NULL),
+(7,	'Cha giàu cha nghèo',	'Robert Kiyosaki',	65000.00,	'Sách tài chính kinh điển.',	'http://localhost:8080/api/images/09a2ad63-0727-48e9-a9ea-bbdbc3ee58e0.jpg',	'Cần Thơ',	'Ninh Kiều',	NULL,	'0300100222',	NULL),
+(8,	'7 thói quen hiệu quả',	'Stephen R.Covey',	80000.00,	'Phát triển bản thân.',	'http://localhost:8080/api/images/3dc81451-c2a7-4114-a10a-5202eb05729d.jpg',	'TP.HCM',	'Quận 10',	NULL,	'0300100222',	NULL),
+(11,	'Sherlock Holmes Toàn Tập',	'Arthur Conan Doyle',	110000.00,	'Truyện trinh thám kinh điển.',	NULL,	'Huế',	'Hương Thủy',	NULL,	'0300100222',	NULL),
+(12,	'Kinh tế học vĩ mô',	'Paul Samuelson',	130000.00,	'Giáo trình kinh tế.',	NULL,	'Hà Nội',	'Ba Đình',	NULL,	'0300100222',	NULL),
+(29,	'7 thoái quen hiệu quả',	'Tôi',	85000.00,	'L',	'http://localhost:8080/api/images/cd7f5fb3-446e-42ae-99af-0f2edeabadf0.jpg',	'TP.HCM',	'Quận 3',	'Củ 80%',	'0328605555',	'2025-12-03 13:31:14.126766'),
+(34,	'Người quan trọng nhất là bản thân bạn',	'Hồ Trọng Bảo',	100000.00,	'Cuốn sách nói về kĩ năng sống. Vì mới nhận hàng chưa bóc siu muốn pass lại',	'http://localhost:8080/api/images/a6723956-56bb-463a-8c7c-6298b40026b2.png',	'TP.HCM',	'Quận 1',	'Mới',	'0328605127',	'2025-12-06 15:42:22.531547');
 
-
--- ===========================================
--- THÊM BOOK 24–27 ĐỂ HỢP LỆ BOOK_CATEGORY
--- ===========================================
-INSERT INTO book (bookID, title, price, created_at) VALUES
-(24,'Sách tạm cho category mapping',10000,'2025-12-01 00:00:00'),
-(25,'Sách tạm cho category mapping 2',10000,'2025-12-01 00:00:00'),
-(26,'Sách tạm cho category mapping 3',10000,'2025-12-01 00:00:00'),
-(27,'Sách tạm cho category mapping 4',10000,'2025-12-01 00:00:00');
 
 -- ===========================================
 -- POSTS SAMPLE

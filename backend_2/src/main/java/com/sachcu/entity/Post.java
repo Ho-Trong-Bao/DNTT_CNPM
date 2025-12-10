@@ -29,7 +29,7 @@ public class Post {
     @JoinColumn(name = "userID", nullable = false)
     private User user;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "bookID", nullable = false, unique = true)
     private Book book;
     

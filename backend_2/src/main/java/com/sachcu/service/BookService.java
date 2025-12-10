@@ -60,9 +60,7 @@ public class BookService {
     /**
      * Tìm kiếm sách theo nhiều tiêu chí
      */
-    public List<BookDetailResponse> searchBooks(String title, String author, 
-                                                String province, String district,
-                                                boolean isAuthenticated) {
+    public List<BookDetailResponse> searchBooks(String title, String author, String province, String district, boolean isAuthenticated) {
         List<Book> books = bookRepository.searchBooks(title, author, province, district);
         
         return books.stream()

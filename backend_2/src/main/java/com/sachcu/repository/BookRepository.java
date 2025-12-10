@@ -25,13 +25,14 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByAuthorContainingIgnoreCase(String author);
     
     // Tìm kiếm sách nâng cao
-    @Query("SELECT b FROM Book b WHERE " +
-           "(:title IS NULL OR LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
-           "(:author IS NULL OR LOWER(b.author) LIKE LOWER(CONCAT('%', :author, '%'))) AND " +
-           "(:province IS NULL OR b.province = :province) AND " +
-           "(:district IS NULL OR b.district = :district)")
-    List<Book> searchBooks(@Param("title") String title,
-                          @Param("author") String author,
-                          @Param("province") String province,
-                          @Param("district") String district);
+       @Query("SELECT b FROM Book b WHERE " +
+              "(:title IS NULL OR :title = '' OR LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
+              "(:author IS NULL OR :author = '' OR LOWER(b.author) LIKE LOWER(CONCAT('%', :author, '%'))) AND " +
+              "(:province IS NULL OR :province = '' OR b.province = :province) AND " +
+              "(:district IS NULL OR :district = '' OR b.district = :district)")
+       List<Book> searchBooks(@Param("title") String title,
+                            @Param("author") String author,
+                            @Param("province") String province,
+                            @Param("district") String district);
+
 }
