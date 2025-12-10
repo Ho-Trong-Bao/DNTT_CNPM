@@ -7,11 +7,11 @@ let allUsers = [];
 // KIỂM TRA QUYỀN + LOAD USER
 // ==============================
 document.addEventListener("DOMContentLoaded", () => {
-  const admin = JSON.parse(localStorage.getItem("user") || "{}");
+  const admin = JSON.parse(localStorage.getItem("admin") || "{}");
 
   if (!admin || admin.role !== "ADMIN") {
     alert("Bạn không có quyền truy cập!");
-    window.location.href = "admin-login.html";
+    window.location.href = "loginAdmin.html";
     return;
   }
 
