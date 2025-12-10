@@ -2,9 +2,40 @@
  * File: frontend/assets/js/my-posts.js
  * Trang: Bài đăng của tôi
  */
+let provinceMap = {};
+let districtMap = {};
+async function loadLocationData() {
+  try {
+    const res = await fetch("https://provinces.open-api.vn/api/?depth=2");
+    const provinces = await res.json();
+
+    provinces.forEach(p => {
+      provinceMap[p.code] = p.name;
+      districtMap[p.code] = p.districts; // danh sách quận theo province code
+    });
+
+    console.log("📌 Location loaded for My Posts");
+
+  } catch (err) {
+    console.error("Lỗi load location:", err);
+  }
+}
+function getProvinceName(code){
+  return provinceMap[code] || code;
+}
+
+function getDistrictName(pCode, dCode){
+  const districts = districtMap[pCode];
+  if(!districts) return dCode;
+
+  const found = districts.find(x => x.code == dCode || x.name == dCode);
+  return found ? found.name : dCode;
+}
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (!requireAuth()) return;
+  await loadLocationData();
   await loadMyPosts();
 });
 
@@ -53,6 +84,9 @@ function createPostCard(post) {
   const img = post.image ||
     "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80";
 
+  
+  const provinceName = getProvinceName(post.province);
+  const districtName = getDistrictName(post.province, post.district);
   const statusBadge = getStatusBadge(post.postStatus);
 
   return `
@@ -80,7 +114,7 @@ function createPostCard(post) {
 
           <p class="small mb-2 text-muted">
             <i class="bi bi-geo-alt-fill me-1"></i>
-            ${post.province || "?"} ${post.district ? "- " + post.district : ""}
+            ${districtName} - ${provinceName}
           </p>
 
           <p class="small">${post.postDescription || "Không có mô tả bài đăng"}</p>
