@@ -29,32 +29,35 @@ function renderBooksPage(books, page) {
 
     container.innerHTML = booksToShow
         .map(book => `
-            <div class="col-md-3">
+                        <div class="col-md-3">
                 <div class="card h-100 shadow-sm">
                     <img src="${book.image}" class="card-img-top" style="height:400px; object-fit:cover;">
-                    
+
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${book.title}</h5>
+                        
+                        <div class="flex-grow-1"> <!-- Phần nội dung phía trên -->
+                            <h5 class="card-title">${book.title}</h5>
 
-                        <p class="text-muted mb-1">
-                            <i class="bi bi-person"></i> ${book.author}
-                        </p>
+                            <p class="text-muted mb-1">
+                                <i class="bi bi-person"></i> ${book.author}
+                            </p>
 
-                        <p class="text-muted small mb-1">
-                            <i class="bi bi-geo-alt-fill"></i>
-                            ${book.province || "?"} ${book.district ? "- " + book.district : ""}
-                        </p>
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                ${book.province || "?"} ${book.district ? "- " + book.district : ""}
+                            </p>
 
-                        <p class="small text-secondary" style="min-height:40px;">
-                            ${book.postDescription || book.description || "Không có mô tả"}
-                        </p>
+                            <p class="small text-secondary" style="min-height:40px;">
+                                ${book.postDescription || book.description || "Không có mô tả"}
+                            </p>
+                        </div>
 
-                        <p class="fw-bold text-danger mt-auto mb-3">
+                        <!-- Phần cố định ở đáy -->
+                        <p class="fw-bold text-danger mb-3">
                             ${book.price.toLocaleString()} đ
                         </p>
 
-                        <a href="book-detail.html?id=${book.bookID}" 
-                           class="btn btn-primary w-100 mt-auto">
+                        <a href="book-detail.html?id=${book.bookID}" class="btn btn-primary w-100">
                             Xem chi tiết
                         </a>
                     </div>
