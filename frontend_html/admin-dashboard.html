@@ -8,16 +8,17 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-</head>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  
+  </head>
 
 <body>
 
   <div class="sidebar">
     <div class="logo-area">
-      <img src="assets/images/logo.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+      <img src="assets/images/logo.png" alt="Logo"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
       <span>ADMIN PANEL</span>
     </div>
 
@@ -49,7 +50,6 @@
         Quản trị - <span>Sách Cũ Theo Khu Vực</span>
       </div>
       <div class="d-flex gap-3 align-items-center">
-        <span id="welcomeName" class="d-none d-md-block text-secondary small">Xin chào, Admin</span>
         <button id="logoutBtn" class="btn btn-sm btn-outline-danger">
           <i class="bi bi-box-arrow-right"></i> Đăng xuất
         </button>
@@ -80,37 +80,6 @@
       </div>
     </div>
 
-    <div class="row g-4">
-      <div class="col-md-8">
-        <div class="chart-container">
-          <h5 class="fw-bold mb-4" style="font-size: 16px;">Hoạt động tuần (bài đăng mới)</h5>
-          <canvas id="weeklyChart"></canvas>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="ranking-card">
-          <h5 class="fw-bold mb-3" style="font-size: 16px;">Top người đăng</h5>
-          <ul class="ranking-list" id="topPostersList">
-            <li class="text-center text-muted py-5">
-                <div class="spinner-border text-warning spinner-border-sm" role="status"></div>
-                <span class="ms-2">Đang tải...</span>
-            </li>
-          </ul>
-
-          <div class="category-stat">
-            <h6 class="fw-bold mb-2" style="font-size: 14px;">Thể loại nổi bật</h6>
-            <div class="d-flex justify-content-between mb-1" style="font-size: 13px;">
-              <span id="topCatName">Đang tính toán...</span>
-              <span id="topCatPercent">0%</span>
-            </div>
-            <div class="progress">
-              <div class="progress-bar" id="topCatBar" role="progressbar" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 
@@ -119,20 +88,29 @@
     // ==========================================
     // 1. KIỂM TRA QUYỀN ADMIN
     // ==========================================
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (!user || user.role !== "ADMIN") {
+    const adminToken = localStorage.getItem("adminToken");
+    const adminInfo = JSON.parse(localStorage.getItem("admin") || "{}");
+
+    if (!adminToken || !adminInfo || adminInfo.role !== "ADMIN") {
+      alert("Phiên đăng nhập hết hạn hoặc không có quyền truy cập!");
       window.location.href = "loginAdmin.html";
     } else {
-        const welcomeEl = document.getElementById("welcomeName");
-        if(welcomeEl) welcomeEl.innerText = "Xin chào, " + (user.name || "Admin");
+      const welcomeEl = document.getElementById("welcomeName");
+      if (welcomeEl) welcomeEl.innerText = "Xin chào, " + (adminInfo.name || "Admin");
     }
 
-    // Logout logic
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      if (window.api && window.api.authAPI) window.api.authAPI.logout();
-      else { localStorage.removeItem("authToken"); localStorage.removeItem("user"); }
-      window.location.href = "loginAdmin.html";
-    });
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        if (window.api && window.api.authAPI) {
+          window.api.authAPI.logoutAdmin();
+        } else {
+          localStorage.removeItem("adminToken");
+          localStorage.removeItem("admin");
+        }
+        window.location.href = "loginAdmin.html";
+      });
+    }
 
     // ==========================================
     // 2. LOGIC DASHBOARD
@@ -142,148 +120,49 @@
 
     async function loadData() {
       try {
-        // Gọi API lấy users và posts song song
+        if (!window.api || !window.api.adminAPI) {
+          console.error("Không tìm thấy file api.js");
+          return;
+        }
+
         const [users, posts] = await Promise.all([
           window.api.adminAPI.listUsers(),
           window.api.adminAPI.getAllPosts()
         ]);
 
-        // --- A. CẬP NHẬT THỐNG KÊ (CARDS) ---
-        document.getElementById('countUser').textContent = users.length.toLocaleString();
-        document.getElementById('countPost').textContent = posts.length.toLocaleString();
+        // --- A. CẬP NHẬT THỐNG KÊ CƠ BẢN ---
+        if (users) document.getElementById('countUser').textContent = users.length.toLocaleString();
+        if (posts) document.getElementById('countPost').textContent = posts.length.toLocaleString();
 
-        // Đếm bài chờ duyệt (PENDING)
-        const pendingCount = posts.filter(p => {
+        const pendingCount = posts ? posts.filter(p => {
           const s = (p.status || p.postStatus || "").toUpperCase();
           return s === 'PENDING';
-        }).length;
+        }).length : 0;
         document.getElementById('countPending').textContent = pendingCount;
-
-        // --- B. VẼ BIỂU ĐỒ (CHART.JS) ---
-        renderWeeklyChart(posts);
-
-        // --- C. XẾP HẠNG (TOP POSTERS) ---
-        renderTopPosters(posts);
-
-        // --- D. THỂ LOẠI NỔI BẬT ---
-        renderTopCategory(posts);
-
       } catch (error) {
         console.error("Lỗi Dashboard:", error);
-        document.getElementById('topPostersList').innerHTML = `<li class="text-danger text-center">Lỗi tải dữ liệu</li>`;
       }
     }
 
-    // HÀM XỬ LÝ BIỂU ĐỒ
-    function renderWeeklyChart(posts) {
-      const labels = [];
-      const dataCounts = [0, 0, 0, 0, 0, 0, 0];
-      const today = new Date();
-
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(today.getDate() - i);
-        labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
-      }
-
-      posts.forEach(p => {
-        const dStr = p.created_at || p.createdAt;
-        if (!dStr) return;
-        const pDate = new Date(dStr);
-        // Nếu bài đăng trong vòng 7 ngày
-        const dayKey = `${pDate.getDate()}/${pDate.getMonth() + 1}`;
-        const index = labels.indexOf(dayKey);
-        if (index !== -1) {
-          dataCounts[index]++;
-        }
-      });
-
-      const ctx = document.getElementById('weeklyChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Bài đăng mới',
-            data: dataCounts,
-            borderColor: '#e67e22',
-            backgroundColor: 'rgba(230, 126, 34, 0.1)',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#e67e22',
-            pointRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true, grid: { borderDash: [5, 5] }, ticks: { stepSize: 1 } },
-            x: { grid: { display: false } }
-          }
-        }
-      });
-    }
-
-    // HÀM XỬ LÝ TOP NGƯỜI ĐĂNG
-    function renderTopPosters(posts) {
-      const userCounts = {};
-
-      posts.forEach(p => {
-        let name = "Ẩn danh";
-        if (p.user && p.user.name) name = p.user.name;
-        else if (p.userName) name = p.userName;
-
-        if (userCounts[name]) userCounts[name]++;
-        else userCounts[name] = 1;
-      });
-
-      const sortedUsers = Object.entries(userCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
-
-      const listEl = document.getElementById('topPostersList');
-      listEl.innerHTML = "";
-
-      if (sortedUsers.length === 0) {
-        listEl.innerHTML = "<li class='text-center'>Chưa có dữ liệu</li>";
-        return;
-      }
-
-      sortedUsers.forEach((item, index) => {
-        const userName = item[0];
-        const count = item[1];
-        listEl.innerHTML += `
-            <li class="ranking-item">
-                <span class="ranking-name">${index + 1}. ${userName}</span>
-                <span class="ranking-count">${count} bài</span>
-            </li>
-        `;
-      });
-    }
-
-    // HÀM XỬ LÝ THỂ LOẠI NỔI BẬT
     function renderTopCategory(posts) {
       const catCounts = {};
       let totalCategorized = 0;
-
       posts.forEach(p => {
-        const catName = p.categoryName || (p.book ? p.book.category : null) || "Khác";
+        let catName = "Khác";
+        if (p.categoryName) catName = p.categoryName;
+        else if (p.category && p.category.name) catName = p.category.name;
+        else if (p.book && p.book.category) catName = p.book.category;
+        else if (typeof p.category === 'string') catName = p.category;
+
         if (catCounts[catName]) catCounts[catName]++;
         else catCounts[catName] = 1;
         totalCategorized++;
       });
-
       const sortedCats = Object.entries(catCounts).sort((a, b) => b[1] - a[1]);
-
       if (sortedCats.length > 0) {
         const topName = sortedCats[0][0];
         const topCount = sortedCats[0][1];
         const percent = totalCategorized > 0 ? Math.round((topCount / totalCategorized) * 100) : 0;
-
         document.getElementById('topCatName').innerText = topName;
         document.getElementById('topCatPercent').innerText = `${percent}%`;
         document.getElementById('topCatBar').style.width = `${percent}%`;
@@ -293,4 +172,5 @@
     }
   </script>
 </body>
+
 </html>

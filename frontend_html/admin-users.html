@@ -1,207 +1,135 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quản lý người dùng | Admin</title>
 
-    <!-- Bootstrap -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý người dùng - Admin</title>
 
-    <!-- Animate CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
-    <!-- Custom CSS -->
-    <style>
-      body {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        min-height: 100vh;
-        padding-top: 90px;
-      }
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
 
-      /* ==============================
-          TOP BAR
-      =============================== */
-      .top-bar {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        padding: 15px 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(10px);
-        z-index: 1000;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
+<body>
 
-      .home-btn,
-      .logout-btn {
-        background: white;
-        color: #333;
-        font-weight: 600;
-        border-radius: 25px;
-        padding: 8px 18px;
-        border: none;
-        transition: all 0.25s ease;
-        cursor: pointer;
-      }
-
-      .home-btn:hover {
-        background: #ffc107;
-        color: black;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      }
-
-      .logout-btn {
-        background: #dc3545;
-        color: white;
-      }
-
-      .logout-btn:hover {
-        background: #b02a37;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      }
-
-      /* ==============================
-          CARD
-      =============================== */
-      .admin-card {
-        background: white;
-        border-radius: 18px;
-        padding: 25px;
-        margin-top: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
-        animation: fadeInUp 0.8s ease;
-      }
-
-      .admin-title {
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 25px;
-        font-size: 26px;
-        color: #333;
-      }
-
-      /* ==============================
-          SEARCH BOX
-      =============================== */
-      #searchInput {
-        border-radius: 25px;
-        padding: 12px 20px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        text-align: center;
-      }
-
-      /* ==============================
-          TABLE
-      =============================== */
-      table {
-        border-radius: 16px;
-        overflow: hidden;
-      }
-
-      .table thead {
-        background: linear-gradient(135deg, #232526, #414345);
-        color: white;
-      }
-
-      .table-hover tbody tr:hover {
-        background-color: #eef2ff;
-        transition: 0.3s;
-      }
-
-      /* ==============================
-          BUTTON EFFECT
-      =============================== */
-      .btn {
-        border-radius: 20px;
-        transition: 0.2s;
-      }
-
-      .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- █████ TOP BAR █████ -->
-    <div class="top-bar animate__animated animate__fadeInDown">
-      <a href="admin-dashboard.html" class="home-btn">🏠 Trang chủ</a>
-      <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+  <div class="sidebar">
+    <div class="logo-area">
+      <img src="assets/images/logo.png" alt="Logo"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+      <span>ADMIN PANEL</span>
     </div>
 
-    <!-- █████ PAGE CONTENT █████ -->
-    <div class="container">
-      <div class="admin-card animate__animated animate__fadeInUp">
-        <h2 class="admin-title animate__animated animate__fadeInDown">
-          👤 QUẢN LÝ NGƯỜI DÙNG
-        </h2>
+    <nav>
+      <a href="admin-dashboard.html" class="nav-link">
+        <i class="bi bi-grid-fill"></i> Tổng quan
+      </a>
 
-        <!-- 🔍 Tìm kiếm -->
-        <div class="row mb-4 justify-content-center">
-          <div class="col-md-6">
-            <input
-              id="searchInput"
-              type="text"
-              class="form-control"
-              placeholder="🔍 Tìm theo tên, email, số điện thoại..."
-              oninput="searchUsers()"
-            />
-          </div>
-        </div>
+      <a href="#" class="nav-link active">
+        <i class="bi bi-people-fill"></i> Quản lý người dùng
+      </a>
 
-        <!-- 🧾 Bảng -->
-        <div class="table-responsive">
-          <table
-            class="table table-bordered table-hover align-middle text-center"
-          >
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Họ tên</th>
-                <th>Email</th>
-                <th>SĐT</th>
-                <th>Địa chỉ</th>
-                <th>Trạng thái</th>
-                <th>Ngày tạo</th>
-                <th style="width: 160px">Hành động</th>
-              </tr>
-            </thead>
-            <tbody id="userTable"></tbody>
-          </table>
-        </div>
+      <a href="admin-posts.html" class="nav-link">
+        <i class="bi bi-file-earmark-text-fill"></i> Duyệt bài đăng
+      </a>
+      <a href="admin-categories.html" class="nav-link">
+        <i class="bi bi-tags-fill"></i> Quản lý thể loại
+      </a>
+    </nav>
+  </div>
+
+  <div class="main-content">
+
+    <div class="top-header">
+      <div class="header-title">
+        Quản trị - <span>Quản lý người dùng</span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <span id="welcomeName" class="d-none d-md-block text-secondary small">Xin chào, Admin</span>
+        <button id="logoutBtn" class="btn btn-sm btn-outline-danger">
+          <i class="bi bi-box-arrow-right"></i> Đăng xuất
+        </button>
       </div>
     </div>
 
-    <!-- API -->
-    <script src="assets/js/api.js"></script>
+    <div class="card border-0 shadow-sm mt-4">
+      <div class="card-body p-4">
 
-    <!-- Logic xử lý -->
-    <script src="assets/js/admin-users.js"></script>
+        <div class="row mb-4 justify-content-between align-items-center">
+          <div class="col-md-5">
+            <h5 class="fw-bold text-dark mb-0">Danh sách tài khoản</h5>
+          </div>
+          <div class="col-md-5">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0 pe-2 text-secondary">
+                <i class="bi bi-search"></i>
+              </span>
+              <input id="searchInput" type="text" class="form-control border-start-0 ps-0 shadow-none text-secondary"
+                placeholder="Tìm theo tên, email, sđt..." oninput="searchUsers()">
+            </div>
+          </div>
+        </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Họ tên</th>
+                <th scope="col">Email</th>
+                <th scope="col">SĐT</th>
+                <th scope="col" style="min-width: 150px;">Địa chỉ</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Ngày tạo</th>
+                <th scope="col" class="text-center" style="min-width: 120px;">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="userTable">
+              <tr>
+                <td colspan="8" class="text-center py-4">Đang tải dữ liệu...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-    <!-- █████ LOGOUT █████ -->
-    <script>
-      function logout() {
-        if (!confirm("Bạn có chắc muốn đăng xuất không?")) return;
+      </div>
+    </div>
 
-        localStorage.removeItem("adminToken");
-        localStorage.removeItem("admin");
+  </div>
 
-        window.location.href = "index.html"; // hoặc loginAdmin.html
-      }
-    </script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="assets/js/api.js"></script>
+
+  <script>
+    // Xử lý hiển thị tên Admin
+    const adminInfo = JSON.parse(localStorage.getItem("admin") || "{}");
+    const welcomeEl = document.getElementById("welcomeName");
+    if (welcomeEl && adminInfo.name) {
+      welcomeEl.innerText = "Xin chào, " + adminInfo.name;
+    }
+
+    // Xử lý nút đăng xuất
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        if (confirm("Bạn có chắc muốn đăng xuất?")) {
+          if (window.api && window.api.authAPI) {
+            window.api.authAPI.logoutAdmin(); // Gọi hàm logout từ api.js nếu có
+          } else {
+            // Fallback nếu api chưa load
+            localStorage.removeItem("adminToken");
+            localStorage.removeItem("admin");
+          }
+          window.location.href = "loginAdmin.html";
+        }
+      });
+    }
+  </script>
+
+  <script src="assets/js/admin-users.js"></script>
+
+</body>
+
 </html>
