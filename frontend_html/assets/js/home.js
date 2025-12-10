@@ -3,11 +3,25 @@
  * Trang chủ - Hiển thị sách nổi bật và dữ liệu tổng quan
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadLocationData();
     loadBooks(1); // load trang đầu tiên
+    
 });
 
+let provinceMap = {};
+let districtMap = {};
 const ITEMS_PER_PAGE = 12;
+
+async function loadLocationData() {
+    const res = await fetch("https://provinces.open-api.vn/api/?depth=2");
+    const provinces = await res.json();
+
+    provinces.forEach(p => {
+        provinceMap[p.code] = p.name;
+        districtMap[p.code] = p.districts;
+    });
+}
 
 async function loadBooks(page) {
     try {
@@ -44,7 +58,15 @@ function renderBooksPage(books, page) {
 
                             <p class="text-muted small mb-1">
                                 <i class="bi bi-geo-alt-fill"></i>
-                                ${book.province || "?"} ${book.district ? "- " + book.district : ""}
+                                ${
+                                    districtMap[book.province]?.find(d => d.code == book.district)?.name
+                                    || book.district
+                                }
+                                -
+                                ${
+                                    provinceMap[book.province]
+                                    || book.province
+                                }
                             </p>
 
                             <p class="small text-secondary" style="min-height:40px;">
