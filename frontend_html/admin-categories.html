@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý danh mục | Admin</title>
+
+    <link rel="icon" href="assets/images/logo.png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <style>
+      body {
+        background: linear-gradient(135deg, #eef2f7, #dfe3ee);
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      /* 🔥 TOP BAR */
+      .top-bar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        z-index: 1000;
+        animation: fadeInDown 0.6s ease;
+      }
+
+      .home-btn {
+        background: #ffffff;
+        color: #333;
+        font-weight: 600;
+        border-radius: 25px;
+        padding: 8px 18px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+        text-decoration: none;
+      }
+
+      .home-btn:hover {
+        background: #ffc107;
+        color: black;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+      }
+
+      .logout-btn {
+        background: #dc3545;
+        color: white;
+        font-weight: 600;
+        border-radius: 25px;
+        padding: 8px 18px;
+        border: none;
+        transition: 0.3s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .logout-btn:hover {
+        background: #bb2d3b;
+        transform: translateY(-2px);
+      }
+
+      .page-content {
+        margin-top: 110px;
+      }
+
+      /* 🔥 CARD STYLE */
+      .card {
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        transition: 0.3s;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+      }
+
+      .card-header {
+        font-size: 18px;
+        background: linear-gradient(135deg, #4e73df, #224abe);
+        color: white;
+        border-radius: 16px 16px 0 0 !important;
+        padding: 14px 20px;
+      }
+
+      /* 🔥 Table Styling */
+      table {
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      thead {
+        background: #f1f3f5;
+      }
+
+      tbody tr {
+        transition: 0.25s;
+      }
+
+      tbody tr:hover {
+        background-color: #eef4ff;
+        transform: scale(1.01);
+      }
+
+      .btn-edit {
+        background: #f6c23e;
+        border: none;
+        color: #000;
+        font-weight: 600;
+      }
+
+      .btn-edit:hover {
+        background: #dda20a;
+        color: white;
+      }
+
+      .btn-delete {
+        background: #e74a3b;
+        border: none;
+        color: white;
+      }
+
+      .btn-delete:hover {
+        background: #c0392b;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 🔥 TOP BAR -->
+    <div class="top-bar animate__animated animate__fadeInDown">
+      <a href="admin-dashboard.html" class="home-btn">🏠 Trang chủ</a>
+      <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <section class="container page-content">
+      <h3 class="fw-bold mb-3 animate__animated animate__fadeInDown">
+        Quản lý danh mục
+      </h3>
+      <p class="text-muted animate__animated animate__fadeInDown">
+        Thêm, chỉnh sửa và xóa danh mục trong hệ thống.
+      </p>
+
+      <!-- FORM -->
+      <div class="card mb-4 animate__animated animate__fadeInUp">
+        <div class="card-header fw-bold">Thêm / Sửa danh mục</div>
+        <div class="card-body">
+          <form id="categoryForm">
+            <input type="hidden" id="categoryID" />
+
+            <div class="mb-3">
+              <label class="form-label">Tên danh mục</label>
+              <input
+                type="text"
+                id="categoryName"
+                class="form-control shadow-sm"
+                placeholder="Nhập tên danh mục..."
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary shadow-sm">
+              <i class="bi bi-save"></i> Lưu
+            </button>
+
+            <button
+              type="reset"
+              class="btn btn-secondary shadow-sm"
+              id="btnCancel"
+            >
+              <i class="bi bi-x-circle"></i> Hủy
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card animate__animated animate__fadeInUp">
+        <div class="card-header fw-bold">Danh sách danh mục</div>
+        <div class="card-body">
+          <table
+            class="table table-bordered table-hover align-middle shadow-sm"
+          >
+            <thead class="table-light">
+              <tr>
+                <th width="80">ID</th>
+                <th>Tên danh mục</th>
+                <th width="200" class="text-center">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="categoryTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/admin-categories.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- LOGOUT -->
+    <script>
+      function logout() {
+        if (!confirm("Bạn có chắc muốn đăng xuất không?")) return;
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("admin");
+        window.location.href = "loginAdmin.html";
+      }
+    </script>
+  </body>
+</html>
