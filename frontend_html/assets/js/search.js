@@ -7,6 +7,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
   await loadProvinces();
   await searchBooks();
+  await loadDistricts();
 
   document.getElementById('searchForm').addEventListener('submit', handleSearch);
   document.getElementById('resetBtn').addEventListener('click', handleReset);
@@ -15,22 +16,47 @@ document.addEventListener('DOMContentLoaded', async function () {
 /* ============================
    LOAD PROVINCE (API VN)
 ============================ */
+let provinceMap = {};    // code -> name
+let districtMap = {};    // provinceCode -> array districts
 async function loadProvinces() {
   try {
-    const res = await fetch("https://provinces.open-api.vn/api/p/");
+    const res = await fetch("https://provinces.open-api.vn/api/?depth=2");
     const provinces = await res.json();
 
     const select = document.getElementById("provinceFilter");
 
     provinces.forEach(p => {
+      provinceMap[p.code] = p.name;
+      districtMap[p.code] = p.districts; // Lưu quận theo tỉnh
       const opt = document.createElement("option");
-      opt.value = p.name;
+      opt.value = p.code;
       opt.textContent = p.name;
       select.appendChild(opt);
+
     });
+    select.addEventListener("change", loadDistricts);
   } catch (err) {
     console.error("Error loading provinces:", err);
   }
+}
+
+async function loadDistricts() {
+  const provinceCode = document.getElementById("provinceFilter").value;
+  const districtSelect = document.getElementById("districtFilter");
+
+  districtSelect.innerHTML = `<option value="">Chọn quận/huyện</option>`;
+
+  if (!provinceCode) return;
+
+  const districts = districtMap[provinceCode];
+  if (!districts) return;
+
+  districts.forEach(d => {
+    const opt = document.createElement("option");
+    opt.value = d.code;
+    opt.textContent = d.name;
+    districtSelect.appendChild(opt);
+  });
 }
 
 /* ============================
@@ -84,11 +110,14 @@ function renderBooks(books) {
     <div class="col-md-3">
       <div class="card h-100 shadow-sm">
         <img src="${book.image}" class="card-img-top"
-             style="height: 220px; object-fit: cover;">
+             style="height: 420px; object-fit: cover;">
         <div class="card-body">
           <h5 class="card-title">${book.title}</h5>
           <p class="text-muted">${book.author}</p>
-          <p><i class="bi bi-geo-alt"></i> ${book.district}, ${book.province}</p>
+          <p><i class="bi bi-geo-alt"></i> 
+            ${districtMap[book.province]?.find(d => d.code == book.district)?.name || book.district}, 
+            ${provinceMap[book.province] || book.province}
+          </p>
         </div>
       </div>
     </div>
