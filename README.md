@@ -1,49 +1,36 @@
-HƯỚNG DẪN CHẠY TOÀN BỘ HỆ THỐNG
-Bước 1: Chuẩn bị môi trường
+# HƯỚNG DẪN CHẠY TOÀN BỘ HỆ THỐNG
+# Bước 1: Chuẩn bị môi trường
 
-# Kiểm tra Java
+## Kiểm tra Java
 java -version  # Cần Java 17+
 
-# Kiểm tra Node.js
+## Kiểm tra Node.js
 node -v  # Cần Node 16+
 
 # Kiểm tra MySQL
 mysql --version  # Cần MySQL 8.0+
 
-
-Bước 2: Setup Database
-
+# Bước 2: Setup Database
+ 
 cd database
 
 docker-compose up -d
 
 cd ..
 
-Bước 3: Chạy Backend
+# Bước 3: Chạy Backend
 cd backend
 
-# Cấu hình MySQL password trong application.properties
-# Sửa: spring.datasource.password=your_password
-
-# Build và chạy
 mvn clean install
 
 mvn spring-boot:run
 
-# Backend sẽ chạy tại http://localhost:8080/api
+Backend sẽ chạy tại http://localhost:8080/api
 
 
-Bước 4: Chạy Frontend
+# Bước 4: Chạy Frontend
 cd frontend
-
-# Cài đặt dependencies
-npm install
-
-# Chạy development server
-npm start
-
-# Frontend sẽ chạy tại http://localhost:3000
-
+go live file index.html
 
 Bước 5: Truy cập ứng dụng
 
