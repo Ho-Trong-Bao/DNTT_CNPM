@@ -9,17 +9,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   await searchBooks();
   await loadDistricts();
 
-  document
-    .getElementById("searchForm")
-    .addEventListener("submit", handleSearch);
+  document.getElementById("searchForm").addEventListener("submit", handleSearch);
   document.getElementById("resetBtn").addEventListener("click", handleReset);
 });
 
 /* ============================
    LOAD PROVINCE (API VN)
 ============================ */
-let provinceMap = {}; // code -> name
-let districtMap = {}; // provinceCode -> array districts
 async function loadProvinces() {
   try {
     const res = await fetch("https://provinces.open-api.vn/api/?depth=2");

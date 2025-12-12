@@ -8,19 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadBooks(1); // load trang đầu tiên
 });
 
-let provinceMap = {};
-let districtMap = {};
 const ITEMS_PER_PAGE = 12;
-
-async function loadLocationData() {
-  const res = await fetch("https://provinces.open-api.vn/api/?depth=2");
-  const provinces = await res.json();
-
-  provinces.forEach((p) => {
-    provinceMap[p.code] = p.name;
-    districtMap[p.code] = p.districts;
-  });
-}
 
 async function loadBooks(page) {
   try {
@@ -40,9 +28,7 @@ function renderBooksPage(books, page) {
   const booksToShow = books.slice(start, end);
   const container = document.getElementById("featuredBooks");
 
-  container.innerHTML = booksToShow
-    .map((book) => createBookCard(book))
-    .join("");
+  container.innerHTML = booksToShow.map((book) => createBookCard(book)).join("");
 }
 
 function renderPagination(totalItems, currentPage) {

@@ -11,9 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-      const modal = new bootstrap.Modal(
-        document.getElementById("loginRequiredModal")
-      );
+      const modal = new bootstrap.Modal(document.getElementById("loginRequiredModal"));
       modal.show();
       return;
     }
@@ -95,9 +93,11 @@ function showToast(message, type = "success") {
 
 // Tạo BookCard HTML
 function createBookCard(book) {
-  const defaultImage =
-    "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80";
+  const defaultImage = "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80";
   const image = book.image || defaultImage;
+
+  const provinceName = getProvinceName(book.province);
+  const districtName = getDistrictName(book.province, book.district);
 
   return `
     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -106,18 +106,19 @@ function createBookCard(book) {
              onerror="this.src='${defaultImage}'">
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${book.title}</h5>
+
           <p class="book-meta flex-grow-1">
             <strong>Tác giả:</strong> ${book.author || "Không rõ"}<br>
             <strong>Tình trạng:</strong> ${book.bookCondition || "Cũ"}<br>
-            <strong>Khu vực:</strong> ${book.province || "Không rõ"}
+            <strong>Khu vực:</strong> 
+              ${provinceName || "Không rõ"} 
+              ${districtName ? " - " + districtName : ""}
           </p>
+
           <div class="d-flex justify-content-between align-items-center mt-auto">
-            <span class="fw-bold text-danger fs-5">${formatPrice(
-              book.price
-            )}</span>
-            <a href="book-detail.html?id=${
-              book.bookID
-            }" class="btn btn-primary btn-sm">
+            <span class="fw-bold text-danger fs-5">${formatPrice(book.price)}</span>
+            <a href="book-detail.html?id=${book.bookID}" 
+               class="btn btn-primary btn-sm">
               Xem chi tiết
             </a>
           </div>

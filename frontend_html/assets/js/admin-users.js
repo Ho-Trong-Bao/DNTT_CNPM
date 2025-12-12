@@ -6,7 +6,8 @@ let allUsers = [];
 // ==============================
 // KIỂM TRA QUYỀN + LOAD USER
 // ==============================
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadLocationData();
   const admin = JSON.parse(localStorage.getItem("admin") || "{}");
 
   if (!admin || admin.role !== "ADMIN") {
@@ -47,9 +48,11 @@ function renderUsers(users) {
   }
 
   users.forEach((u) => {
-    const address = [u.province, u.district, u.ward]
-      .filter(Boolean)
-      .join(" - ");
+    const provinceName = getProvinceName(u.province);
+    const districtName = getDistrictName(u.province, u.district);
+    const wardName = getWardName(u.district, u.ward);
+
+    const address = [provinceName, districtName, wardName].filter(Boolean).join(" - ");
 
     const tr = document.createElement("tr");
 
