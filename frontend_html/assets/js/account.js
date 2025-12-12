@@ -7,52 +7,104 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Kiểm tra đăng nhập
   if (!requireAuth()) return;
 
+  await loadAddressOptions();
   await loadUserProfile();
-  setupAvatarPreview();
   setupProfileForm();
   setupPasswordForm();
 });
+
+async function loadAddressOptions() {
+  const provinceSelect = document.getElementById("province");
+  const districtSelect = document.getElementById("district");
+  const wardSelect = document.getElementById("ward");
+
+  // Load tỉnh
+  const provinces = await fetch("https://provinces.open-api.vn/api/p/").then(
+    (r) => r.json()
+  );
+  provinceSelect.innerHTML = '<option value="">-- Chọn Tỉnh/Thành --</option>';
+  provinces.forEach((p) => {
+    provinceSelect.innerHTML += `<option value="${p.code}">${p.name}</option>`;
+  });
+
+  // Khi chọn tỉnh → load huyện
+  provinceSelect.addEventListener("change", async function () {
+    districtSelect.innerHTML =
+      '<option value="">-- Chọn Quận/Huyện --</option>';
+    wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+
+    if (!this.value) return;
+
+    const selectedProvince = await fetch(
+      `https://provinces.open-api.vn/api/p/${this.value}?depth=2`
+    ).then((r) => r.json());
+
+    selectedProvince.districts.forEach((d) => {
+      districtSelect.innerHTML += `<option value="${d.code}">${d.name}</option>`;
+    });
+  });
+
+  // Khi chọn huyện → load xã
+  districtSelect.addEventListener("change", async function () {
+    wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+
+    if (!this.value) return;
+
+    const selectedDistrict = await fetch(
+      `https://provinces.open-api.vn/api/d/${this.value}?depth=2`
+    ).then((r) => r.json());
+
+    selectedDistrict.wards.forEach((w) => {
+      wardSelect.innerHTML += `<option value="${w.code}">${w.name}</option>`;
+    });
+  });
+}
 
 // Load user profile từ API: GET /api/users/{id}
 async function loadUserProfile() {
   try {
     const userID = getUserId();
-
-    if (!userID) {
-      throw new Error("Không tìm thấy thông tin người dùng");
-    }
-
-    // Gọi API: GET /api/users/{userID}
-    console.log("Loading profile for userID:", userID);
     const user = await userAPI.getById(userID);
 
-    console.log("Loaded user:", user);
-
-    // Fill form với dữ liệu user
     document.getElementById("name").value = user.name || "";
     document.getElementById("email").value = user.email || "";
     document.getElementById("phone").value = user.phone || "";
-    document.getElementById("province").value = user.province || "";
-    document.getElementById("district").value = user.district || "";
-    document.getElementById("ward").value = user.ward || "";
+
+    // Set tỉnh
+    document.getElementById("province").value = user.province;
+
+    // Load huyện dựa trên mã tỉnh
+    const provinceData = await fetch(
+      `https://provinces.open-api.vn/api/p/${user.province}?depth=2`
+    ).then((r) => r.json());
+
+    const districtSelect = document.getElementById("district");
+    districtSelect.innerHTML =
+      '<option value="">-- Chọn Quận/Huyện --</option>';
+    provinceData.districts.forEach((d) => {
+      districtSelect.innerHTML += `<option value="${d.code}">${d.name}</option>`;
+    });
+
+    // Set huyện
+    districtSelect.value = user.district;
+
+    // Load xã dựa trên mã huyện
+    const districtData = await fetch(
+      `https://provinces.open-api.vn/api/d/${user.district}?depth=2`
+    ).then((r) => r.json());
+
+    const wardSelect = document.getElementById("ward");
+    wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+    districtData.wards.forEach((w) => {
+      wardSelect.innerHTML += `<option value="${w.code}">${w.name}</option>`;
+    });
+
+    // Set xã
+    wardSelect.value = user.ward;
   } catch (error) {
-    console.error("Error loading profile:", error);
+    console.error(error);
     showToast("Không thể tải thông tin tài khoản", "error");
   }
-}
-
-// Setup avatar preview
-function setupAvatarPreview() {
-  document.getElementById("avatar").addEventListener("change", function (e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (evt) {
-        document.getElementById("avatarPreview").src = evt.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
 }
 
 // Setup profile form submit - API: PUT /api/users/{id}

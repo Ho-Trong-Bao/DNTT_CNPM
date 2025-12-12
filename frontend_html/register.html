@@ -147,12 +147,7 @@
                           id="province"
                           name="province"
                         >
-                          <option value="">Chọn tỉnh/thành</option>
-                          <option value="TP.HCM">TP.HCM</option>
-                          <option value="Hà Nội">Hà Nội</option>
-                          <option value="Đà Nẵng">Đà Nẵng</option>
-                          <option value="Cần Thơ">Cần Thơ</option>
-                          <option value="Hải Phòng">Hải Phòng</option>
+                          <option value="">-- Chọn Tỉnh --</option>
                         </select>
                       </div>
                     </div>
@@ -162,13 +157,13 @@
                         <label for="district" class="form-label fw-semibold"
                           >Quận/Huyện</label
                         >
-                        <input
-                          type="text"
-                          class="form-control"
+                        <select
+                          class="form-select"
                           id="district"
                           name="district"
-                          placeholder="Nhập quận/huyện"
-                        />
+                        >
+                          <option value="">-- Chọn Quận/Huyện --</option>
+                        </select>
                       </div>
                     </div>
 
@@ -177,13 +172,9 @@
                         <label for="ward" class="form-label fw-semibold"
                           >Phường/Xã</label
                         >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="ward"
-                          name="ward"
-                          placeholder="Nhập phường/xã"
-                        />
+                        <select class="form-select" id="ward" name="ward">
+                          <option value="">-- Chọn Phường/Xã --</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -227,7 +218,55 @@
       // Redirect nếu đã đăng nhập
       redirectIfAuthenticated();
 
-      // Xử lý form register
+      // ============================
+      // Load Province - District - Ward
+      // ============================
+      const province = document.getElementById("province");
+      const district = document.getElementById("district");
+      const ward = document.getElementById("ward");
+
+      // Load danh sách tỉnh
+      fetch("https://provinces.open-api.vn/api/p/")
+        .then((res) => res.json())
+        .then((data) => {
+          data.forEach((p) => {
+            province.innerHTML += `<option value="${p.code}">${p.name}</option>`;
+          });
+        });
+
+      // Khi chọn tỉnh → load huyện
+      province.addEventListener("change", async function () {
+        district.innerHTML = "<option value=''>-- Chọn Quận/Huyện --</option>";
+        ward.innerHTML = "<option value=''>-- Chọn Phường/Xã --</option>";
+
+        const res = await fetch(
+          `https://provinces.open-api.vn/api/p/${this.value}?depth=2`
+        );
+        const data = await res.json();
+
+        data.districts.forEach((d) => {
+          district.innerHTML += `<option value="${d.code}">${d.name}</option>`;
+        });
+      });
+
+      // Khi chọn huyện → load xã
+      district.addEventListener("change", async function () {
+        ward.innerHTML = "<option value=''>-- Chọn Phường/Xã --</option>";
+
+        const res = await fetch(
+          `https://provinces.open-api.vn/api/d/${this.value}?depth=2`
+        );
+        const data = await res.json();
+
+        data.wards.forEach((w) => {
+          ward.innerHTML += `<option value="${w.code}">${w.name}</option>`;
+        });
+      });
+
+      // ============================
+      // Xử lý form đăng ký
+      // ============================
+
       document
         .getElementById("registerForm")
         .addEventListener("submit", async function (e) {
@@ -239,9 +278,9 @@
             password: document.getElementById("password").value,
             confirmPassword: document.getElementById("confirmPassword").value,
             phone: document.getElementById("phone").value,
-            province: document.getElementById("province").value,
-            district: document.getElementById("district").value,
-            ward: document.getElementById("ward").value,
+            province: province.value,
+            district: district.value,
+            ward: ward.value,
           };
 
           const errorAlert = document.getElementById("errorAlert");
@@ -268,6 +307,13 @@
 
           if (formData.password !== formData.confirmPassword) {
             errorAlert.textContent = "Mật khẩu xác nhận không khớp";
+            errorAlert.classList.remove("d-none");
+            return;
+          }
+
+          if (!formData.province || !formData.district || !formData.ward) {
+            errorAlert.textContent =
+              "Vui lòng chọn đầy đủ Tỉnh/Quận/Huyện/Phường";
             errorAlert.classList.remove("d-none");
             return;
           }

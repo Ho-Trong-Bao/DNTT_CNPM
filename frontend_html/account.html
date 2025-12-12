@@ -151,11 +151,6 @@
                           name="province"
                         >
                           <option value="">Chọn tỉnh/thành</option>
-                          <option value="TP.HCM">TP.HCM</option>
-                          <option value="Hà Nội">Hà Nội</option>
-                          <option value="Đà Nẵng">Đà Nẵng</option>
-                          <option value="Cần Thơ">Cần Thơ</option>
-                          <option value="Hải Phòng">Hải Phòng</option>
                         </select>
                       </div>
                     </div>
@@ -165,13 +160,13 @@
                         <label for="district" class="form-label fw-semibold"
                           >Quận/Huyện</label
                         >
-                        <input
-                          type="text"
-                          class="form-control"
+                        <select
+                          class="form-select"
                           id="district"
                           name="district"
-                          placeholder="Nhập quận/huyện"
-                        />
+                        >
+                          <option value="">-- Chọn Quận/Huyện --</option>
+                        </select>
                       </div>
                     </div>
 
@@ -180,13 +175,9 @@
                         <label for="ward" class="form-label fw-semibold"
                           >Phường/Xã</label
                         >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="ward"
-                          name="ward"
-                          placeholder="Nhập phường/xã"
-                        />
+                        <select class="form-select" id="ward" name="ward">
+                          <option value="">-- Chọn Phường/Xã --</option>
+                        </select>
                       </div>
                     </div>
                   </div>
