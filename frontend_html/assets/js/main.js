@@ -215,7 +215,10 @@ function setActiveNavLink() {
 
 // Đăng xuất
 function logout() {
-  localStorage.removeItem("authToken");
+  localStorage.removeItem("userToken"); // tên mới
+  localStorage.removeItem("adminToken"); // nếu có
+  localStorage.removeItem("authToken"); // xoá tên cũ luôn cho chắc
+
   localStorage.removeItem("user");
   window.location.href = "index.html";
 }
