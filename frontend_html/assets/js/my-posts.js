@@ -62,6 +62,7 @@ async function loadMyPosts() {
       `;
       return;
     }
+    posts.sort((a, b) => b.postID - a.postID);
 
     container.innerHTML = posts.map((p) => createPostCard(p)).join("");
   } catch (err) {
@@ -79,8 +80,7 @@ async function loadMyPosts() {
 ============================= */
 function createPostCard(post) {
   const img =
-    post.image ||
-    "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80";
+    post.image || "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80";
 
   const provinceName = getProvinceName(post.province);
   const districtName = getDistrictName(post.province, post.district);
@@ -114,9 +114,7 @@ function createPostCard(post) {
             ${districtName} - ${provinceName}
           </p>
 
-          <p class="small">${
-            post.postDescription || "Không có mô tả bài đăng"
-          }</p>
+          <p class="small">${post.postDescription || "Không có mô tả bài đăng"}</p>
         </div>
 
         <div class="card-footer bg-white d-flex justify-content-between">
@@ -125,21 +123,15 @@ function createPostCard(post) {
             <i class="bi bi-eye me-1"></i>Xem
           </a>
 
-          <button class="btn btn-warning btn-sm" onclick="editPost(${
-            post.postID
-          })">
+          <button class="btn btn-warning btn-sm" onclick="editPost(${post.postID})">
             <i class="bi bi-pencil-square me-1"></i>Sửa
           </button>
 
-          <button class="btn btn-danger btn-sm" onclick="confirmDelete(${
-            post.postID
-          })">
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete(${post.postID})">
             <i class="bi bi-trash me-1"></i>Xóa
           </button>
 
-          <button class="btn btn-success btn-sm" onclick="markAsSold(${
-            post.postID
-          })">
+          <button class="btn btn-success btn-sm" onclick="markAsSold(${post.postID})">
             <i class="bi bi-check2-circle me-1"></i>Đã bán
           </button>
 
@@ -215,17 +207,15 @@ async function deletePost() {
   }
 }
 
-document
-  .getElementById("confirmDeleteBtn")
-  .addEventListener("click", async () => {
-    if (!deletePostID) return;
+document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+  if (!deletePostID) return;
 
-    try {
-      await postAPI.delete(deletePostID);
-      showToast("Đã xóa bài đăng!", "success");
-      setTimeout(() => location.reload(), 800);
-    } catch (error) {
-      console.error(error);
-      showToast("Không thể xóa bài đăng!", "error");
-    }
-  });
+  try {
+    await postAPI.delete(deletePostID);
+    showToast("Đã xóa bài đăng!", "success");
+    setTimeout(() => location.reload(), 800);
+  } catch (error) {
+    console.error(error);
+    showToast("Không thể xóa bài đăng!", "error");
+  }
+});

@@ -102,7 +102,7 @@ function createBookCard(book) {
   return `
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="card book-card h-100">
-        <img src="${image}" class="card-img-top" alt="${book.title}" 
+        <img src="${image}" class="card-img-top" alt="${book.title}" style="height: 400px
              onerror="this.src='${defaultImage}'">
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${book.title}</h5>

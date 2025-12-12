@@ -83,6 +83,7 @@ async function searchBooks() {
   const res = await fetch(`${API_BASE_URL}/books/search?${qs}`);
   const books = await res.json();
   console.log("🔥 Dữ liệu books nhận từ API:", books);
+  books.sort((a, b) => b.bookID - a.bookID);
   renderBooks(books);
 }
 

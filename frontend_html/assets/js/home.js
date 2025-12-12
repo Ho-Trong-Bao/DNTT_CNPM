@@ -13,6 +13,7 @@ const ITEMS_PER_PAGE = 12;
 async function loadBooks(page) {
   try {
     const books = await bookAPI.list(); // GET /books
+    books.sort((a, b) => b.bookID - a.bookID);
     renderBooksPage(books, page);
     renderPagination(books.length, page);
   } catch (err) {

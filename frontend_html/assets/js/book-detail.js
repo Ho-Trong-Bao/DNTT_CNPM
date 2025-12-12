@@ -46,7 +46,7 @@ async function loadBookDetail(bookId) {
         <div class="col-md-5">
           <div class="card border-0 shadow-sm">
             <img src="${image}" class="card-img-top" alt="${book.title}"
-              style="height: 500px; object-fit: cover;"
+              style="height: 800px; object-fit: cover;"
               onerror="this.src='${defaultImage}'">
           </div>
         </div>
@@ -118,7 +118,7 @@ async function loadRelatedBooks(currentBook) {
 
     // Loại bỏ chính cuốn đang xem
     const filtered = books.filter((b) => b.bookID !== currentBook.bookID);
-
+    filtered.sort((a, b) => b.bookID - a.bookID);
     if (filtered.length > 0) {
       container.innerHTML = filtered
         .slice(0, 4)

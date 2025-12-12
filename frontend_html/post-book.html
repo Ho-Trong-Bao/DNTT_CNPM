@@ -7,15 +7,9 @@
     <link rel="icon" href="assets/images/logo.png" />
 
     <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Bootstrap Icons -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
@@ -27,28 +21,16 @@
           <img src="assets/images/logo.png" alt="Logo" />
           Sách Cũ Theo Khu Vực
         </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          class="collapse navbar-collapse justify-content-end"
-          id="navbarNav"
-        >
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="index.html">
-                <i class="bi bi-house-door me-1"></i>Trang chủ
-              </a>
+              <a class="nav-link" href="index.html"> <i class="bi bi-house-door me-1"></i>Trang chủ </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="search-books.html">
-                <i class="bi bi-search me-1"></i>Tìm sách
-              </a>
+              <a class="nav-link" href="search-books.html"> <i class="bi bi-search me-1"></i>Tìm sách </a>
             </li>
             <ul class="navbar-nav" id="authLinks"></ul>
           </ul>
@@ -69,20 +51,12 @@
                 id="imagePreview"
                 src="https://placehold.co/400x500?text=Book+Cover"
                 class="card-img-top"
-                style="height: 400px; object-fit: cover"
+                style="height: 600px; object-fit: cover"
               />
               <div class="card-body">
                 <label class="form-label fw-semibold">Ảnh bìa sách *</label>
-                <input
-                  type="file"
-                  id="bookImage"
-                  class="form-control"
-                  accept="image/*"
-                  required
-                />
-                <small class="text-muted"
-                  >Ảnh sẽ được upload trước khi đăng bài</small
-                >
+                <input type="file" id="bookImage" class="form-control" accept="image/*" required />
+                <small class="text-muted">Ảnh sẽ được upload trước khi đăng bài</small>
               </div>
             </div>
           </div>
@@ -113,14 +87,7 @@
 
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Giá bán *</label>
-                  <input
-                    id="price"
-                    type="number"
-                    class="form-control"
-                    min="1000"
-                    step="1000"
-                    required
-                  />
+                  <input id="price" type="number" class="form-control" min="1000" step="1000" required />
                 </div>
               </div>
 
@@ -154,22 +121,11 @@
 
               <div class="mb-3">
                 <label class="form-label fw-semibold">Mô tả *</label>
-                <textarea
-                  id="description"
-                  rows="4"
-                  class="form-control"
-                  required
-                ></textarea>
+                <textarea id="description" rows="4" class="form-control" required></textarea>
               </div>
 
               <div class="text-end mt-4">
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  onclick="history.back()"
-                >
-                  Hủy
-                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="history.back()">Hủy</button>
                 <button type="submit" class="btn btn-primary" id="submitBtn">
                   <i class="bi bi-upload me-2"></i>Đăng bài
                 </button>
