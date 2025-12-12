@@ -112,8 +112,11 @@ function createBookCard(book) {
             <strong>Tình trạng:</strong> ${book.bookCondition || "Cũ"}<br>
             <strong>Khu vực:</strong> 
               ${provinceName || "Không rõ"} 
-              ${districtName ? " - " + districtName : ""}
+              ${districtName ? " - " + districtName : ""}<br>
+            <strong>Đăng:</strong> ${timeAgo(book.createdAt)}
+
           </p>
+     
 
           <div class="d-flex justify-content-between align-items-center mt-auto">
             <span class="fw-bold text-danger fs-5">${formatPrice(book.price)}</span>
@@ -126,6 +129,33 @@ function createBookCard(book) {
       </div>
     </div>
   `;
+}
+
+function timeAgo(dateString) {
+  if (!dateString) return "Không rõ";
+
+  // backend kiểu: "2025-12-03 13:31:14.126766"
+  const date = new Date(dateString.replace(" ", "T"));
+
+  if (isNaN(date.getTime())) return "Không rõ";
+
+  const now = new Date();
+  const diff = (now - date) / 1000; // giây
+
+  if (diff < 60) return "mới đăng";
+
+  if (diff < 3600) {
+    const mins = Math.floor(diff / 60);
+    return mins <= 1 ? "mới đăng" : `${mins} phút trước`;
+  }
+
+  if (diff < 86400) {
+    const hours = Math.floor(diff / 3600);
+    return `${hours} giờ trước`;
+  }
+
+  const days = Math.floor(diff / 86400);
+  return `${days} ngày trước`;
 }
 
 // Update navbar theo trạng thái đăng nhập
