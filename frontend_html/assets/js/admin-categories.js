@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const data = await api.categoryAPI.getAll();
 
-      console.log("CATEGORY DATA:", data); 
+      console.log("✅ CATEGORY DATA:", data); // <-- DEBUG BẮT BUỘC CÓ
 
       if (!Array.isArray(data)) {
         alert("Dữ liệu danh mục không hợp lệ!");
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       renderTable(data);
     } catch (err) {
-      console.error("LOAD CATEGORY ERROR:", err);
+      console.error("❌ LOAD CATEGORY ERROR:", err);
       alert("Không tải được danh mục");
     }
   }
