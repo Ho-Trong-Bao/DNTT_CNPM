@@ -1,17 +1,21 @@
 # HƯỚNG DẪN CHẠY TOÀN BỘ HỆ THỐNG
+
 # Bước 1: Chuẩn bị môi trường
 
 ## Kiểm tra Java
-java -version  # Cần Java 17+
+
+java -version # Cần Java 17+
 
 ## Kiểm tra Node.js
-node -v  # Cần Node 16+
+
+node -v # Cần Node 16+
 
 # Kiểm tra MySQL
-mysql --version  # Cần MySQL 8.0+
+
+mysql --version # Cần MySQL 8.0+
 
 # Bước 2: Setup Database
- 
+
 cd database
 
 docker-compose up -d
@@ -19,6 +23,7 @@ docker-compose up -d
 cd ..
 
 # Bước 3: Chạy Backend
+
 cd backend
 
 mvn clean install
@@ -27,19 +32,15 @@ mvn spring-boot:run
 
 Backend sẽ chạy tại http://localhost:8080/api
 
-
 # Bước 4: Chạy Frontend
+
 cd frontend
 go live file index.html
 
-Bước 5: Truy cập ứng dụng
-
-Mở trình duyệt: http://localhost:3000
 Đăng ký tài khoản mới hoặc dùng tài khoản mặc định:
 
-Email: nguyenvana@example.com
+Email: vungtau@gmail.com
 Password: 123456
-
 
 🎨 TÍNH NĂNG NỔI BẬT
 ✅ Giao diện đẹp, hiện đại
