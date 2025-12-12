@@ -323,7 +323,8 @@ public class PostService {
         response.setPostID(post.getPostID());
         response.setPostStatus(post.getStatus().name());
         response.setCreatedAt(post.getCreatedAt());
-        
+
+
         if (post.getBook() != null) {
             response.setBookID(post.getBook().getBookID());
             response.setTitle(post.getBook().getTitle());

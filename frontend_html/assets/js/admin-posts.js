@@ -1,240 +1,225 @@
-// assets/js/admin-posts.js
-
-// 1. Kiểm tra quyền Admin
-// SỬA: Lấy key "admin" thay vì "user" (do api.js lưu là "admin")
-const currentAdmin = JSON.parse(localStorage.getItem("admin") || "{}");
-
-// Kiểm tra: Phải có data và role phải là ADMIN
-if (!currentAdmin || currentAdmin.role !== "ADMIN") {
-  alert(
-    "Bạn không có quyền truy cập trang này hoặc phiên đăng nhập đã hết hạn!"
-  );
-  window.location.href = "loginAdmin.html"; // Đảm bảo bạn có file này
-} else {
-  // Hiển thị tên admin
-  const adminNameEl = document.getElementById("adminName");
-  if (adminNameEl)
-    adminNameEl.textContent = currentAdmin.name || "Quản trị viên";
-}
-
-// 2. Xử lý nút đăng xuất
-const logoutBtn = document.getElementById("logoutBtn");
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    if (window.api && window.api.authAPI) {
-      // SỬA: Gọi hàm logoutAdmin() thay vì logout() chung chung
-      window.api.authAPI.logoutAdmin();
-    } else {
-      // Fallback thủ công nếu api chưa load
-      localStorage.removeItem("adminToken");
-      localStorage.removeItem("admin");
+document.addEventListener("DOMContentLoaded", () => {
+    const admin = JSON.parse(localStorage.getItem("admin") || "null");
+    if (!admin || admin.role !== "ADMIN") {
+        window.location.href = "loginAdmin.html";
+        return;
     }
-    window.location.href = "loginAdmin.html";
-  });
-}
-
-let allPosts = [];
-
-// --- CÁC HÀM FORMAT ---
-const formatCurrency = (amount) => {
-  if (!amount && amount !== 0) return "0 đ";
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(amount);
-};
-
-const formatDate = (dateString) => {
-  if (!dateString) return "N/A";
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return "N/A";
-  return date.toLocaleDateString("vi-VN");
-};
-
-const getStatusBadge = (status) => {
-  const s = (status || "").toUpperCase();
-  switch (s) {
-    case "PENDING":
-      return '<span class="badge bg-warning text-dark">Chờ duyệt</span>';
-    case "APPROVED":
-      return '<span class="badge bg-success">Đã duyệt</span>';
-    case "DECLINED":
-      return '<span class="badge bg-danger">Từ chối</span>';
-    case "SOLD":
-      return '<span class="badge bg-secondary">Đã bán</span>';
-    default:
-      return `<span class="badge bg-light text-dark">${s || "Chưa rõ"}</span>`;
-  }
-};
-
-// --- LOGIC CHÍNH ---
-
-document.addEventListener("DOMContentLoaded", async () => {
-  await loadAllPosts();
+    // Cấu hình Toast
+    window.Toast = Swal.mixin({
+        toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true
+    });
+    loadData();
 });
 
-async function loadAllPosts() {
-  const tbody = document.getElementById("postsTableBody");
-  try {
-    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-5"><div class="spinner-border text-primary"></div></td></tr>`;
+const formatCurrency = (amount) => new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount || 0);
+const formatDate = (dateString) => dateString ? new Date(dateString).toLocaleDateString("vi-VN") : "N/A";
 
-    // Gọi API: window.api.adminAPI.getAllPosts() đã được định nghĩa trong api.js
-    const data = await window.api.adminAPI.getAllPosts();
+// Biến lưu trữ dữ liệu gốc
+let allPosts = [];
+let allUsers = [];
+let currentFilter = 'ALL'; // Trạng thái lọc hiện tại
 
-    // Kiểm tra dữ liệu trả về
-    // api.js của bạn trả về JSON.parse(text), nên data có thể là mảng ngay lập tức hoặc object chứa mảng
-    let postsArray = [];
-    if (Array.isArray(data)) {
-      postsArray = data;
-    } else if (data && Array.isArray(data.data)) {
-      postsArray = data.data; // Trường hợp bọc trong { data: [...] }
-    } else {
-      // Nếu API trả về rỗng hoặc lỗi nhẹ, coi như mảng rỗng để không crash web
-      console.warn("Dữ liệu không phải mảng:", data);
-    }
-
-    // Sắp xếp: ID giảm dần (Mới nhất lên đầu)
-    allPosts = postsArray.sort((a, b) => {
-      const idA = a.postID || a.id || 0;
-      const idB = b.postID || b.id || 0;
-      return idB - idA;
-    });
-
-    renderPosts(allPosts);
-
+// ==========================================
+// 1. TẢI DỮ LIỆU
+// ==========================================
+async function loadData() {
+    const tbody = document.getElementById("postsTableBody");
     const countEl = document.getElementById("totalPostsCount");
-    if (countEl) countEl.innerText = `Tổng số: ${allPosts.length} bài đăng`;
-  } catch (error) {
-    console.error("Lỗi tải bài đăng:", error);
-    tbody.innerHTML = `
-            <tr><td colspan="8" class="text-center text-danger">
-                Lỗi kết nối API: ${error.message}<br>
-                <small>Vui lòng kiểm tra Console (F12) và đảm bảo Backend đang chạy.</small>
-            </td></tr>
-        `;
-  }
+
+    try {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-5"><div class="spinner-border text-primary"></div> Đang tải...</td></tr>`;
+
+        // Gọi API song song
+        const [postsRes, usersRes] = await Promise.all([
+            window.api.adminAPI.getAllPosts(),
+            window.api.adminAPI.listUsers()
+        ]);
+
+        // Xử lý dữ liệu trả về (mảng hoặc object chứa mảng)
+        allPosts = Array.isArray(postsRes) ? postsRes : (postsRes.data || []);
+        allUsers = Array.isArray(usersRes) ? usersRes : (usersRes.data || []);
+
+        // Sắp xếp mới nhất lên đầu
+        allPosts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+        if (countEl) countEl.innerText = `Tổng số: ${allPosts.length} bài đăng`;
+        
+        // Render dữ liệu (Mặc định hiển thị tất cả)
+        applyFilterAndRender();
+
+    } catch (error) {
+        console.error(error);
+        if (error.message.includes("403")) {
+            alert("Hết phiên đăng nhập!"); window.location.href = "loginAdmin.html";
+        }
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger">Lỗi: ${error.message}</td></tr>`;
+    }
 }
 
-function renderPosts(postsData) {
-  const tbody = document.getElementById("postsTableBody");
-  tbody.innerHTML = "";
+// ==========================================
+// 2. LOGIC LỌC (FILTER) & TÌM KIẾM
+// ==========================================
 
-  if (!postsData || postsData.length === 0) {
-    tbody.innerHTML =
-      '<tr><td colspan="8" class="text-center">Không có bài đăng nào.</td></tr>';
-    return;
-  }
-
-  postsData.forEach((post) => {
-    // --- XỬ LÝ DỮ LIỆU AN TOÀN ---
-    const pID = post.postID || post.id || post.postId;
-
-    // Xử lý Book (Nested hoặc Flat)
-    let bTitle = "Sách không tên";
-    let bPrice = 0;
-    let bImage = "";
-
-    if (post.book) {
-      bTitle = post.book.title || bTitle;
-      bPrice = post.book.price || 0;
-      bImage = post.book.image || "";
-    } else {
-      bTitle = post.title || post.bookTitle || bTitle;
-      bPrice = post.price || post.bookPrice || 0;
-      bImage = post.image || post.bookImage || "";
-    }
-
-    // Xử lý Image
-    const imgDisplay = bImage
-      ? `<img src="${bImage}" class="book-thumb" alt="Img" onerror="this.onerror=null;this.src='https://via.placeholder.com/60x80?text=No+Img'">`
-      : `<div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="width:60px; height:80px; font-size:10px;">No Img</div>`;
-
-    // Xử lý User
-    let uName = "Ẩn danh";
-    if (post.user) {
-      uName = post.user.name || post.user.fullName || uName;
-    } else {
-      uName = post.userName || post.user_name || post.author || uName;
-    }
-
-    const pStatus = post.status || post.postStatus || "PENDING";
-    const pDate = post.created_at || post.createdAt || post.date || "";
-
-    // --- BUTTONS ---
-    let actionButtons = "";
-    const statusUpper = (pStatus + "").toUpperCase();
-
-    if (statusUpper === "PENDING") {
-      // Lưu ý: Thêm dấu nháy đơn '${pID}' phòng trường hợp ID là string UUID
-      actionButtons = `
-                <button class="btn btn-sm btn-success mb-1" onclick="updatePostStatus('${pID}', 'APPROVED')">
-                    <i class="bi bi-check-lg"></i> Duyệt
-                </button>
-                <button class="btn btn-sm btn-outline-danger mb-1" onclick="updatePostStatus('${pID}', 'DECLINED')">
-                    <i class="bi bi-x-lg"></i> Từ chối
-                </button>
-            `;
-    } else if (statusUpper === "APPROVED") {
-      actionButtons = `
-                <button class="btn btn-sm btn-outline-secondary" onclick="updatePostStatus('${pID}', 'SOLD')">
-                      Đã bán
-                </button>
-            `;
-    } else {
-      actionButtons = `<span class="text-muted small">--</span>`;
-    }
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-            <td>#${pID}</td>
-            <td>${imgDisplay}</td>
-            <td class="fw-bold text-primary text-wrap" style="max-width: 200px;">${bTitle}</td>
-            <td>${uName}</td>
-            <td class="fw-bold text-danger">${formatCurrency(bPrice)}</td>
-            <td><small>${formatDate(pDate)}</small></td>
-            <td>${getStatusBadge(pStatus)}</td>
-            <td class="text-end">
-                <div class="d-flex flex-column align-items-end gap-1">
-                    ${actionButtons}
-                </div>
-            </td>
-        `;
-    tbody.appendChild(row);
-  });
-}
-
+// Hàm này được gọi khi bấm nút lọc
 window.filterPosts = function (statusKey) {
-  const buttons = document.querySelectorAll(".btn-group .btn");
-  buttons.forEach((btn) => btn.classList.remove("active"));
-  event.target.classList.add("active");
+    // 1. Update UI nút bấm
+    const buttons = document.querySelectorAll(".btn-group .btn");
+    buttons.forEach(btn => btn.classList.remove("active"));
+    event.target.classList.add("active");
 
-  if (statusKey === "ALL") {
-    renderPosts(allPosts);
-  } else {
-    const filtered = allPosts.filter((p) => {
-      const s = p.status || p.postStatus || "";
-      return s.toUpperCase() === statusKey;
+    // 2. Cập nhật trạng thái và render lại
+    currentFilter = statusKey;
+    applyFilterAndRender();
+};
+
+// Hàm tìm kiếm
+window.searchPosts = function () {
+    applyFilterAndRender();
+};
+
+// Hàm trung tâm: Kết hợp Lọc + Tìm kiếm + Render
+function applyFilterAndRender() {
+    const keyword = document.getElementById("searchInput").value.toLowerCase();
+    
+    // Tạo Map User để tra cứu tên (cho tìm kiếm)
+    const userMap = {};
+    allUsers.forEach(u => {
+        const uid = u.userID || u.id;
+        if(uid) userMap[String(uid)] = (u.name || "").toLowerCase();
     });
-    renderPosts(filtered);
-  }
-};
 
-window.updatePostStatus = async function (postID, newStatus) {
-  const confirmMsg =
-    newStatus === "APPROVED"
-      ? "Duyệt bài đăng này?"
-      : newStatus === "DECLINED"
-      ? "Từ chối bài đăng này?"
-      : `Chuyển trạng thái thành ${newStatus}?`;
+    const filtered = allPosts.filter(p => {
+        // 1. Kiểm tra Lọc theo Trạng thái
+        const pStatus = (p.status || p.postStatus || "").toUpperCase();
+        const matchesStatus = (currentFilter === 'ALL') || (pStatus === currentFilter);
 
-  if (!confirm(confirmMsg)) return;
+        // 2. Kiểm tra Tìm kiếm (Tên sách hoặc Tên người bán)
+        const title = (p.book?.title || p.title || "").toLowerCase();
+        
+        let posterName = "";
+        const pid = String(p.userID || p.userId || "");
+        if(pid && userMap[pid]) posterName = userMap[pid];
+        else if(p.userName) posterName = p.userName.toLowerCase();
 
-  try {
-    await window.api.adminAPI.updatePostStatus(postID, { status: newStatus });
-    alert("Cập nhật thành công!");
-    loadAllPosts();
-  } catch (error) {
-    console.error(error);
-    alert("Có lỗi xảy ra: " + (error.message || "Không rõ lỗi"));
-  }
-};
+        const matchesSearch = title.includes(keyword) || posterName.includes(keyword);
+
+        return matchesStatus && matchesSearch;
+    });
+
+    renderPosts(filtered, allUsers);
+}
+
+// ==========================================
+// 3. RENDER BẢNG
+// ==========================================
+function renderPosts(postsData, usersData) {
+    const tbody = document.getElementById("postsTableBody");
+    tbody.innerHTML = "";
+
+    if (!postsData || postsData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">Không tìm thấy bài đăng phù hợp</td></tr>';
+        return;
+    }
+
+    // Map User (ID -> Tên hiển thị)
+    const userMap = {};
+    if (usersData) {
+        usersData.forEach(u => {
+            const uid = u.userID || u.id || u._id;
+            if(uid) userMap[String(uid)] = u.name || u.fullName || u.email;
+        });
+    }
+
+    postsData.forEach(post => {
+        const pID = post.postID || post.id || post._id;
+        
+        // --- LOGIC TÊN NGƯỜI BÁN ---
+        let uName = "Ẩn danh";
+        let uClass = "text-muted";
+        
+        // Lấy ID (ưu tiên các trường có thể có)
+        const rawId = post.userID || post.userId || post.user_id || (post.user ? (post.user.userID || post.user.id) : null);
+        const uidStr = rawId ? String(rawId) : null;
+
+        if (uidStr && userMap[uidStr]) {
+            uName = userMap[uidStr];
+            uClass = "text-primary fw-bold";
+        } else if (post.userName) {
+            uName = post.userName;
+            uClass = "text-dark fw-bold";
+        } else if (post.user && post.user.name) {
+            uName = post.user.name;
+            uClass = "text-dark fw-bold";
+        }
+
+        const bTitle = post.book?.title || post.title || "Không tiêu đề";
+        const bPrice = post.book?.price || post.price || 0;
+        const bImage = post.book?.image || post.image || "assets/images/no-image.png";
+        
+        const status = (post.status || post.postStatus || "PENDING").toUpperCase();
+        let badge = getStatusBadge(status);
+
+        // Actions
+        let actions = '';
+        if (status === 'PENDING') {
+            actions = `
+                <button class="btn btn-sm btn-success me-1" onclick="updatePostStatus('${pID}', 'APPROVED')" title="Duyệt"><i class="bi bi-check-lg"></i></button>
+                <button class="btn btn-sm btn-danger" onclick="updatePostStatus('${pID}', 'DECLINED')" title="Từ chối"><i class="bi bi-x-lg"></i></button>`;
+        } else if (status === 'APPROVED') {
+            actions = `<button class="btn btn-sm btn-outline-secondary" onclick="updatePostStatus('${pID}', 'SOLD')">Đã bán</button>`;
+        } else {
+            actions = `<span class="text-muted small">--</span>`;
+        }
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="fw-bold text-secondary">#${pID}</td>
+            <td><img src="${bImage}" class="book-thumb" onerror="this.src='https://via.placeholder.com/50'"></td>
+            <td class="fw-bold text-dark text-wrap" style="max-width: 250px;">${bTitle}</td>
+            
+            <td class="${uClass}">
+                ${uName}
+                ${uName === 'Ẩn danh' ? `<br><small style="font-size:10px">(ID: ${uidStr || 'null'})</small>` : ''}
+            </td>
+            
+            <td class="fw-bold text-danger">${formatCurrency(bPrice)}</td>
+            <td class="small text-muted">${formatDate(post.createdAt)}</td>
+            <td>${badge}</td>
+            <td class="text-end">${actions}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function getStatusBadge(status) {
+    switch (status) {
+        case "PENDING": return `<span class="badge bg-warning text-dark">⏳ Chờ duyệt</span>`;
+        case "APPROVED": return `<span class="badge bg-success">✔ Đã duyệt</span>`;
+        case "DECLINED": return `<span class="badge bg-danger">❌ Từ chối</span>`;
+        case "SOLD": return `<span class="badge bg-secondary">💰 Đã bán</span>`;
+        default: return `<span class="badge bg-light text-dark">? ${status}</span>`;
+    }
+}
+
+// ==========================================
+// 4. HÀNH ĐỘNG
+// ==========================================
+window.updatePostStatus = async function (id, status) {
+    const result = await Swal.fire({
+        title: 'Xác nhận?',
+        text: status === 'APPROVED' ? 'Duyệt bài này?' : (status === 'DECLINED' ? 'Từ chối bài này?' : 'Đánh dấu đã bán?'),
+        icon: 'question', showCancelButton: true, confirmButtonText: 'Đồng ý'
+    });
+
+    if (result.isConfirmed) {
+        try {
+            Swal.showLoading();
+            await window.api.adminAPI.updatePostStatus(id, { status: status });
+            await loadData(); // Load lại dữ liệu
+            Swal.close();
+            window.Toast.fire({ icon: 'success', title: 'Thành công!' });
+        } catch (e) {
+            Swal.fire('Lỗi', e.message, 'error');
+        }
+    }
+}

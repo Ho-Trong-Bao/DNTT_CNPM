@@ -338,15 +338,31 @@ const adminAPI = {
       headers: getHeaders(true, true),
       body: JSON.stringify(payload),
     });
-    return handleResponse(res);
+    if (!res.ok) {
+      throw new Error("Lỗi cập nhật từ Server");
+    }
+    try {
+      return await res.json();
+    } catch (err) {
+      console.warn("Backend trả về HTML nhưng status OK -> Coi như thành công.");
+      return { success: true };
+    }
   },
-
   async deleteCategory(categoryID) {
     const res = await fetch(`${API_BASE_URL}/admin/categories/${categoryID}`, {
       method: "DELETE",
       headers: getHeaders(false, true),
     });
-    return handleResponse(res);
+
+    if (!res.ok) {
+      throw new Error("Không thể xóa danh mục này (có thể do lỗi Server)");
+    }
+    try {
+      return await res.json();
+    } catch (err) {
+      console.warn("Delete thành công nhưng Backend không trả về JSON.");
+      return { success: true };
+    }
   },
 };
 

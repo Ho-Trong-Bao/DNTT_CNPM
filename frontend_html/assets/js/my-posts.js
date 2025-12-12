@@ -167,8 +167,8 @@ function getStatusBadge(status) {
 
     case "APPROVED":
       return `<span class="badge bg-success">✔ Đã duyệt</span>`;
-
     case "REJECTED":
+    case "DECLINED":
       return `<span class="badge bg-danger">❌ Từ chối</span>`;
 
     case "SOLD":
