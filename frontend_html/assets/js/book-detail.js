@@ -3,27 +3,27 @@
  * Book Detail Page JavaScript (ĐÃ CHỈNH SỬA THEO BACKEND)
  */
 
-document.addEventListener('DOMContentLoaded', async function() {
-  const bookId = getUrlParameter('id');
-  
+document.addEventListener("DOMContentLoaded", async function () {
+  const bookId = getUrlParameter("id");
+
   if (!bookId) {
-    showError('Không tìm thấy ID sách');
+    showError("Không tìm thấy ID sách");
     return;
   }
-  
+
   await loadBookDetail(bookId);
   await loadRelatedBooks();
 });
 
 async function loadBookDetail(bookId) {
-  const section = document.getElementById('bookDetailSection');
-  showLoading('bookDetailSection');
-  
+  const section = document.getElementById("bookDetailSection");
+  showLoading("bookDetailSection");
+
   try {
     const book = await bookAPI.get(bookId);
 
     if (!book) {
-      showError('Không tìm thấy sách');
+      showError("Không tìm thấy sách");
       return;
     }
 
@@ -104,7 +104,6 @@ async function loadBookDetail(bookId) {
         </div>
       </div>
     `;
-
   } catch (error) {
     console.error("Error loading book detail:", error);
     showError("Không thể tải thông tin sách");
@@ -116,7 +115,6 @@ async function loadRelatedBooks() {
 
   try {
     const books = await bookAPI.search({});
-
 
     if (books && books.length > 0) {
       container.innerHTML = books

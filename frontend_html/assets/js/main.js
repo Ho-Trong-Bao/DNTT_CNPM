@@ -3,9 +3,7 @@
  * Main Utilities & Common Functions
  */
 
-
 document.addEventListener("DOMContentLoaded", () => {
-
   const btnPostBook = document.getElementById("btnPostBook");
   if (!btnPostBook) return;
 
@@ -13,7 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-      const modal = new bootstrap.Modal(document.getElementById("loginRequiredModal"));
+      const modal = new bootstrap.Modal(
+        document.getElementById("loginRequiredModal")
+      );
       modal.show();
       return;
     }
@@ -21,23 +21,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Đã đăng nhập -> chuyển về post-book
     window.location.href = "post-book.html";
   });
-
 });
-
-
 
 // Format giá tiền
 function formatPrice(price) {
-  return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
+  return new Intl.NumberFormat("vi-VN").format(price) + "đ";
 }
 
 // Format ngày tháng
 function formatDate(dateString) {
   const date = new Date(dateString);
-  return date.toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
+  return date.toLocaleDateString("vi-VN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   });
 }
 
@@ -59,27 +56,27 @@ function showLoading(elementId) {
 function hideLoading(elementId) {
   const element = document.getElementById(elementId);
   if (element) {
-    element.innerHTML = '';
+    element.innerHTML = "";
   }
 }
 
 // Hiển thị toast notification
-function showToast(message, type = 'success') {
+function showToast(message, type = "success") {
   // Tạo toast container nếu chưa có
-  let container = document.querySelector('.toast-container');
+  let container = document.querySelector(".toast-container");
   if (!container) {
-    container = document.createElement('div');
-    container.className = 'toast-container';
+    container = document.createElement("div");
+    container.className = "toast-container";
     document.body.appendChild(container);
   }
 
   // Tạo toast element
-  const toast = document.createElement('div');
+  const toast = document.createElement("div");
   toast.className = `toast toast-${type} show`;
-  toast.setAttribute('role', 'alert');
-  
-  const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : '⚠';
-  
+  toast.setAttribute("role", "alert");
+
+  const icon = type === "success" ? "✓" : type === "error" ? "✗" : "⚠";
+
   toast.innerHTML = `
     <div class="d-flex align-items-center p-3">
       <strong class="me-2">${icon}</strong>
@@ -98,9 +95,10 @@ function showToast(message, type = 'success') {
 
 // Tạo BookCard HTML
 function createBookCard(book) {
-  const defaultImage = 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80';
+  const defaultImage =
+    "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80";
   const image = book.image || defaultImage;
-  
+
   return `
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="card book-card h-100">
@@ -109,13 +107,17 @@ function createBookCard(book) {
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${book.title}</h5>
           <p class="book-meta flex-grow-1">
-            <strong>Tác giả:</strong> ${book.author || 'Không rõ'}<br>
-            <strong>Tình trạng:</strong> ${book.bookCondition || 'Cũ'}<br>
-            <strong>Khu vực:</strong> ${book.province || 'Không rõ'}
+            <strong>Tác giả:</strong> ${book.author || "Không rõ"}<br>
+            <strong>Tình trạng:</strong> ${book.bookCondition || "Cũ"}<br>
+            <strong>Khu vực:</strong> ${book.province || "Không rõ"}
           </p>
           <div class="d-flex justify-content-between align-items-center mt-auto">
-            <span class="fw-bold text-danger fs-5">${formatPrice(book.price)}</span>
-            <a href="book-detail.html?id=${book.bookID}" class="btn btn-primary btn-sm">
+            <span class="fw-bold text-danger fs-5">${formatPrice(
+              book.price
+            )}</span>
+            <a href="book-detail.html?id=${
+              book.bookID
+            }" class="btn btn-primary btn-sm">
               Xem chi tiết
             </a>
           </div>
@@ -129,8 +131,8 @@ function createBookCard(book) {
 function updateNavbar() {
   const user = getCurrentUser();
   const isLoggedIn = isAuthenticated();
-  
-  const authLinks = document.getElementById('authLinks');
+
+  const authLinks = document.getElementById("authLinks");
   if (!authLinks) return;
 
   if (isLoggedIn) {
@@ -147,7 +149,7 @@ function updateNavbar() {
       </li>
       <li class="nav-item">
         <a class="nav-link" href="account.html">
-          <i class="bi bi-person-circle me-1"></i>${user?.name || 'Tài khoản'}
+          <i class="bi bi-person-circle me-1"></i>${user?.name || "Tài khoản"}
         </a>
       </li>
       <li class="nav-item">
@@ -169,22 +171,22 @@ function updateNavbar() {
 
 // Set active navbar link
 function setActiveNavLink() {
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  const navLinks = document.querySelectorAll('.nav-link');
-  
-  navLinks.forEach(link => {
-    const href = link.getAttribute('href');
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  navLinks.forEach((link) => {
+    const href = link.getAttribute("href");
     if (href && href.includes(currentPage)) {
-      link.classList.add('active');
+      link.classList.add("active");
     }
   });
 }
 
 // Đăng xuất
 function logout() {
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('user');
-  window.location.href = 'index.html';
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("user");
+  window.location.href = "index.html";
 }
 
 // Lấy URL parameter
@@ -200,7 +202,7 @@ function isValidEmail(email) {
 }
 
 // Initialize common features khi DOM loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   updateNavbar();
   setActiveNavLink();
 });

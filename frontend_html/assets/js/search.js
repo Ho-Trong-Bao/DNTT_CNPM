@@ -4,20 +4,22 @@
  */
 
 // Khi tải trang
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener("DOMContentLoaded", async function () {
   await loadProvinces();
   await searchBooks();
   await loadDistricts();
 
-  document.getElementById('searchForm').addEventListener('submit', handleSearch);
-  document.getElementById('resetBtn').addEventListener('click', handleReset);
+  document
+    .getElementById("searchForm")
+    .addEventListener("submit", handleSearch);
+  document.getElementById("resetBtn").addEventListener("click", handleReset);
 });
 
 /* ============================
    LOAD PROVINCE (API VN)
 ============================ */
-let provinceMap = {};    // code -> name
-let districtMap = {};    // provinceCode -> array districts
+let provinceMap = {}; // code -> name
+let districtMap = {}; // provinceCode -> array districts
 async function loadProvinces() {
   try {
     const res = await fetch("https://provinces.open-api.vn/api/?depth=2");
@@ -25,14 +27,13 @@ async function loadProvinces() {
 
     const select = document.getElementById("provinceFilter");
 
-    provinces.forEach(p => {
+    provinces.forEach((p) => {
       provinceMap[p.code] = p.name;
       districtMap[p.code] = p.districts; // Lưu quận theo tỉnh
       const opt = document.createElement("option");
       opt.value = p.code;
       opt.textContent = p.name;
       select.appendChild(opt);
-
     });
     select.addEventListener("change", loadDistricts);
   } catch (err) {
@@ -51,7 +52,7 @@ async function loadDistricts() {
   const districts = districtMap[provinceCode];
   if (!districts) return;
 
-  districts.forEach(d => {
+  districts.forEach((d) => {
     const opt = document.createElement("option");
     opt.value = d.code;
     opt.textContent = d.name;
@@ -71,7 +72,6 @@ async function searchBooks() {
   console.log("titleInput =", document.getElementById("titleInput"));
   console.log("authorInput =", document.getElementById("authorInput"));
   console.log("🔥 searchBooks() ĐÃ ĐƯỢC GỌI");
-  
 
   const params = {};
 
@@ -90,9 +90,6 @@ async function searchBooks() {
   renderBooks(books);
 }
 
-
-
-
 function renderBooks(books) {
   const container = document.getElementById("searchResults");
 
@@ -106,24 +103,54 @@ function renderBooks(books) {
     return;
   }
 
-  container.innerHTML = books.map(book => `
-    <div class="col-md-3">
-      <div class="card h-100 shadow-sm">
-        <img src="${book.image}" class="card-img-top"
-             style="height: 420px; object-fit: cover;">
-        <div class="card-body">
-          <h5 class="card-title">${book.title}</h5>
-          <p class="text-muted">${book.author}</p>
-          <p><i class="bi bi-geo-alt"></i> 
-            ${districtMap[book.province]?.find(d => d.code == book.district)?.name || book.district}, 
-            ${provinceMap[book.province] || book.province}
-          </p>
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
+  container.innerHTML = books
+    .map(
+      (book) => `
+      <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <img src="${
+                      book.image
+                    }" class="card-img-top" style="height:400px; object-fit:cover;">
 
+                    <div class="card-body d-flex flex-column">
+                        
+                        <div class="flex-grow-1"> <!-- Phần nội dung phía trên -->
+                            <h5 class="card-title">${book.title}</h5>
+
+                        </div>
+
+                        <!-- Phần cố định ở đáy -->
+
+                            <p class="text-muted mb-1">
+                                <i class="bi bi-person"></i> ${book.author}
+                            </p>
+
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                ${
+                                  districtMap[book.province]?.find(
+                                    (d) => d.code == book.district
+                                  )?.name || book.district
+                                }
+                                -
+                                ${provinceMap[book.province] || book.province}
+                            </p>
+                        <p class="fw-bold text-danger mb-3">
+                            ${book.price.toLocaleString()} đ
+                        </p>
+
+                        <a href="book-detail.html?id=${
+                          book.bookID
+                        }" class="btn btn-primary w-100">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `
+    )
+    .join("");
+}
 
 /* ============================
    FORM EVENTS
