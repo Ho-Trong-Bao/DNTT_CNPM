@@ -35,7 +35,7 @@ Backend sẽ chạy tại http://localhost:8080/api
 # Bước 4: Chạy Frontend
 
 cd frontend
-go live file index.html
+go live file index.html ở post 5500 hoặc 5501
 
 Đăng ký tài khoản mới hoặc dùng tài khoản mặc định:
 
