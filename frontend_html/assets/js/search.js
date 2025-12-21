@@ -1,12 +1,15 @@
 /**
  * File: frontend/assets/js/search.js
- * Search Books Page JavaScript (PHIÊN BẢN CHUẨN BACKEND)
+ * Search Books Page JavaScript (CÓ PHÂN TRANG)
  */
+
+let allBooks = []; // Lưu toàn bộ books
+const ITEMS_PER_PAGE = 12;
 
 // Khi tải trang
 document.addEventListener("DOMContentLoaded", async function () {
   await loadProvinces();
-  await searchBooks();
+  await searchBooks(1); // Load trang đầu tiên
   await loadDistricts();
 
   document.getElementById("searchForm").addEventListener("submit", handleSearch);
@@ -57,9 +60,9 @@ async function loadDistricts() {
 }
 
 /* ============================
-   SEARCH BOOKS – KHỚP BACKEND
+   SEARCH BOOKS — KHỚP BACKEND
 ============================ */
-async function searchBooks() {
+async function searchBooks(page = 1) {
   const title = document.getElementById("titleInput").value.trim();
   const author = document.getElementById("authorInput").value.trim();
   const province = document.getElementById("provinceFilter").value.trim();
@@ -80,14 +83,30 @@ async function searchBooks() {
 
   console.log("➡ Gửi API:", `${API_BASE_URL}/books/search?${qs}`);
 
-  const res = await fetch(`${API_BASE_URL}/books/search?${qs}`);
-  const books = await res.json();
-  console.log("🔥 Dữ liệu books nhận từ API:", books);
-  books.sort((a, b) => b.bookID - a.bookID);
-  renderBooks(books);
+  try {
+    const res = await fetch(`${API_BASE_URL}/books/search?${qs}`);
+    const books = await res.json();
+    console.log("🔥 Dữ liệu books nhận từ API:", books);
+    
+    books.sort((a, b) => b.bookID - a.bookID);
+    allBooks = books; // Lưu toàn bộ books
+
+    renderBooksPage(allBooks, page);
+    renderPagination(allBooks.length, page);
+  } catch (err) {
+    console.error("Error searching books:", err);
+    showToast("Không thể tìm kiếm sách!", "error");
+  }
 }
 
-function renderBooks(books) {
+/* ============================
+   PHÂN TRANG
+============================ */
+function renderBooksPage(books, page) {
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+
+  const booksToShow = books.slice(start, end);
   const container = document.getElementById("searchResults");
 
   if (!books || books.length === 0) {
@@ -100,7 +119,31 @@ function renderBooks(books) {
     return;
   }
 
-  container.innerHTML = books.map((book) => createBookCard(book)).join("");
+  container.innerHTML = booksToShow.map((book) => createBookCard(book)).join("");
+}
+
+function renderPagination(totalItems, currentPage) {
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const pagination = document.getElementById("pagination");
+
+  if (!pagination) return; // Nếu không có element pagination thì bỏ qua
+
+  pagination.innerHTML = "";
+
+  if (totalPages <= 1) return; // Không cần phân trang nếu chỉ có 1 trang
+
+  for (let i = 1; i <= totalPages; i++) {
+    pagination.innerHTML += `
+      <li class="page-item ${i === currentPage ? "active" : ""}">
+        <a class="page-link" href="#" onclick="searchBooks(${i}); return false;">${i}</a>
+      </li>
+    `;
+  }
+}
+
+function renderBooks(books) {
+  renderBooksPage(books, 1);
+  renderPagination(books.length, 1);
 }
 
 /* ============================
@@ -108,7 +151,7 @@ function renderBooks(books) {
 ============================ */
 function handleSearch(e) {
   e.preventDefault();
-  searchBooks();
+  searchBooks(1); // Reset về trang 1 khi search mới
 }
 
 function handleReset() {
@@ -117,7 +160,7 @@ function handleReset() {
   document.getElementById("provinceFilter").value = "";
   document.getElementById("districtFilter").value = "";
 
-  searchBooks();
+  searchBooks(1); // Reset về trang 1
 }
 
 /* ============================

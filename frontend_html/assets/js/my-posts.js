@@ -1,9 +1,12 @@
 /**
  * File: frontend/assets/js/my-posts.js
- * Trang: Bài đăng của tôi
+ * Trang: Bài đăng của tôi (CÓ PHÂN TRANG)
  */
 let provinceMap = {};
 let districtMap = {};
+let allPosts = []; // Lưu toàn bộ posts
+const ITEMS_PER_PAGE = 12;
+
 async function loadLocationData() {
   try {
     const res = await fetch("https://provinces.open-api.vn/api/?depth=2");
@@ -11,7 +14,7 @@ async function loadLocationData() {
 
     provinces.forEach((p) => {
       provinceMap[p.code] = p.name;
-      districtMap[p.code] = p.districts; // danh sách quận theo province code
+      districtMap[p.code] = p.districts;
     });
 
     console.log("📌 Location loaded for My Posts");
@@ -19,6 +22,7 @@ async function loadLocationData() {
     console.error("Lỗi load location:", err);
   }
 }
+
 function getProvinceName(code) {
   return provinceMap[code] || code;
 }
@@ -34,10 +38,10 @@ function getDistrictName(pCode, dCode) {
 document.addEventListener("DOMContentLoaded", async () => {
   if (!requireAuth()) return;
   await loadLocationData();
-  await loadMyPosts();
+  await loadMyPosts(1); // Load trang đầu tiên
 });
 
-async function loadMyPosts() {
+async function loadMyPosts(page = 1) {
   const container = document.getElementById("myPostsContainer");
   const userID = getUserId();
   if (!userID) return;
@@ -62,15 +66,50 @@ async function loadMyPosts() {
       `;
       return;
     }
-    posts.sort((a, b) => b.postID - a.postID);
 
-    container.innerHTML = posts.map((p) => createPostCard(p)).join("");
+    posts.sort((a, b) => b.postID - a.postID);
+    allPosts = posts; // Lưu toàn bộ posts
+
+    renderPostsPage(allPosts, page);
+    renderPagination(allPosts.length, page);
   } catch (err) {
     console.error("Error:", err);
     container.innerHTML = `
       <div class="text-center text-danger py-4">
         Không thể tải danh sách bài đăng.
       </div>
+    `;
+  }
+}
+
+/* ============================
+   PHÂN TRANG
+============================= */
+function renderPostsPage(posts, page) {
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+
+  const postsToShow = posts.slice(start, end);
+  const container = document.getElementById("myPostsContainer");
+
+  container.innerHTML = postsToShow.map((p) => createPostCard(p)).join("");
+}
+
+function renderPagination(totalItems, currentPage) {
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const pagination = document.getElementById("pagination");
+
+  if (!pagination) return; // Nếu không có element pagination thì bỏ qua
+
+  pagination.innerHTML = "";
+
+  if (totalPages <= 1) return; // Không cần phân trang nếu chỉ có 1 trang
+
+  for (let i = 1; i <= totalPages; i++) {
+    pagination.innerHTML += `
+      <li class="page-item ${i === currentPage ? "active" : ""}">
+        <a class="page-link" href="#" onclick="loadMyPosts(${i}); return false;">${i}</a>
+      </li>
     `;
   }
 }
@@ -143,9 +182,8 @@ function createPostCard(post) {
 }
 
 /* ============================
-   Thây đổi trạng thái bài thành đã bán
+   Thay đổi trạng thái bài thành đã bán
 ============================= */
-
 async function markAsSold(postID) {
   try {
     await postAPI.markSold(postID);
@@ -164,16 +202,13 @@ function getStatusBadge(status) {
   switch (status) {
     case "PENDING":
       return `<span class="badge bg-warning text-dark">⏳ Chờ duyệt</span>`;
-
     case "APPROVED":
-      return `<span class="badge bg-success">✔ Đã duyệt</span>`;
+      return `<span class="badge bg-success">✓ Đã duyệt</span>`;
     case "REJECTED":
     case "DECLINED":
-      return `<span class="badge bg-danger">❌ Từ chối</span>`;
-
+      return `<span class="badge bg-danger">✖ Từ chối</span>`;
     case "SOLD":
       return `<span class="badge bg-secondary">💰 Đã bán</span>`;
-
     default:
       return `<span class="badge bg-secondary">Không xác định</span>`;
   }
@@ -182,7 +217,6 @@ function getStatusBadge(status) {
 /* ============================
    BUTTON ACTIONS
 ============================= */
-
 function editPost(postID) {
   window.location.href = `edit-post.html?id=${postID}`;
 }
@@ -198,9 +232,7 @@ function confirmDelete(postID) {
 async function deletePost() {
   try {
     await postAPI.delete(deletePostID);
-
     showToast("Đã xoá bài đăng!", "success");
-
     loadMyPosts(); // load lại danh sách
   } catch (error) {
     showToast(error.message || "Lỗi xoá bài đăng!", "error");
