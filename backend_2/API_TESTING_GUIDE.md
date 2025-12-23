@@ -114,12 +114,11 @@ Xóa bất kỳ bài nào
 - Username: `root`
 - Password: `123456`
 
-chạy data base
-cd database
-docker-compose up -d 
-cd ..
+
+
+
 ### Chạy backend:
-cd backend_2
+
 mvn clean install  
 
 ```bash
