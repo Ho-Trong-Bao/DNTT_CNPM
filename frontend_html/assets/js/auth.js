@@ -5,12 +5,12 @@
 
 // Kiểm tra user đã đăng nhập chưa
 function isAuthenticated() {
-  return !!localStorage.getItem('authToken');
+  return !!localStorage.getItem("authToken");
 }
 
 // Lấy thông tin user từ localStorage
 function getCurrentUser() {
-  const userStr = localStorage.getItem('user');
+  const userStr = localStorage.getItem("user");
   if (userStr) {
     try {
       return JSON.parse(userStr);
@@ -23,20 +23,20 @@ function getCurrentUser() {
 
 // Lưu thông tin đăng nhập
 function saveAuthData(token, user) {
-  localStorage.setItem('authToken', token);
-  localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem("authToken", token);
+  localStorage.setItem("user", JSON.stringify(user));
 }
 
 // Đăng xuất
 function logout() {
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('user');
-  window.location.href = '/login.html';
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("user");
+  window.location.href = "/login.html";
 }
 
 // Lấy token
 function getToken() {
-  return localStorage.getItem('authToken');
+  return localStorage.getItem("authToken");
 }
 
 // Lấy userID
@@ -54,9 +54,9 @@ function getUserEmail() {
 // Kiểm tra và redirect nếu chưa đăng nhập
 function requireAuth() {
   if (!isAuthenticated()) {
-    showToast('Vui lòng đăng nhập để tiếp tục', 'warning');
+    showToast("Vui lòng đăng nhập để tiếp tục", "warning");
     setTimeout(() => {
-      window.location.href = '/login.html';
+      window.location.href = "/login.html";
     }, 1000);
     return false;
   }
@@ -66,6 +66,6 @@ function requireAuth() {
 // Kiểm tra và redirect nếu đã đăng nhập
 function redirectIfAuthenticated() {
   if (isAuthenticated()) {
-    window.location.href = '/index.html';
+    window.location.href = "/index.html";
   }
 }

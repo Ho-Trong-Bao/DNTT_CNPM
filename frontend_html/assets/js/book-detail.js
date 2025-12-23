@@ -3,39 +3,35 @@
  * Book Detail Page JavaScript (ĐÃ CHỈNH SỬA THEO BACKEND)
  */
 
-document.addEventListener('DOMContentLoaded', async function() {
-  const bookId = getUrlParameter('id');
-  
+document.addEventListener("DOMContentLoaded", async function () {
+  const bookId = getUrlParameter("id");
+
   if (!bookId) {
-    showError('Không tìm thấy ID sách');
+    showError("Không tìm thấy ID sách");
     return;
   }
-  
+
   await loadBookDetail(bookId);
-  await loadRelatedBooks();
 });
 
 async function loadBookDetail(bookId) {
-  const section = document.getElementById('bookDetailSection');
-  showLoading('bookDetailSection');
-  
+  const section = document.getElementById("bookDetailSection");
+  showLoading("bookDetailSection");
+  await loadLocationData();
   try {
     const book = await bookAPI.get(bookId);
 
     if (!book) {
-      showError('Không tìm thấy sách');
+      showError("Không tìm thấy sách");
       return;
     }
-
-    const defaultImage =
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80";
+    loadRelatedBooks(book);
+    const defaultImage = "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80";
 
     const image = book.image || defaultImage;
 
     // 👉 Category xử lý theo backend (không có mảng)
-    const categoriesHtml = book.categoryName
-      ? `<span class="badge bg-secondary">${book.categoryName}</span>`
-      : "";
+    const categoriesHtml = book.categoryName ? `<span class="badge bg-secondary">${book.categoryName}</span>` : "";
 
     // 👉 Mô tả lấy từ postDescription
     const description = book.postDescription || "Không có mô tả.";
@@ -50,7 +46,7 @@ async function loadBookDetail(bookId) {
         <div class="col-md-5">
           <div class="card border-0 shadow-sm">
             <img src="${image}" class="card-img-top" alt="${book.title}"
-              style="height: 500px; object-fit: cover;"
+              style="height: 800px; object-fit: cover;"
               onerror="this.src='${defaultImage}'">
           </div>
         </div>
@@ -64,9 +60,10 @@ async function loadBookDetail(bookId) {
 
           <p><strong>Tác giả:</strong> ${book.author || "Không rõ"}</p>
           <p><strong>Tình trạng:</strong> ${book.bookCondition || "Cũ"}</p>
-          <p><strong>Khu vực:</strong> ${book.province || ""} 
-            ${book.district ? " - " + book.district : ""}</p>
-
+          <p><strong>Khu vực:</strong> 
+            ${getProvinceName(book.province)} 
+            ${book.district ? " - " + getDistrictName(book.province, book.district) : ""}
+          </p>
           <p class="fs-4 text-danger fw-bold">
             ${formatPrice(book.price)}
           </p>
@@ -104,28 +101,31 @@ async function loadBookDetail(bookId) {
         </div>
       </div>
     `;
-
   } catch (error) {
     console.error("Error loading book detail:", error);
     showError("Không thể tải thông tin sách");
   }
 }
 
-async function loadRelatedBooks() {
+async function loadRelatedBooks(currentBook) {
   const container = document.getElementById("relatedBooks");
 
   try {
-    const books = await bookAPI.search({});
+    // Gửi API search author
+    const books = await bookAPI.search({
+      author: currentBook.author,
+    });
 
-
-    if (books && books.length > 0) {
-      container.innerHTML = books
+    // Loại bỏ chính cuốn đang xem
+    const filtered = books.filter((b) => b.bookID !== currentBook.bookID);
+    filtered.sort((a, b) => b.bookID - a.bookID);
+    if (filtered.length > 0) {
+      container.innerHTML = filtered
         .slice(0, 4)
         .map((book) => createBookCard(book))
         .join("");
     } else {
-      container.innerHTML =
-        '<p class="text-muted text-center">Không có sách tương tự</p>';
+      container.innerHTML = '<p class="text-muted text-center">Không có sách cùng tác giả</p>';
     }
   } catch (error) {
     console.error("Error loading related books:", error);
