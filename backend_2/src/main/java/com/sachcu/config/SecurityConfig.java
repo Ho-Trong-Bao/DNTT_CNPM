@@ -67,7 +67,7 @@ public class SecurityConfig {
                         "/admin/**",
                         "/manage/**",
                         "/books/admin/**",
-                        "admin/categories/**"
+                        "/admin/categories/**"
                 ).hasRole("ADMIN")
 
                 // mặc định: yêu cầu đăng nhập
@@ -93,7 +93,8 @@ public class SecurityConfig {
                 "http://localhost:5173",
                 "http://127.0.0.1:5500",
                 "http://127.0.0.1:5501",
-                "https://your-frontend-domain.com"
+                "https://your-frontend-domain.com",
+                "https://sachcutheokhuvuc.netlify.app"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
