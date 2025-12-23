@@ -2,7 +2,7 @@
 // API CLIENT HOÀN CHỈNH
 // ========================
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://your-backend-name.onrender.com/api";
 
 // ===== TOKEN =====
 function getAuthToken() {
@@ -281,12 +281,9 @@ const adminAPI = {
   },
 
   async getPostsByStatus(status) {
-    const res = await fetch(
-      `${API_BASE_URL}/admin/posts/status/${encodeURIComponent(status)}`,
-      {
-        headers: getHeaders(true, true),
-      }
-    );
+    const res = await fetch(`${API_BASE_URL}/admin/posts/status/${encodeURIComponent(status)}`, {
+      headers: getHeaders(true, true),
+    });
     return handleResponse(res);
   },
 
