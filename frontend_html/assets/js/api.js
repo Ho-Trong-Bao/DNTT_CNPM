@@ -2,7 +2,7 @@
 // API CLIENT HOÀN CHỈNH
 // ========================
 
-const API_BASE_URL = "https://dnttcnpm-database.up.railway.app/";
+const API_BASE_URL = "https://dnttcnpm-database.up.railway.app/api";
 
 // ===== TOKEN =====
 function getAuthToken() {
