@@ -134,8 +134,8 @@ function createBookCard(book) {
 function timeAgo(dateString) {
   if (!dateString) return "Không rõ";
 
-  // coi là giờ local (VN)
-  const date = new Date(dateString.replace(" ", "T"));
+  // ép UTC
+  const date = new Date(dateString.replace(" ", "T") + "Z");
 
   if (isNaN(date.getTime())) return "Không rõ";
 
